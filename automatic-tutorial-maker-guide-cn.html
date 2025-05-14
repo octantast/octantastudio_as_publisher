@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatic Tutorial Maker Guide</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+
+        :root {
+            --main-bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-color: #000000;
+            --card-bg-color: #f7f7f7;
+            --border-color: #cccccc;
+            --secondary-color: #555555;
+            --heading-bg: #f2f2f2;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--main-bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .screenshot {
+            margin: 15px 0;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            position: relative;
+            clip-path: polygon( 10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px );
+        }
+
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 5mm 0;
+            column-count: 2;
+            column-gap: 10mm;
+            column-fill: balance;
+            position: relative;
+            overflow-y: visible;
+        }
+
+            .container::after {
+                content: none;
+            }
+
+        header {
+            column-span: all;
+            text-align: center;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            break-inside: avoid;
+            position: relative;
+        }
+
+            header::after {
+                content: none;
+            }
+
+            header .logo {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+
+            header .logo-text {
+                width: 60px;
+                height: 60px;
+                background-color: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--accent-color);
+                font-weight: bold;
+                font-size: 20px;
+                letter-spacing: 1px;
+                position: relative;
+                transform: rotate(45deg);
+            }
+
+                header .logo-text::before {
+                    content: "";
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    border: 2px solid var(--accent-color);
+                    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+                }
+
+                header .logo-text span {
+                    transform: rotate(-45deg);
+                    position: relative;
+                    z-index: 2;
+                }
+
+            header h1 {
+                font-size: 32px;
+                margin: 5px 0 5px;
+                color: var(--accent-color);
+                font-weight: 900;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                position: relative;
+            }
+
+            header p {
+                font-size: 14px;
+                margin: 10px 0;
+                font-weight: 500;
+                color: var(--secondary-color);
+            }
+
+        .header-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 24px;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+            clip-path: polygon( 8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px );
+            font-weight: 600;
+        }
+
+        .section {
+            background-color: var(--main-bg-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            break-inside: avoid;
+            position: relative;
+            border: 1px solid var(--border-color);
+            clip-path: polygon( 8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px );
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 0 0 15px;
+            color: var(--accent-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding: 6px 10px;
+            background-color: var(--heading-bg);
+            clip-path: polygon( 0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100% );
+        }
+
+            h2::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: var(--accent-color);
+            }
+
+        h3 {
+            font-size: 16px;
+            margin: 15px 0 10px;
+            color: var(--secondary-color);
+            text-transform: uppercase;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .feature {
+            background-color: var(--card-bg-color);
+            padding: 10px 12px;
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+            border: 1px solid var(--border-color);
+            clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px );
+            margin-bottom: 4px;
+        }
+
+        .feature-icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+            position: relative;
+        }
+
+        .feature-text {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 36px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+
+            .step:last-child {
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+            .step::before {
+                counter-increment: step;
+                content: counter(step);
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 26px;
+                height: 26px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: white;
+                font-size: 14px;
+                clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+                background: var(--accent-color);
+            }
+
+        .step-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+            color: var(--accent-color);
+        }
+
+        .sub-steps {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+            .sub-steps li {
+                position: relative;
+                padding-left: 18px;
+                margin-bottom: 6px;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+            }
+
+                .sub-steps li::before {
+                    content: "→";
+                    position: absolute;
+                    left: 0;
+                    color: var(--accent-color);
+                    font-size: 12px;
+                }
+
+        .support-section {
+            margin-bottom: 20px;
+            break-inside: avoid;
+            background-color: var(--main-bg-color);
+            padding: 15px;
+            position: relative;
+            border: 1px solid var(--border-color);
+            clip-path: polygon( 10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px );
+        }
+
+            .support-section h2 {
+                font-size: 20px;
+                margin: 0 0 15px;
+                color: var(--accent-color);
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+
+        .support-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            width: 100%;
+            position: relative;
+            padding-top: 15px;
+        }
+
+        .support-link {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--text-color);
+            width: 33%;
+            text-align: center;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .icon-container {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 6px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+            .icon-container::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: var(--card-bg-color);
+                clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            }
+
+            .icon-container svg {
+                width: 70%;
+                height: 70%;
+                color: var(--accent-color);
+                position: relative;
+                z-index: 1;
+            }
+
+        .support-link span {
+            font-size: 11px;
+            display: block;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .quick-tip {
+            margin: 15px 0;
+            position: relative;
+        }
+
+            .quick-tip h3 {
+                font-size: 13px;
+                margin: 0 0 8px;
+                color: var(--accent-color);
+                letter-spacing: 0.5px;
+                font-weight: 600;
+            }
+
+        .template-text {
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 0;
+            color: #444;
+            font-size: 12px;
+            line-height: 1.5;
+            background-color: transparent;
+            padding: 0;
+            display: block;
+            border: none;
+        }
+
+        .learning-sequence-container {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0 0 20px 0;
+            width: 100%;
+        }
+
+        .sequence-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative;
+            background-color: #f7f7f7;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            cursor: move;
+            transition: all 0.2s ease;
+            clip-path: polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px);
+        }
+
+            .sequence-item:hover {
+                background-color: #f0f0f0;
+            }
+
+            .sequence-item.dragging {
+                opacity: 0.5;
+                background-color: #e8e8e8;
+            }
+
+        .sequence-number {
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            margin-right: 6px;
+            color: #fff;
+            background-color: #000;
+            flex-shrink: 0;
+        }
+
+            .sequence-number.manual {
+                background-color: #333;
+            }
+
+        .sequence-content {
+            font-size: 11px;
+            flex-grow: 1;
+        }
+
+        .arrow-down {
+            display: none;
+        }
+
+        .sequence-legend {
+            margin-top: 15px;
+            display: flex;
+            font-size: 10px;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend-number {
+            min-width: 12px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            margin-right: 5px;
+            color: #fff;
+        }
+
+        .add-item-btn {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 11px;
+            cursor: pointer;
+            clip-path: polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px);
+        }
+
+        .item-type-toggle {
+            background: none;
+            border: none;
+            padding: 0;
+            width: 24px;
+            height: 18px;
+            cursor: pointer;
+            position: relative;
+            margin-left: 8px;
+            flex-shrink: 0;
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+        }
+
+            .item-type-toggle:before {
+                content: "AUTO";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 8px;
+                color: #666;
+                font-weight: bold;
+            }
+
+        .manual .item-type-toggle:before {
+            content: "MANUAL";
+        }
+
+        .delete-btn {
+            width: 16px;
+            height: 16px;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            position: relative;
+            margin-left: 4px;
+            flex-shrink: 0;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+            .delete-btn:hover {
+                opacity: 1;
+            }
+
+            .delete-btn:before, .delete-btn:after {
+                content: "";
+                position: absolute;
+                width: 12px;
+                height: 2px;
+                background-color: #666;
+                top: 7px;
+                left: 2px;
+            }
+
+            .delete-btn:before {
+                transform: rotate(45deg);
+            }
+
+            .delete-btn:after {
+                transform: rotate(-45deg);
+            }
+
+        .connector {
+            display: none;
+        }
+
+        .sequence-item:last-child .connector,
+        .manual .connector {
+            display: none;
+        }
+
+        .edit-content-btn {
+            width: 16px;
+            height: 16px;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            position: relative;
+            margin-left: 4px;
+            flex-shrink: 0;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+            .edit-content-btn:hover {
+                opacity: 1;
+            }
+
+            .edit-content-btn:before {
+                content: "✎";
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                font-size: 12px;
+                color: #666;
+                top: 1px;
+                left: 2px;
+            }
+
+        .edit-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 0.2s, opacity 0.2s;
+        }
+
+            .edit-dialog.visible {
+                visibility: visible;
+                opacity: 1;
+                transition: visibility 0s, opacity 0.2s;
+            }
+
+        .edit-dialog-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 4px;
+            width: 80%;
+            max-width: 400px;
+        }
+
+            .edit-dialog-content h3 {
+                margin-top: 0;
+                margin-bottom: 10px;
+                font-size: 16px;
+            }
+
+            .edit-dialog-content textarea {
+                width: 100%;
+                height: 80px;
+                padding: 8px;
+                margin-bottom: 10px;
+                font-family: inherit;
+                font-size: 12px;
+                border: 1px solid #ddd;
+            }
+
+        .edit-dialog-btns {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .edit-dialog-btn {
+            padding: 6px 12px;
+            margin-left: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+            .edit-dialog-btn.save {
+                background-color: #000;
+                color: white;
+            }
+
+            .edit-dialog-btn.cancel {
+                background-color: #f2f2f2;
+                color: #333;
+            }
+
+        .feature {
+            background-color: var(--card-bg-color);
+            padding: 10px 12px;
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+            border: 1px solid var(--border-color);
+            clip-path: polygon( 4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px );
+            margin-bottom: 4px;
+        }
+
+        footer {
+            column-span: all;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 11px;
+            color: var(--accent-color);
+            padding-top: 20px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+            footer::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 20%;
+                right: 20%;
+                height: 1px;
+                background: var(--accent-color);
+            }
+
+
+        @media screen and (max-width: 768px) {
+            .container {
+                column-count: 1;
+                padding: 5mm 10px;
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .support-links {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .support-link {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .sequence-legend {
+                flex-direction: column;
+            }
+
+            .legend-item {
+                margin-right: 0;
+                margin-bottom: 8px;
+            }
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .container {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AUTOMATIC TUTORIAL MAKER</h1>
+            <p>为Unity开发者提供的快速入门指南，由Octanta Studio开发</p>
+        </header>
+
+
+        <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.5; font-weight: 500;">
+            <strong>Automatic Tutorial Maker</strong> 通过自动记录开发者操作或手动步骤创建游戏教程。一次记录，后期自定义。
+        </p>
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 3l8 10-3.5 1.5L15 19l-2 1-1.5-5L7 17z" />
+                    </svg>
+                </div>
+                <div class="feature-text">多种输入类型（点击，滑动，按住等）</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                </div>
+                <div class="feature-text">PC，移动设备，游戏手柄支持</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5" />
+                        <ellipse cx="12" cy="12" rx="8" ry="3.5" stroke="currentColor" stroke-width="1.5" />
+                        <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                </div>
+                <div class="feature-text">2D，3D，UI对象识别</div>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 21l-8-4.5V7.5L12 3l8 4.5v9L12 21z" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M12 12L4 7.5M12 12l8-4.5M12 12v9" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                </div>
+                <div class="feature-text">自动或手动调用步骤</div>
+            </div>
+        </div>
+        <h2>学习序列示例</h2>
+
+        <div class="learning-sequence-container">
+            <div id="sequence-list">
+            </div>
+
+            <div class="sequence-legend">
+                <div class="legend-item">
+                    <span class="legend-number" style="background-color: #000;">#</span>
+                    <span>Start Step → Auto After Previous Step</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-number" style="background-color: #333;">M</span>
+                    <span>Start Step → Manual Call</span>
+                </div>
+            </div>
+
+            <button class="add-item-btn" id="add-item-btn">+ 添加步骤</button>
+        </div>
+
+        <div class="edit-dialog" id="edit-dialog">
+            <div class="edit-dialog-content">
+                <h3>Edit Step Description</h3>
+                <textarea id="edit-content-textarea"></textarea>
+                <div class="edit-dialog-btns">
+                    <button class="edit-dialog-btn cancel" id="cancel-edit-btn">取消</button>
+                    <button class="edit-dialog-btn save" id="save-edit-btn">节省</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const sequenceItems = [
+                    { id: 1, type: 'auto', number: 0, content: 'UI指针在画布上高亮按钮（例如，点击开始）' },
+                    { id: 2, type: 'auto', number: 1, content: '3D箭头指向地图上的对象（例如，进入任务触发区域）' },
+                    { id: 3, type: 'manual', number: 'M', content: '文本提示出现在2D预制体上方（例如，悬停时显示描述）' }
+                ];
+
+                const sequenceList = document.getElementById('sequence-list');
+                const addItemBtn = document.getElementById('add-item-btn');
+                const editDialog = document.getElementById('edit-dialog');
+                const editContentTextarea = document.getElementById('edit-content-textarea');
+                const saveEditBtn = document.getElementById('save-edit-btn');
+                const cancelEditBtn = document.getElementById('cancel-edit-btn');
+
+                let draggedItem = null;
+                let editingItemId = null;
+
+                function createSequenceItem(item) {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = `sequence-item ${item.type === 'manual' ? 'manual' : ''}`;
+                    itemElement.dataset.id = item.id;
+                    itemElement.draggable = true;
+
+                    const numberElement = document.createElement('span');
+                    numberElement.className = `sequence-number ${item.type === 'manual' ? 'manual' : ''}`;
+                    numberElement.textContent = item.number;
+
+                    const contentElement = document.createElement('span');
+                    contentElement.className = 'sequence-content';
+                    contentElement.textContent = item.content;
+
+                    const arrowDown = document.createElement('div');
+                    arrowDown.className = 'arrow-down';
+
+                    const typeToggleBtn = document.createElement('button');
+                    typeToggleBtn.className = 'item-type-toggle';
+                    typeToggleBtn.title = 'Toggle between Auto/Manual';
+
+                    const editContentBtn = document.createElement('button');
+                    editContentBtn.className = 'edit-content-btn';
+                    editContentBtn.title = 'Edit content';
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.title = 'Delete item';
+
+                    const connector = document.createElement('div');
+                    connector.className = 'connector';
+
+                    itemElement.appendChild(arrowDown);
+                    itemElement.appendChild(numberElement);
+                    itemElement.appendChild(contentElement);
+                    itemElement.appendChild(editContentBtn);
+                    itemElement.appendChild(typeToggleBtn);
+                    itemElement.appendChild(deleteBtn);
+                    itemElement.appendChild(connector);
+
+                    itemElement.addEventListener('dragstart', function (e) {
+                        draggedItem = itemElement;
+                        setTimeout(() => {
+                            itemElement.classList.add('dragging');
+                        }, 0);
+                    });
+
+                    itemElement.addEventListener('dragend', function () {
+                        draggedItem = null;
+                        itemElement.classList.remove('dragging');
+
+                        const newOrder = Array.from(sequenceList.querySelectorAll('.sequence-item')).map(item => parseInt(item.dataset.id));
+                        sequenceItems.sort((a, b) => newOrder.indexOf(a.id) - newOrder.indexOf(b.id));
+
+                        updateItemNumbers();
+                    });
+
+                    typeToggleBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+
+                        const id = parseInt(itemElement.dataset.id);
+                        const item = sequenceItems.find(i => i.id === id);
+
+                        if (item) {
+                            item.type = item.type === 'auto' ? 'manual' : 'auto';
+                            if (item.type === 'manual') {
+                                item.number = 'M';
+                                numberElement.textContent = 'M';
+                                numberElement.classList.add('manual');
+                                itemElement.classList.add('manual');
+                            } else {
+                                numberElement.classList.remove('manual');
+                                itemElement.classList.remove('manual');
+                            }
+                            updateItemNumbers();
+                        }
+                    });
+
+                    editContentBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+
+                        const id = parseInt(itemElement.dataset.id);
+                        const item = sequenceItems.find(i => i.id === id);
+
+                        if (item) {
+                            editingItemId = id;
+                            editContentTextarea.value = item.content;
+                            editDialog.classList.add('visible');
+                        }
+                    });
+
+                    deleteBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+
+                        const id = parseInt(itemElement.dataset.id);
+                        const index = sequenceItems.findIndex(i => i.id === id);
+
+                        if (index !== -1) {
+                            sequenceItems.splice(index, 1);
+                            renderItems();
+                            updateItemNumbers();
+                        }
+                    });
+
+                    return itemElement;
+                }
+
+                function updateItemNumbers() {
+                    let autoIndex = 0;
+
+                    sequenceItems.forEach(item => {
+                        if (item.type === 'auto') {
+                            item.number = autoIndex++;
+                        } else {
+                            item.number = 'M';
+                        }
+                    });
+
+                    const items = sequenceList.querySelectorAll('.sequence-item');
+                    items.forEach(itemElement => {
+                        const id = parseInt(itemElement.dataset.id);
+                        const item = sequenceItems.find(i => i.id === id);
+                        if (item) {
+                            const numberElement = itemElement.querySelector('.sequence-number');
+                            numberElement.textContent = item.number;
+                        }
+                    });
+                }
+
+                function renderItems() {
+                    sequenceList.innerHTML = '';
+
+                    sequenceItems.forEach(item => {
+                        const itemElement = createSequenceItem(item);
+                        sequenceList.appendChild(itemElement);
+                    });
+                }
+
+                sequenceList.addEventListener('dragover', function (e) {
+                    e.preventDefault();
+
+                    const afterElement = getDragAfterElement(sequenceList, e.clientY);
+                    if (draggedItem) {
+                        if (afterElement) {
+                            sequenceList.insertBefore(draggedItem, afterElement);
+                        } else {
+                            sequenceList.appendChild(draggedItem);
+                        }
+                    }
+                });
+
+                function getDragAfterElement(container, y) {
+                    const draggableElements = [...container.querySelectorAll('.sequence-item:not(.dragging)')];
+
+                    return draggableElements.reduce((closest, child) => {
+                        const box = child.getBoundingClientRect();
+                        const offset = y - box.top - box.height / 2;
+
+                        if (offset < 0 && offset > closest.offset) {
+                            return { offset: offset, element: child };
+                        } else {
+                            return closest;
+                        }
+                    }, { offset: Number.NEGATIVE_INFINITY }).element;
+                }
+
+                addItemBtn.addEventListener('click', function () {
+                    const newId = sequenceItems.length > 0 ? Math.max(...sequenceItems.map(item => item.id)) + 1 : 1;
+                    const newItem = {
+                        id: newId,
+                        type: 'auto',
+                        number: sequenceItems.filter(item => item.type === 'auto').length,
+                        content: '新教程步骤（点击编辑）'
+                    };
+
+                    sequenceItems.push(newItem);
+                    renderItems();
+                });
+
+                saveEditBtn.addEventListener('click', function () {
+                    if (editingItemId !== null) {
+                        const item = sequenceItems.find(i => i.id === editingItemId);
+                        if (item) {
+                            item.content = editContentTextarea.value;
+                            renderItems();
+                        }
+                    }
+
+                    editDialog.classList.remove('visible');
+                    editingItemId = null;
+                });
+
+                cancelEditBtn.addEventListener('click', function () {
+                    editDialog.classList.remove('visible');
+                    editingItemId = null;
+                });
+
+                renderItems();
+            });
+        </script>
+        <div class="section">
+            <h2>设置</h2>
+            <div class="screenshot">
+                <a href="https://www.gitbook.com/cdn-cgi/image/dpr=2,width=760,onerror=redirect,format=auto/https%3A%2F%2Ffiles.gitbook.com%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FXXV9mXl47pizEJp2sQyb%252Fuploads%252Fi8hlKL0TePgOy46aq2ne%252Fimage_2025-05-13_22-59-40.png%3Falt%3Dmedia%26token%3D894bab8c-01f0-4168-a03a-02e8cdeb1894" target="_blank" title="Open in full size">
+                    <img src="https://www.gitbook.com/cdn-cgi/image/dpr=2,width=760,onerror=redirect,format=auto/https%3A%2F%2Ffiles.gitbook.com%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FXXV9mXl47pizEJp2sQyb%252Fuploads%252Fi8hlKL0TePgOy46aq2ne%252Fimage_2025-05-13_22-59-40.png%3Falt%3Dmedia%26token%3D894bab8c-01f0-4168-a03a-02e8cdeb1894" alt="Adding ATM to Unity scene" style="width: 100%;">
+                </a>
+            </div>
+            <div class="steps">
+                <ul class="sub-steps">
+                    <li>窗口 → 包管理器 → 包：我的资源 → 导入AutomaticTutorialMaker</li>
+                    <li>将TutorialSystem预制体添加到您的场景</li>
+                    <li>右击 → 预制体 → 解包</li>
+                    <li>选择TutorialSystem → TutorialSceneReferences</li>
+                    <li>分配主摄像机和目标画布</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <div class="section">
+            <h2>为场景创建教程</h2>
+            <div class="screenshot">
+                <a href="https://www.gitbook.com/cdn-cgi/image/dpr=2,width=760,onerror=redirect,format=auto/https%3A%2F%2Ffiles.gitbook.com%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FXXV9mXl47pizEJp2sQyb%252Fuploads%252F5yPP34waXHjxLBDO4eqq%252Fimage_2025-05-13_22-51-23.png%3Falt%3Dmedia%26token%3Dad735cb9-8c92-462d-afae-63bb92be0d00" target="_blank" title="Open in full size">
+                    <img src="https://www.gitbook.com/cdn-cgi/image/dpr=2,width=760,onerror=redirect,format=auto/https%3A%2F%2Ffiles.gitbook.com%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FXXV9mXl47pizEJp2sQyb%252Fuploads%252F5yPP34waXHjxLBDO4eqq%252Fimage_2025-05-13_22-51-23.png%3Falt%3Dmedia%26token%3Dad735cb9-8c92-462d-afae-63bb92be0d00" alt="Getting ATM" style="width: 100%;">
+                </a>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-title">记录</div>
+                    <ul class="sub-steps">
+                        <li>开始播放模式</li>
+                        <li>选择AutomaticTutorialMaker</li>
+                        <li>点击开始记录</li>
+                        <li>执行必要操作（点击，滑动，输入）</li>
+                        <li>实时跟踪教程步骤创建</li>
+                        <li>点击停止记录</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <div class="step-title">自定义</div>
+                    <ul class="sub-steps">
+                        <li>在ATM中编辑（删除不必要的步骤，通过标签搜索对象）</li>
+                        <li>再次开始播放模式</li>
+                        <li>检查提示如何工作</li>
+                        <li>如需重置教程进度（StepSequencePlayer → 重置）</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div>
+            <h2>支持和资源</h2>
+            <ul class="sub-steps">
+                <li>将ATM_docs_compressed和ATM_helper文件插入GPT/Claude聊天</li>
+                <li>询问："解释自动教程制作工具如何工作"</li>
+                <li>获取适合您需求的指导</li>
+            </ul>
+
+            <div class="support-links">
+                <a href="https://octanta-studio.gitbook.io/automatic-tutorial-maker-for-unity-in-game-tips" class="support-link">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="3" y1="9" x2="21" y2="9"></line>
+                            <line x1="9" y1="21" x2="9" y2="9"></line>
+                        </svg>
+                    </div>
+                    <span>DOCS</span>
+                </a>
+                <a href="https://discord.gg/UvvBkSvg2n" class="support-link">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25-1.845-.276-3.68-.276-5.487 0-.164-.393-.406-.874-.618-1.25a.077.077 0 0 0-.078-.037 19.736 19.736 0 0 0-4.885 1.515.07.07 0 0 0-.032.028C.533 9.046-.319 13.58.099 18.058a.082.082 0 0 0 .031.056c2.053 1.508 4.041 2.423 5.993 3.029a.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 12.21 12.21 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .079.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029c1.961-.607 3.95-1.522 6.002-3.03a.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.029" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <span>DISCORD</span>
+                </a>
+                <a href="https://mail.google.com/mail/?view=cm&to=octantastudio@gmail.com" class="support-link">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </div>
+                    <span>EMAIL</span>
+                </a>
+            </div>
+
+        </div>
+        <p> </p>
+        <div>
+            <center>
+                <a href="https://u3d.as/3tsL" target="_blank" class="header-link">
+
+                    前往UNITY ASSET STORE →
+                </a>
+            </center>
+        </div>
+
+        <footer>
+            © 2025 OCTANTA STUDIO. AUTOMATIC TUTORIAL MAKER
+        </footer>
+    </div>
+</body>
+</html>
