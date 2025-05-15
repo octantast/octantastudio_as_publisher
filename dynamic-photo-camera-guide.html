@@ -521,29 +521,6 @@
             margin-top: 10px;
         }
 
-        footer {
-            column-span: all;
-            text-align: center;
-            margin-top: 40px;
-            font-size: 11px;
-            color: var(--accent-color);
-            padding-top: 20px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-        }
-
-            footer::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 20%;
-                right: 20%;
-                height: 1px;
-                background: var(--accent-color);
-            }
-
         @media screen and (max-width: 768px) {
             .container {
                 column-count: 1;
@@ -590,7 +567,6 @@
             <a href="http://u3d.as/3qTN" target="_blank" class="header-link">
                 GET ON UNITY ASSET STORE →
             </a>
-
         </header>
 
         <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.5; font-weight: 500;">
@@ -684,11 +660,8 @@
 
                 let isDragging = false;
                 let initialX, initialY, initialLeft, initialTop;
-
-                // Create a clone for dragging
                 let clone = null;
 
-                // Make the card draggable
                 card.addEventListener('mousedown', startDrag);
                 card.addEventListener('touchstart', startDrag, { passive: false });
 
@@ -696,7 +669,6 @@
                     e.preventDefault();
                     isDragging = true;
 
-                    // Get initial positions
                     const rect = card.getBoundingClientRect();
                     initialLeft = rect.left;
                     initialTop = rect.top;
@@ -709,7 +681,6 @@
                         initialY = e.touches[0].clientY;
                     }
 
-                    // Create clone for dragging
                     clone = card.cloneNode(true);
                     clone.style.position = 'fixed';
                     clone.style.left = initialLeft + 'px';
@@ -719,13 +690,11 @@
                     clone.style.pointerEvents = 'none';
                     document.body.appendChild(clone);
 
-                    // Add move and end event listeners
                     document.addEventListener('mousemove', dragMove);
                     document.addEventListener('touchmove', dragMove, { passive: false });
                     document.addEventListener('mouseup', endDrag);
                     document.addEventListener('touchend', endDrag);
 
-                    // Change cursor style
                     card.style.opacity = '0.5';
                 }
 
@@ -743,7 +712,6 @@
                         clientY = e.touches[0].clientY;
                     }
 
-                    // Move the clone
                     const dx = clientX - initialX;
                     const dy = clientY - initialY;
 
@@ -754,7 +722,6 @@
                 function endDrag(e) {
                     if (!isDragging) return;
 
-                    // Check if clone is over detector
                     const detectorRect = detector.getBoundingClientRect();
                     const cloneRect = clone.getBoundingClientRect();
 
@@ -766,18 +733,15 @@
                     );
 
                     if (isOverDetector) {
-                        // Success - show validation
                         screen.textContent = 'CODE#1 VALIDATED!';
                         screen.classList.add('valid');
 
-                        // Reset after delay
                         setTimeout(() => {
                             screen.textContent = 'Awaiting photo...';
                             screen.classList.remove('valid');
                         }, 2000);
                     }
 
-                    // Clean up
                     document.body.removeChild(clone);
                     clone = null;
                     card.style.opacity = '1';
@@ -836,8 +800,6 @@
             </ul>
         </div>
         <div>
-         
-
             <div class="support-links">
                 <a href="https://octanta-studio.gitbook.io/dynamic-photo-camera-for-unity-in-game-photos" class="support-link">
                     <div class="icon-container">
@@ -871,7 +833,6 @@
         <footer>
             © 2025 OCTANTA STUDIO. DYNAMIC PHOTO CAMERA
         </footer>
-
     </div>
 </body>
 </html>
