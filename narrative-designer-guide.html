@@ -43,11 +43,24 @@
             max-width: 210mm;
             margin: 0 auto;
             padding: 5mm 0;
+            position: relative;
+            overflow-y: visible;
+        }
+
+        .two-columns {
             column-count: 2;
             column-gap: 10mm;
             column-fill: balance;
-            position: relative;
-            overflow-y: visible;
+        }
+
+        .three-columns {
+            display: flex;
+            margin-top: 20px;
+            gap: 10mm;
+        }
+
+        .column {
+            width: 33.33%;
         }
 
         header {
@@ -299,58 +312,21 @@
             position: relative;
         }
 
-        .components {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .component {
-            background-color: var(--card-bg-color);
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px );
-        }
-
-        .component-title {
-            font-weight: bold;
-            font-size: 13px;
-            margin-bottom: 5px;
-            color: var(--accent-color);
-        }
-
-        .component-desc {
-            font-size: 12px;
-        }
-
-        .export-types {
+        .strategic-board-content {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin: 15px 0;
+            align-items: flex-start;
+            gap: 15px;
         }
 
-        .export-type {
-            text-align: center;
-            width: 30%;
-            margin-bottom: 15px;
+        .strategic-board-image {
+            width: 45%;
         }
 
-        .export-icon {
-            width: 40px;
-            height: 40px;
-            margin: 0 auto 5px;
-            position: relative;
-        }
-
-        .export-name {
-            font-size: 12px;
-            font-weight: bold;
+        .strategic-board-text {
+            width: 55%;
         }
 
         footer {
-            column-span: all;
             text-align: center;
             margin-top: 40px;
             font-size: 11px;
@@ -373,9 +349,16 @@
             }
 
         @media screen and (max-width: 768px) {
-            .container {
+            .two-columns {
                 column-count: 1;
-                padding: 5mm 10px;
+            }
+
+            .three-columns {
+                flex-direction: column;
+            }
+
+            .column {
+                width: 100%;
             }
 
             header h1 {
@@ -384,6 +367,15 @@
 
             .features {
                 grid-template-columns: 1fr;
+            }
+
+            .strategic-board-content {
+                flex-direction: column;
+            }
+
+            .strategic-board-image,
+            .strategic-board-text {
+                width: 100%;
             }
 
             .support-links {
@@ -420,11 +412,11 @@
             </a>
         </header>
 
-        <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.5; font-weight: 500;">
-            <strong>Narrative Designer</strong> is designed to visualize and systematize narrative elements and get AI help with story development.
-        </p>
+        <div class="two-columns">
+            <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.5; font-weight: 500;">
+                <strong>Narrative Designer</strong> is designed to visualize and systematize narrative elements and get AI help with story development.
+            </p>
 
-        <div class="section">
             <h2>SETUP</h2>
             <div class="steps">
                 <ul class="sub-steps">
@@ -439,7 +431,7 @@
                 <div style="display: flex; justify-content: space-around; width: 100%; margin-top: 15px;">
                     <!-- Character Brain -->
                     <div style="display: flex; flex-direction: column; align-items: center; width: 30%;">
-                        <div style="font-weight: bold; text-transform: uppercase; font-size: 12px; margin-bottom: 5px;">CHARACTER<br>BRAIN</div>
+                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px;">CHARACTER BRAIN</div>
                         <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <circle cx="12" cy="8" r="4" stroke="black"></circle>
@@ -450,8 +442,8 @@
                     </div>
 
                     <!-- Character Database -->
-                    <div style="display: flex; flex-direction: column; align-items: center; width: 30%;">
-                        <div style="font-weight: bold; text-transform: uppercase; font-size: 12px; margin-bottom: 5px;">CHARACTER<br>DATABASE</div>
+                    <div style="display: flex; flex-direction: column; align-items: center; width: 35%;">
+                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px;">CHARACTER DATABASE</div>
                         <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M8 6h13" stroke="black"></path>
@@ -462,11 +454,11 @@
                                 <path d="M3 18h.01" stroke="black" stroke-width="2"></path>
                             </svg>
                         </div>
-                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Tracks event timeline and relationships</div>
+                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Tracks event timeline and character relationships</div>
                     </div>
                     <!-- Global Context -->
                     <div style="display: flex; flex-direction: column; align-items: center; width: 30%;">
-                        <div style="font-weight: bold; text-transform: uppercase; font-size: 12px; margin-bottom: 5px;">GLOBAL<br>CONTEXT</div>
+                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px;">GLOBAL CONTEXT</div>
                         <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <circle cx="12" cy="12" r="7" stroke="black"></circle>
@@ -476,56 +468,323 @@
                         <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Stores game-wide lore, mechanics and media</div>
                     </div>
                 </div>
-
-                <!-- Local Contexts -->
+                <!-- Local Contexts (Events on the Timeline) -->
                 <div style="margin-top: 25px; position: relative;">
-                    <div style="font-weight: bold; text-transform: uppercase; font-size: 12px; margin-bottom: 5px; color: #666;">LOCAL CONTEXTS (EVENTS ON THE TIMELINE)</div>
-                    <div style="display: flex; justify-content: center; align-items: center; height: 50px; position: relative; margin: 10px 0;">
-                        <!-- Timeline line -->
-                        <div style="position: absolute; height: 2px; background-color: #999; width: 80%; top: 50%; transform: translateY(-50%);"></div>
+                    <div style="font-weight: bold; text-transform: uppercase; font-size: 12px; margin-bottom: 5px; color: #666; text-align: center;">LOCAL CONTEXTS (EVENTS ON THE TIMELINE)</div>
 
-                        <!-- Timeline points -->
-                        <div style="display: flex; justify-content: space-between; width: 80%; position: relative; z-index: 2;">
-                            <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #fff; border: 2px solid #000; display: flex; justify-content: center; align-items: center; font-size: 12px; font-weight: bold;">1</div>
-                            <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #fff; border: 2px solid #000; display: flex; justify-content: center; align-items: center; font-size: 12px; font-weight: bold;">2</div>
-                            <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #fff; border: 2px solid #000; display: flex; justify-content: center; align-items: center; font-size: 12px; font-weight: bold;">3</div>
-                            <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #fff; border: 2px solid #000; display: flex; justify-content: center; align-items: center; font-size: 12px; font-weight: bold;">4</div>
-                            <div style="width: 24px; height: 24px; border-radius: 50%; background-color: #fff; border: 2px solid #000; display: flex; justify-content: center; align-items: center; font-size: 12px; font-weight: bold;">5</div>
+                    <div id="interactive-timeline" style="position: relative; margin: 20px 0 30px 0;">
+                        <!-- Timeline line -->
+                        <div id="timeline-line" style="position: absolute; height: 2px; background-color: #999; width: 80%; left: 10%; top: 12px;"></div>
+
+                        <!-- Drop indicator (diamond) - hidden by default -->
+                        <div id="drop-indicator" style="position: absolute; width: 10px; height: 10px; background-color: #000; transform: rotate(45deg); z-index: 4; display: none; top: 8px;"></div>
+
+                        <!-- Timeline points container -->
+                        <div id="timeline-points" style="display: flex; justify-content: space-between; width: 80%; margin: 0 auto; position: relative;">
+                            <!-- Points will be dynamically generated here -->
                         </div>
+
+                        <!-- Event description box -->
+                        <div id="event-description" style="display: none; margin: 15px auto 0; padding: 10px; background-color: #f7f7f7; border: 1px solid #ddd; max-width: 80%; border-radius: 4px; font-size: 12px; text-align: center;"></div>
+                    </div>
+
+                    <div style="text-align: center; font-size: 11px; color: #666; margin-top: 5px;">
+                        Click on an event to view details. Drag events to reorder them on the timeline.
                     </div>
                 </div>
+                <script type="text/javascript">
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // Initial events data
+                        const timelineEvents = [
+                            { id: 1, name: "Event A", description: "First major plot point in the story" },
+                            { id: 2, name: "Event B", description: "Character development milestone" },
+                            { id: 3, name: "Event C", description: "Major conflict or challenge" },
+                            { id: 4, name: "Event D", description: "Resolution of secondary plot" },
+                            { id: 5, name: "Event E", description: "Final climax or conclusion" }
+                        ];
+
+                        let draggedEvent = null;
+                        let draggedIndex = null;
+                        let selectedEvent = null;
+                        let draggedElement = null;
+                        let targetGapIndex = null; // Index of the gap where we will insert
+
+                        const timelineContainer = document.getElementById('interactive-timeline');
+                        const timelineLine = document.getElementById('timeline-line');
+                        const timelinePoints = document.getElementById('timeline-points');
+                        const eventDescription = document.getElementById('event-description');
+                        const dropIndicator = document.getElementById('drop-indicator');
+
+                        // Function to render timeline
+                        function renderTimeline() {
+                            // Clear existing points
+                            timelinePoints.innerHTML = '';
+
+                            // Create and append points
+                            timelineEvents.forEach(event => {
+                                const pointContainer = document.createElement('div');
+                                pointContainer.className = 'point-container';
+                                pointContainer.style.display = 'flex';
+                                pointContainer.style.flexDirection = 'column';
+                                pointContainer.style.alignItems = 'center';
+                                pointContainer.style.width = `${100 / timelineEvents.length}%`;
+
+                                const point = document.createElement('div');
+                                point.className = 'timeline-point';
+                                point.setAttribute('data-id', event.id);
+                                point.style.width = '24px';
+                                point.style.height = '24px';
+                                point.style.borderRadius = '50%';
+                                point.style.backgroundColor = selectedEvent === event.id ? '#f0f0f0' : '#fff';
+                                point.style.border = '2px solid #000';
+                                point.style.display = 'flex';
+                                point.style.justifyContent = 'center';
+                                point.style.alignItems = 'center';
+                                point.style.fontSize = '12px';
+                                point.style.fontWeight = 'bold';
+                                point.style.cursor = 'pointer';
+                                point.style.zIndex = '5';
+                                point.style.position = 'relative';
+                                point.style.marginBottom = '5px';
+                                point.textContent = event.id;
+
+                                // Make point draggable
+                                point.draggable = true;
+
+                                // Event name label
+                                const label = document.createElement('div');
+                                label.style.fontSize = '11px';
+                                label.style.marginTop = '5px';
+                                label.style.fontWeight = '500';
+                                label.style.textAlign = 'center';
+                                label.textContent = event.name;
+
+                                // Append elements
+                                pointContainer.appendChild(point);
+                                pointContainer.appendChild(label);
+                                timelinePoints.appendChild(pointContainer);
+
+                                // Set up event listeners
+                                point.addEventListener('dragstart', handleDragStart);
+                                point.addEventListener('click', handlePointClick);
+                            });
+
+                            // Set up timeline drop zone
+                            timelineContainer.addEventListener('dragover', handleDragOver);
+                            timelineContainer.addEventListener('drop', handleDrop);
+                            document.addEventListener('dragend', resetDragState);
+                        }
+
+                        // Handle drag start
+                        function handleDragStart(e) {
+                            // Set dragged event and element
+                            draggedEvent = parseInt(this.getAttribute('data-id'));
+                            draggedElement = this;
+                            draggedIndex = timelineEvents.findIndex(event => event.id === draggedEvent);
+
+                            // Create a transparent drag image
+                            var dragImage = document.createElement('div');
+                            dragImage.style.width = '1px';
+                            dragImage.style.height = '1px';
+                            dragImage.style.opacity = '0.01';
+                            document.body.appendChild(dragImage);
+
+                            // Set the drag image (makes the drag visual cleaner)
+                            if (e.dataTransfer.setDragImage) {
+                                e.dataTransfer.setDragImage(dragImage, 0, 0);
+                            }
+
+                            // Store event data
+                            e.dataTransfer.setData('text', draggedEvent);
+
+                            // Apply visual feedback
+                            this.style.opacity = '0.6';
+
+                            // Delay removing the drag image
+                            setTimeout(function () {
+                                document.body.removeChild(dragImage);
+                            }, 0);
+                        }
+
+                        // Handle drag over - VERY SIMPLE APPROACH
+                        function handleDragOver(e) {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = 'move';
+
+                            // Get mouse position
+                            const mouseX = e.clientX;
+
+                            // Get timeline dimensions
+                            const timelineRect = timelineLine.getBoundingClientRect();
+                            const timelineLeft = timelineRect.left;
+                            const timelineWidth = timelineRect.width;
+
+                            // Calculate positions of all points
+                            const pointPositions = [];
+                            for (let i = 0; i < timelineEvents.length; i++) {
+                                // Calculate x position of this point
+                                const pointX = timelineLeft + (i / (timelineEvents.length - 1)) * timelineWidth;
+                                pointPositions.push(pointX);
+                            }
+
+                            // Determine drop position - SIMPLE LOGIC:
+                            // If dragged right of a point, place after it
+                            // If dragged left of a point, place before it
+                            let newIndex = null;
+
+                            // Count points to the left of the mouse
+                            let pointsToLeft = 0;
+                            for (let i = 0; i < pointPositions.length; i++) {
+                                if (mouseX > pointPositions[i]) {
+                                    pointsToLeft++;
+                                }
+                            }
+
+                            // Don't insert at same position
+                            if (pointsToLeft === draggedIndex || pointsToLeft === draggedIndex + 1) {
+                                hideDropIndicator();
+                                targetGapIndex = null;
+                                return;
+                            }
+
+                            // Show indicator between appropriate points
+                            // If mouse is between two points, show indicator exactly between them
+                            if (pointsToLeft > 0 && pointsToLeft < timelineEvents.length) {
+                                const leftPointIndex = pointsToLeft - 1;
+                                const rightPointIndex = pointsToLeft;
+
+                                // Skip if the dragged point is one of these points
+                                if (leftPointIndex === draggedIndex || rightPointIndex === draggedIndex) {
+                                    hideDropIndicator();
+                                    targetGapIndex = null;
+                                    return;
+                                }
+
+                                // Calculate exact middle position in pixels
+                                const middleX = (pointPositions[leftPointIndex] + pointPositions[rightPointIndex]) / 2;
+
+                                // Convert to percentage for positioning
+                                const percentage = (middleX - timelineLeft) / timelineWidth * 100;
+
+                                // Position the indicator exactly in the center
+                                dropIndicator.style.left = `calc(10% + ${percentage}% * 0.8 - 5px)`;
+                                dropIndicator.style.display = 'block';
+
+                                // Store the target position
+                                targetGapIndex = leftPointIndex;
+                            } else {
+                                hideDropIndicator();
+                                targetGapIndex = null;
+                            }
+                        }
+
+                        // Hide the drop indicator
+                        function hideDropIndicator() {
+                            dropIndicator.style.display = 'none';
+                        }
+
+                        // Handle drop - SIMPLE APPROACH
+                        function handleDrop(e) {
+                            e.preventDefault();
+
+                            // Hide the drop indicator
+                            hideDropIndicator();
+
+                            // If no valid gap is targeted, do nothing
+                            if (targetGapIndex === null) {
+                                resetDragState();
+                                return;
+                            }
+
+                            // Calculate new position
+                            let newPosition = targetGapIndex + 1; // Insert after the gap's left point
+
+                            // Remove event from original position
+                            const [draggedEventObj] = timelineEvents.splice(draggedIndex, 1);
+
+                            // If insert position is after where we removed, adjust it
+                            if (newPosition > draggedIndex) {
+                                newPosition--;
+                            }
+
+                            // Insert at new position
+                            timelineEvents.splice(newPosition, 0, draggedEventObj);
+
+                            // Renumber all events
+                            timelineEvents.forEach((event, index) => {
+                                event.id = index + 1;
+                            });
+
+                            // Re-render timeline
+                            renderTimeline();
+
+                            // Reset drag state
+                            resetDragState();
+                        }
+
+                        // Reset drag state
+                        function resetDragState() {
+                            if (draggedElement) {
+                                draggedElement.style.opacity = '1';
+                            }
+                            draggedEvent = null;
+                            draggedElement = null;
+                            draggedIndex = null;
+                            targetGapIndex = null;
+                            hideDropIndicator();
+                        }
+
+                        // Handle point click to show description
+                        function handlePointClick(e) {
+                            e.stopPropagation();
+
+                            const clickedId = parseInt(this.getAttribute('data-id'));
+
+                            // Toggle selection
+                            if (selectedEvent === clickedId) {
+                                // Deselect if already selected
+                                selectedEvent = null;
+                                eventDescription.style.display = 'none';
+                            } else {
+                                // Select new event
+                                selectedEvent = clickedId;
+                                const event = timelineEvents.find(e => e.id === clickedId);
+
+                                // Show description
+                                if (event) {
+                                    eventDescription.innerHTML = `<strong>${event.name}</strong><br>${event.description}`;
+                                    eventDescription.style.display = 'block';
+                                }
+                            }
+
+                            // Update visual state
+                            renderTimeline();
+                        }
+
+                        // Close event description when clicking outside
+                        document.addEventListener('click', function (e) {
+                            if (!e.target.closest('.timeline-point') && selectedEvent !== null) {
+                                selectedEvent = null;
+                                eventDescription.style.display = 'none';
+                                renderTimeline();
+                            }
+                        });
+
+                        // Handle window resize
+                        window.addEventListener('resize', function () {
+                            renderTimeline();
+                        });
+
+                        // Initial render
+                        renderTimeline();
+                    });
+                </script>
             </center>
-        </div>
-        <div class="section">
-            <div class="steps">
-                <div class="step">
-                    <div class="step-title">CREATE TIMELINE EVENTS</div>
-                    <ul class="sub-steps">
-                        <li>Open the Character Database object</li>
-                        <li>In the Selected Event section, enter a description of your story event</li>
-                        <li>Drag a sprite into the illustration field if available</li>
-                        <li>Under Character Effects, set how this event impacts each character (-100 to +100)</li>
-                        <li>Expand the '+' next to each character name to add specific behavior details</li>
-                        <li>Click 'Save Event As New' to add it to the global timeline</li>
-                    </ul>
-                </div>
 
-                <div class="step">
-                    <div class="step-title">MANAGE TIMELINE EVENTS</div>
-                    <ul class="sub-steps">
-                        <li>All created events appear in the Timeline Events list & matrix below the edit area</li>
-                        <li>Click on any event to load and edit its details</li>
-                        <li>Drag events to reorder them in the timeline</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>CHARACTER MATRIX</h2>
             <div class="screenshot">
                 <img src="https://www.gitbook.com/cdn-cgi/image/dpr=2,width=1920,onerror=redirect,format=auto/https%3A%2F%2Ffiles.gitbook.com%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F4xTYAUCIqQKIhDrUF5Jj%252Fuploads%252FBak0zfSvvOduIgQwlBLF%252Fimage.png%3Falt%3Dmedia%26token%3Dff31dc2a-e2a7-4b4b-b27d-0f600a51b033" alt="Narrative Designer Interface" style="width: 100%;">
             </div>
+            <h2>CHARACTER MATRIX</h2>
             <ul class="sub-steps">
                 <li>Click 'Open Full Matrix View' to see a global timeline</li>
                 <li>Use 'Descriptive View' for text descriptions or 'Numeric View' for impact values</li>
@@ -542,27 +801,48 @@
                     <span style="font-style: italic;">0 = No knowledge of event</span>
                 </div>
             </div>
-        </div>
-        <div class="section">
-            <h2>STRATEGIC BOARD</h2>
-            <div class="screenshot" style="width: 60%; margin: 15px auto;">
-                <img src="https://octanta-studio.gitbook.io/~gitbook/image?url=https%3A%2F%2F982414592-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fb0qpeQUsDr1dTsID7c0e%252Fuploads%252FNCUAGKHIhWdHuYGstY1l%252Fimage_2025-04-11_17-46-02.png%3Falt%3Dmedia%26token%3Df3c1dc7b-1d19-47ed-9f55-059b14e1a503&width=768&dpr=4&quality=100&sign=d344b206&sv=2" alt="Strategic Board Interface" style="width: 100%;">
-            </div>
-            <ul class="sub-steps">
-                <li>Drag characters to rearrange their positions on the board</li>
-                <li>Click on lines between characters to edit relationships</li>
-                <li>Use different colors and dot sizes to indicate character status</li>
-                <li>Set custom background map of your game world</li>
-            </ul>
-        </div>
-        <div class="section">
-            <h2>EXPORT & AI INTEGRATION</h2>
-            <div class="screenshot">
-                <img src="" alt="Narrative Designer Interface" style="width: 100%;">
-            </div>
-        </div>
+            <div class="section">
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-title">CREATE TIMELINE EVENTS</div>
+                        <ul class="sub-steps">
+                            <li>Open the Character Database object</li>
+                            <li>In the Selected Event section, enter a description of your story event</li>
+                            <li>Drag a sprite into the illustration field if available</li>
+                            <li>Under Character Effects, set how this event impacts each character (-100 to +100)</li>
+                            <li>Expand the '+' next to each character name to add specific behavior details</li>
+                            <li>Click 'Save Event As New' to add it to the global timeline</li>
+                        </ul>
+                    </div>
 
-        <div>
+                    <div class="step">
+                        <div class="step-title">MANAGE TIMELINE EVENTS</div>
+                        <ul class="sub-steps">
+                            <li>All created events appear in the Timeline Events list & matrix below the edit area</li>
+                            <li>Click on any event to load and edit its details</li>
+                            <li>Drag events to reorder them in the timeline</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="strategic-board-content">
+                <div class="strategic-board-image">
+                    <div class="screenshot" style="margin: 0;">
+                        <img src="https://octanta-studio.gitbook.io/~gitbook/image?url=https%3A%2F%2F982414592-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fb0qpeQUsDr1dTsID7c0e%252Fuploads%252FNCUAGKHIhWdHuYGstY1l%252Fimage_2025-04-11_17-46-02.png%3Falt%3Dmedia%26token%3Df3c1dc7b-1d19-47ed-9f55-059b14e1a503&width=768&dpr=4&quality=100&sign=d344b206&sv=2" alt="Strategic Board Interface" style="width: 100%;">
+                    </div>
+                </div>
+                <div class="strategic-board-text">
+                    <h2>STRATEGIC BOARD</h2>
+                    <ul class="sub-steps" style="margin-top: 0;">
+                        <li>Drag characters to rearrange their positions</li>
+                        <li>Click on lines between characters to edit relationships</li>
+                        <li>Use different colors and dot sizes to indicate character status</li>
+                        <li>Set custom background map of your game world</li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="support-links">
                 <a href="https://octanta-studio.gitbook.io/narrative-designer-visualize-and-systematize-story" class="support-link">
                     <div class="icon-container">
@@ -593,6 +873,7 @@
                 </a>
             </div>
         </div>
+
 
         <footer>
             © 2025 OCTANTA STUDIO. NARRATIVE DESIGNER
