@@ -503,35 +503,60 @@
                             { id: 5, name: "Event E", description: "Final climax or conclusion" }
                         ];
 
+                        // State variables
                         let draggedEvent = null;
                         let draggedIndex = null;
                         let selectedEvent = null;
                         let draggedElement = null;
-                        let targetGapIndex = null; // Index of the gap where we will insert
+                        let dropTargetIndex = null;
+                        let isDragging = false;
 
+                        // DOM elements
                         const timelineContainer = document.getElementById('interactive-timeline');
                         const timelineLine = document.getElementById('timeline-line');
                         const timelinePoints = document.getElementById('timeline-points');
                         const eventDescription = document.getElementById('event-description');
                         const dropIndicator = document.getElementById('drop-indicator');
 
+                        // Ensure drop indicator is always visible during drag
+                        function setupDropIndicator() {
+                            // Make sure the drop indicator exists and is styled correctly
+                            dropIndicator.style.width = '10px';
+                            dropIndicator.style.height = '10px';
+                            dropIndicator.style.backgroundColor = '#000';
+                            dropIndicator.style.transform = 'rotate(45deg)';
+                            dropIndicator.style.position = 'absolute';
+                            dropIndicator.style.zIndex = '100';
+                            dropIndicator.style.top = '8px';
+                            dropIndicator.style.pointerEvents = 'none'; // Make sure it doesn't interfere with mouse events
+                            dropIndicator.style.transition = 'left 0.05s ease'; // Smooth movement
+                        }
+
                         // Function to render timeline
                         function renderTimeline() {
                             // Clear existing points
                             timelinePoints.innerHTML = '';
 
+                            // Calculate the available space
+                            const containerWidth = timelineContainer.offsetWidth;
+                            const effectiveWidth = containerWidth * 0.8; // 80% of container width
+                            const pointSpacing = effectiveWidth / (timelineEvents.length - 1);
+
                             // Create and append points
-                            timelineEvents.forEach(event => {
+                            timelineEvents.forEach((event, index) => {
                                 const pointContainer = document.createElement('div');
                                 pointContainer.className = 'point-container';
                                 pointContainer.style.display = 'flex';
                                 pointContainer.style.flexDirection = 'column';
                                 pointContainer.style.alignItems = 'center';
                                 pointContainer.style.width = `${100 / timelineEvents.length}%`;
+                                pointContainer.style.position = 'relative';
+                                pointContainer.setAttribute('data-index', index);
 
                                 const point = document.createElement('div');
                                 point.className = 'timeline-point';
                                 point.setAttribute('data-id', event.id);
+                                point.setAttribute('data-index', index);
                                 point.style.width = '24px';
                                 point.style.height = '24px';
                                 point.style.borderRadius = '50%';
@@ -559,6 +584,9 @@
                                 label.style.textAlign = 'center';
                                 label.textContent = event.name;
 
+                                // Create drop zones between all points to ensure equal spacing
+                                createDropZones(index, pointContainer, timelineEvents.length);
+
                                 // Append elements
                                 pointContainer.appendChild(point);
                                 pointContainer.appendChild(label);
@@ -569,10 +597,95 @@
                                 point.addEventListener('click', handlePointClick);
                             });
 
-                            // Set up timeline drop zone
+                            // Create a consistent set of drop zones along the entire timeline
+                            createEvenlySpacedDropZones();
+
+                            // Set up timeline container listeners
                             timelineContainer.addEventListener('dragover', handleDragOver);
                             timelineContainer.addEventListener('drop', handleDrop);
                             document.addEventListener('dragend', resetDragState);
+                        }
+
+                        // Create evenly spaced drop zones across the entire timeline
+                        function createEvenlySpacedDropZones() {
+                            // Create drop zones container that covers the entire timeline
+                            const dropZonesContainer = document.createElement('div');
+                            dropZonesContainer.className = 'drop-zones-container';
+                            dropZonesContainer.style.position = 'absolute';
+                            dropZonesContainer.style.left = '10%'; // Match timeline position
+                            dropZonesContainer.style.width = '80%'; // Match timeline width
+                            dropZonesContainer.style.height = '24px';
+                            dropZonesContainer.style.top = '0';
+                            dropZonesContainer.style.zIndex = '3';
+
+                            // Create drop zones including before first and after last point
+                            const totalDropZones = timelineEvents.length + 1; // One more than the number of points
+
+                            for (let i = 0; i < totalDropZones; i++) {
+                                const dropZone = document.createElement('div');
+                                dropZone.className = 'drop-zone';
+                                dropZone.setAttribute('data-index', i);
+
+                                // Position each drop zone
+                                const percentage = (i / (totalDropZones - 1)) * 100;
+                                dropZone.style.position = 'absolute';
+                                dropZone.style.left = `${percentage}%`;
+                                dropZone.style.transform = 'translateX(-50%)';
+                                dropZone.style.width = '20px';
+                                dropZone.style.height = '24px';
+                                dropZone.style.backgroundColor = 'transparent'; // Always transparent
+
+                                // Add event listeners
+                                dropZone.addEventListener('dragenter', function (e) {
+                                    e.preventDefault();
+                                    if (isDragging) {
+                                        dropTargetIndex = parseInt(this.getAttribute('data-index'));
+                                        updateDropIndicator(dropTargetIndex);
+                                    }
+                                });
+
+                                dropZone.addEventListener('dragover', function (e) {
+                                    e.preventDefault();
+                                    e.dataTransfer.dropEffect = 'move';
+                                    if (isDragging) {
+                                        dropTargetIndex = parseInt(this.getAttribute('data-index'));
+                                        updateDropIndicator(dropTargetIndex);
+                                    }
+                                });
+
+                                dropZonesContainer.appendChild(dropZone);
+                            }
+
+                            timelineContainer.appendChild(dropZonesContainer);
+                        }
+
+                        // Create drop zones for specific index
+                        function createDropZones(index, container, totalPoints) {
+                            // For first point, add a drop zone before it
+                            if (index === 0) {
+                                const beforeDropZone = document.createElement('div');
+                                beforeDropZone.className = 'drop-zone';
+                                beforeDropZone.setAttribute('data-index', 0);
+                                beforeDropZone.style.position = 'absolute';
+                                beforeDropZone.style.left = '-20px';
+                                beforeDropZone.style.top = '0';
+                                beforeDropZone.style.width = '20px';
+                                beforeDropZone.style.height = '24px';
+                                beforeDropZone.style.backgroundColor = 'transparent';
+                                container.appendChild(beforeDropZone);
+                            }
+
+                            // For all points, add a drop zone after it
+                            const afterDropZone = document.createElement('div');
+                            afterDropZone.className = 'drop-zone';
+                            afterDropZone.setAttribute('data-index', index + 1);
+                            afterDropZone.style.position = 'absolute';
+                            afterDropZone.style.right = '-20px';
+                            afterDropZone.style.top = '0';
+                            afterDropZone.style.width = '20px';
+                            afterDropZone.style.height = '24px';
+                            afterDropZone.style.backgroundColor = 'transparent';
+                            container.appendChild(afterDropZone);
                         }
 
                         // Handle drag start
@@ -580,7 +693,8 @@
                             // Set dragged event and element
                             draggedEvent = parseInt(this.getAttribute('data-id'));
                             draggedElement = this;
-                            draggedIndex = timelineEvents.findIndex(event => event.id === draggedEvent);
+                            draggedIndex = parseInt(this.getAttribute('data-index'));
+                            isDragging = true;
 
                             // Create a transparent drag image
                             var dragImage = document.createElement('div');
@@ -600,112 +714,110 @@
                             // Apply visual feedback
                             this.style.opacity = '0.6';
 
+                            // Show the drop indicator at the current position initially
+                            dropIndicator.style.display = 'block';
+                            updateDropIndicator(draggedIndex);
+
+                            // Add a dragging class to the body to style drop zones differently
+                            document.body.classList.add('dragging');
+
                             // Delay removing the drag image
                             setTimeout(function () {
                                 document.body.removeChild(dragImage);
                             }, 0);
+
+                            // Make sure we show potential drop positions
+                            highlightAllDropPositions();
                         }
 
-                        // Handle drag over - VERY SIMPLE APPROACH
+                        // Highlight only the diamond indicator, not the drop zones
+                        function highlightAllDropPositions() {
+                            // We're now only showing the diamond indicator, not highlighting zones
+                            // Keep this function for consistency but don't add any background color
+                        }
+
+                        // Update drop indicator position to show exactly where the item will be placed
+                        function updateDropIndicator(index) {
+                            // Always show the indicator during drag operations
+                            if (!isDragging) return;
+
+                            // Get timeline dimensions
+                            const totalPoints = timelineEvents.length;
+                            const timelineRect = timelineLine.getBoundingClientRect();
+                            const timelineWidth = timelineRect.width;
+                            const timelineLeft = timelineRect.left;
+
+                            // Calculate the percentage position along the timeline
+                            let percentage;
+
+                            if (index === 0) {
+                                // Before the first item
+                                percentage = 0;
+                            } else if (index >= totalPoints) {
+                                // After the last item
+                                percentage = 100;
+                            } else {
+                                // Between items - calculate exact position
+                                percentage = (index / totalPoints) * 100;
+                            }
+
+                            // Position the indicator (10% offset for the timeline's left margin)
+                            dropIndicator.style.left = `calc(10% + ${percentage * 0.8}% - 5px)`;
+                            dropIndicator.style.display = 'block';
+                        }
+
+                        // Handle drag over - continuously update drop position
                         function handleDragOver(e) {
+                            if (!isDragging) return;
+
                             e.preventDefault();
                             e.dataTransfer.dropEffect = 'move';
 
-                            // Get mouse position
+                            // Continuously monitor mouse position to ensure indicator stays visible
                             const mouseX = e.clientX;
-
-                            // Get timeline dimensions
                             const timelineRect = timelineLine.getBoundingClientRect();
                             const timelineLeft = timelineRect.left;
                             const timelineWidth = timelineRect.width;
 
-                            // Calculate positions of all points
-                            const pointPositions = [];
-                            for (let i = 0; i < timelineEvents.length; i++) {
-                                // Calculate x position of this point
-                                const pointX = timelineLeft + (i / (timelineEvents.length - 1)) * timelineWidth;
-                                pointPositions.push(pointX);
-                            }
+                            // Calculate where along the timeline the mouse is (0 to 1)
+                            let relativePosition = (mouseX - timelineLeft) / timelineWidth;
+                            relativePosition = Math.max(0, Math.min(1, relativePosition)); // Clamp between 0 and 1
 
-                            // Determine drop position - SIMPLE LOGIC:
-                            // If dragged right of a point, place after it
-                            // If dragged left of a point, place before it
-                            let newIndex = null;
+                            // Convert to index (including positions between points)
+                            const totalPositions = timelineEvents.length + 1; // +1 for the position after the last point
+                            const exactPosition = relativePosition * timelineEvents.length;
+                            const nearestIndex = Math.round(exactPosition);
 
-                            // Count points to the left of the mouse
-                            let pointsToLeft = 0;
-                            for (let i = 0; i < pointPositions.length; i++) {
-                                if (mouseX > pointPositions[i]) {
-                                    pointsToLeft++;
+                            // Update the drop target - make sure it's a valid position
+                            if (nearestIndex >= 0 && nearestIndex <= timelineEvents.length) {
+                                // Skip if trying to drop at the same position or right after
+                                if (nearestIndex !== draggedIndex && nearestIndex !== draggedIndex + 1) {
+                                    dropTargetIndex = nearestIndex;
+                                    updateDropIndicator(dropTargetIndex);
                                 }
-                            }
-
-                            // Don't insert at same position
-                            if (pointsToLeft === draggedIndex || pointsToLeft === draggedIndex + 1) {
-                                hideDropIndicator();
-                                targetGapIndex = null;
-                                return;
-                            }
-
-                            // Show indicator between appropriate points
-                            // If mouse is between two points, show indicator exactly between them
-                            if (pointsToLeft > 0 && pointsToLeft < timelineEvents.length) {
-                                const leftPointIndex = pointsToLeft - 1;
-                                const rightPointIndex = pointsToLeft;
-
-                                // Skip if the dragged point is one of these points
-                                if (leftPointIndex === draggedIndex || rightPointIndex === draggedIndex) {
-                                    hideDropIndicator();
-                                    targetGapIndex = null;
-                                    return;
-                                }
-
-                                // Calculate exact middle position in pixels
-                                const middleX = (pointPositions[leftPointIndex] + pointPositions[rightPointIndex]) / 2;
-
-                                // Convert to percentage for positioning
-                                const percentage = (middleX - timelineLeft) / timelineWidth * 100;
-
-                                // Position the indicator exactly in the center
-                                dropIndicator.style.left = `calc(10% + ${percentage}% * 0.8 - 5px)`;
-                                dropIndicator.style.display = 'block';
-
-                                // Store the target position
-                                targetGapIndex = leftPointIndex;
-                            } else {
-                                hideDropIndicator();
-                                targetGapIndex = null;
                             }
                         }
 
-                        // Hide the drop indicator
-                        function hideDropIndicator() {
-                            dropIndicator.style.display = 'none';
-                        }
-
-                        // Handle drop - SIMPLE APPROACH
+                        // Handle drop - update timeline with new order
                         function handleDrop(e) {
                             e.preventDefault();
 
-                            // Hide the drop indicator
-                            hideDropIndicator();
-
-                            // If no valid gap is targeted, do nothing
-                            if (targetGapIndex === null) {
+                            // If no valid target is selected, do nothing
+                            if (dropTargetIndex === null ||
+                                dropTargetIndex === draggedIndex ||
+                                dropTargetIndex === draggedIndex + 1) {
                                 resetDragState();
                                 return;
                             }
 
-                            // Calculate new position
-                            let newPosition = targetGapIndex + 1; // Insert after the gap's left point
-
-                            // Remove event from original position
-                            const [draggedEventObj] = timelineEvents.splice(draggedIndex, 1);
-
-                            // If insert position is after where we removed, adjust it
+                            // Calculate new position based on drop target
+                            let newPosition = dropTargetIndex;
                             if (newPosition > draggedIndex) {
                                 newPosition--;
                             }
+
+                            // Remove event from original position
+                            const [draggedEventObj] = timelineEvents.splice(draggedIndex, 1);
 
                             // Insert at new position
                             timelineEvents.splice(newPosition, 0, draggedEventObj);
@@ -724,14 +836,36 @@
 
                         // Reset drag state
                         function resetDragState() {
+                            isDragging = false;
+
                             if (draggedElement) {
                                 draggedElement.style.opacity = '1';
                             }
+
+                            document.body.classList.remove('dragging');
+
+                            // Reset drop zone styling (removing any visible highlighting)
+                            const dropZones = document.querySelectorAll('.drop-zone');
+                            dropZones.forEach(zone => {
+                                zone.style.backgroundColor = 'transparent';
+                            });
+
+                            // Hide the drop indicator only when drag is fully complete
+                            setTimeout(() => {
+                                if (!isDragging) {
+                                    hideDropIndicator();
+                                }
+                            }, 50);
+
                             draggedEvent = null;
                             draggedElement = null;
                             draggedIndex = null;
-                            targetGapIndex = null;
-                            hideDropIndicator();
+                            dropTargetIndex = null;
+                        }
+
+                        // Hide the drop indicator
+                        function hideDropIndicator() {
+                            dropIndicator.style.display = 'none';
                         }
 
                         // Handle point click to show description
@@ -772,8 +906,51 @@
 
                         // Handle window resize
                         window.addEventListener('resize', function () {
-                            renderTimeline();
+                            if (isDragging) {
+                                // Make sure indicator stays correctly positioned during resize
+                                updateDropIndicator(dropTargetIndex || draggedIndex);
+                            } else {
+                                renderTimeline();
+                            }
                         });
+
+                        // Add CSS for drop zones and interaction
+                        const style = document.createElement('style');
+                        style.textContent = `
+        .drop-zone {
+            cursor: pointer;
+            background-color: transparent !important;
+        }
+        
+        #drop-indicator {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #000;
+            z-index: 100;
+            top: 8px;
+            transform: rotate(45deg);
+            pointer-events: none;
+        }
+
+        /* Fixed spacing between timeline points */
+        .point-container {
+            position: relative;
+        }
+        
+        /* Ensure all points are visible and properly spaced */
+        #timeline-points {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin: 0 auto;
+            position: relative;
+        }
+    `;
+                        document.head.appendChild(style);
+
+                        // Initialize the drop indicator
+                        setupDropIndicator();
 
                         // Initial render
                         renderTimeline();
