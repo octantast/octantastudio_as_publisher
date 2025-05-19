@@ -421,7 +421,7 @@
             <div class="steps">
                 <ul class="sub-steps">
                     <li>Import the asset package into your Unity project</li>
-                    <li>Find Assets > OctantaStudio > NarrativeDesigner > NarrativeDesigner.prefab and add it to your scene</li>
+                    <li>Find NarrativeDesigner.prefab and add it to your scene</li>
                     <li>Create required components as indicated in the menu</li>
                 </ul>
             </div>
@@ -431,19 +431,19 @@
                 <div style="display: flex; justify-content: space-around; width: 100%; margin-top: 15px;">
                     <!-- Character Brain -->
                     <div style="display: flex; flex-direction: column; align-items: center; width: 30%;">
-                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px;">CHARACTER BRAIN</div>
+                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 5px;">CHARACTER BRAIN</div>
                         <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <circle cx="12" cy="8" r="4" stroke="black"></circle>
                                 <path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2" stroke="black"></path>
                             </svg>
                         </div>
-                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Stores each character traits, skills, memories</div>
+                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Character traits, skills, memories</div>
                     </div>
 
                     <!-- Character Database -->
                     <div style="display: flex; flex-direction: column; align-items: center; width: 35%;">
-                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px;">CHARACTER DATABASE</div>
+                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 5px;">CHARACTER DATABASE</div>
                         <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M8 6h13" stroke="black"></path>
@@ -454,25 +454,25 @@
                                 <path d="M3 18h.01" stroke="black" stroke-width="2"></path>
                             </svg>
                         </div>
-                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Tracks event timeline and character relationships</div>
+                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Timeline and character relationships</div>
                     </div>
                     <!-- Global Context -->
                     <div style="display: flex; flex-direction: column; align-items: center; width: 30%;">
-                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px;">GLOBAL CONTEXT</div>
+                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 5px;">GLOBAL CONTEXT</div>
                         <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <circle cx="12" cy="12" r="7" stroke="black"></circle>
                                 <ellipse cx="12" cy="12" rx="10" ry="3" stroke="black"></ellipse>
                             </svg>
                         </div>
-                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Stores game-wide lore, mechanics and media</div>
+                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Game-wide lore, mechanics, media</div>
                     </div>
                 </div>
                 <!-- Local Contexts (Events on the Timeline) -->
                 <div style="margin-top: 25px; position: relative;">
-                    <div style="font-weight: bold; text-transform: uppercase; font-size: 12px; margin-bottom: 5px; color: #666; text-align: center;">LOCAL CONTEXTS (EVENTS ON THE TIMELINE)</div>
+                    <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px; color: #666; text-align: center;">LOCAL CONTEXTS (EVENTS ON THE TIMELINE)</div>
 
-                    <div id="interactive-timeline" style="position: relative; margin: 20px 0 30px 0;">
+                    <div id="interactive-timeline" style="position: relative; margin: 5px 0 5px 0;">
                         <!-- Timeline line -->
                         <div id="timeline-line" style="position: absolute; height: 2px; background-color: #999; width: 80%; left: 10%; top: 12px;"></div>
 
@@ -485,10 +485,10 @@
                         </div>
 
                         <!-- Event description box -->
-                        <div id="event-description" style="display: none; margin: 15px auto 0; padding: 10px; background-color: #f7f7f7; border: 1px solid #ddd; max-width: 80%; border-radius: 4px; font-size: 12px; text-align: center;"></div>
+                        <div id="event-description" style="display: none; margin: 5px auto 0; padding: 10px; background-color: #f7f7f7; border: 1px solid #ddd; max-width: 80%; border-radius: 4px; font-size: 12px; text-align: center;"></div>
                     </div>
 
-                    <div style="text-align: center; font-size: 11px; color: #666; margin-top: 5px;">
+                    <div style="text-align: center; font-size: 11px; color: #666; margin-top: 0px;">
                         Click on an event to view details. Drag events to reorder them on the timeline.
                     </div>
                 </div>
