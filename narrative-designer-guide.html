@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- This is the modified head section to support tabs -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Narrative Designer Quick Guide</title>
+    <title>Narrative Designer Guide</title>
     <style>
         @page {
             size: A4;
@@ -18,6 +19,10 @@
             --border-color: #cccccc;
             --secondary-color: #555555;
             --heading-bg: #f2f2f2;
+            --tab-active-bg: #000000;
+            --tab-active-text: #ffffff;
+            --tab-inactive-bg: #f2f2f2;
+            --tab-inactive-text: #000000;
         }
 
         body {
@@ -31,6 +36,7 @@
             overflow-y: auto;
         }
 
+        /* Original styles remain the same */
         .screenshot {
             margin: 15px 0;
             overflow: hidden;
@@ -347,6 +353,45 @@
                 background: var(--accent-color);
             }
 
+        /* New tabber styles */
+        .tabber {
+            width: 100%;
+            margin: 10px 0 30px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: var(--tab-inactive-bg);
+            color: var(--tab-inactive-text);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+            position: relative;
+            clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px );
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+            .tab.active {
+                background-color: var(--tab-active-bg);
+                color: var(--tab-active-text);
+            }
+
+        .tab-content {
+            display: none;
+        }
+
+            .tab-content.active {
+                display: block;
+            }
+
         @media screen and (max-width: 768px) {
             .two-columns {
                 column-count: 1;
@@ -366,6 +411,11 @@
 
             .features {
                 grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: column;
+                gap: 5px;
             }
 
             .strategic-board-content {
@@ -398,585 +448,654 @@
             .container {
                 padding: 0;
             }
+
+            .tab-content {
+                display: block !important;
+            }
+
+            .tabs {
+                display: none;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            header div {
+                flex-wrap: nowrap !important;
+            }
+
+            header h1 {
+                width: auto !important;
+                margin-bottom: 0 !important;
+                margin-right: 15px !important;
+            }
+
+            header a {
+                position: absolute !important;
+                right: -5px !important;
+                top: 50% !important;
+                transform: translateY(-50%) !important;
+                margin-bottom: 0 !important;
+            }
         }
     </style>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            if (tabs.length > 0) {
+                tabs[0].click();
+            }
+
+            const timelineEvents = [
+                { id: 1, name: "Event A", description: "First major plot point in the story" },
+                { id: 2, name: "Event B", description: "Character development milestone" },
+                { id: 3, name: "Event C", description: "Major conflict or challenge" },
+                { id: 4, name: "Event D", description: "Resolution of secondary plot" },
+                { id: 5, name: "Event E", description: "Final climax or conclusion" }
+            ];
+
+            let draggedEvent = null;
+            let draggedIndex = null;
+            let selectedEvent = null;
+            let draggedElement = null;
+            let dropTargetIndex = null;
+            let isDragging = false;
+
+            const timelineContainer = document.getElementById('interactive-timeline');
+            const timelineLine = document.getElementById('timeline-line');
+            const timelinePoints = document.getElementById('timeline-points');
+            const eventDescription = document.getElementById('event-description');
+            const dropIndicator = document.getElementById('drop-indicator');
+
+            function setupDropIndicator() {
+                dropIndicator.style.width = '10px';
+                dropIndicator.style.height = '10px';
+                dropIndicator.style.backgroundColor = '#000';
+                dropIndicator.style.transform = 'rotate(45deg)';
+                dropIndicator.style.position = 'absolute';
+                dropIndicator.style.zIndex = '100';
+                dropIndicator.style.top = '8px';
+                dropIndicator.style.pointerEvents = 'none';
+                dropIndicator.style.transition = 'left 0.05s ease';
+            }
+
+            function renderTimeline() {
+                timelinePoints.innerHTML = '';
+
+                const containerWidth = timelineContainer.offsetWidth;
+                const effectiveWidth = containerWidth * 0.8;
+                const pointSpacing = effectiveWidth / (timelineEvents.length - 1);
+
+                timelineEvents.forEach((event, index) => {
+                    const pointContainer = document.createElement('div');
+                    pointContainer.className = 'point-container';
+                    pointContainer.style.display = 'flex';
+                    pointContainer.style.flexDirection = 'column';
+                    pointContainer.style.alignItems = 'center';
+                    pointContainer.style.width = `${100 / timelineEvents.length}%`;
+                    pointContainer.style.position = 'relative';
+                    pointContainer.setAttribute('data-index', index);
+
+                    const point = document.createElement('div');
+                    point.className = 'timeline-point';
+                    point.setAttribute('data-id', event.id);
+                    point.setAttribute('data-index', index);
+                    point.style.width = '24px';
+                    point.style.height = '24px';
+                    point.style.borderRadius = '50%';
+                    point.style.backgroundColor = selectedEvent === event.id ? '#f0f0f0' : '#fff';
+                    point.style.border = '2px solid #000';
+                    point.style.display = 'flex';
+                    point.style.justifyContent = 'center';
+                    point.style.alignItems = 'center';
+                    point.style.fontSize = '12px';
+                    point.style.fontWeight = 'bold';
+                    point.style.cursor = 'pointer';
+                    point.style.zIndex = '5';
+                    point.style.position = 'relative';
+                    point.style.marginBottom = '5px';
+                    point.textContent = event.id;
+
+                    point.draggable = true;
+
+                    const label = document.createElement('div');
+                    label.style.fontSize = '11px';
+                    label.style.marginTop = '5px';
+                    label.style.fontWeight = '500';
+                    label.style.textAlign = 'center';
+                    label.textContent = event.name;
+
+                    createDropZones(index, pointContainer, timelineEvents.length);
+
+                    pointContainer.appendChild(point);
+                    pointContainer.appendChild(label);
+                    timelinePoints.appendChild(pointContainer);
+
+                    point.addEventListener('dragstart', handleDragStart);
+                    point.addEventListener('click', handlePointClick);
+                });
+
+                createEvenlySpacedDropZones();
+
+                timelineContainer.addEventListener('dragover', handleDragOver);
+                timelineContainer.addEventListener('drop', handleDrop);
+                document.addEventListener('dragend', resetDragState);
+            }
+
+            function createEvenlySpacedDropZones() {
+                const dropZonesContainer = document.createElement('div');
+                dropZonesContainer.className = 'drop-zones-container';
+                dropZonesContainer.style.position = 'absolute';
+                dropZonesContainer.style.left = '10%';
+                dropZonesContainer.style.width = '80%';
+                dropZonesContainer.style.height = '24px';
+                dropZonesContainer.style.top = '0';
+                dropZonesContainer.style.zIndex = '3';
+
+                const totalDropZones = timelineEvents.length + 1;
+
+                for (let i = 0; i < totalDropZones; i++) {
+                    const dropZone = document.createElement('div');
+                    dropZone.className = 'drop-zone';
+                    dropZone.setAttribute('data-index', i);
+
+                    const percentage = (i / (totalDropZones - 1)) * 100;
+                    dropZone.style.position = 'absolute';
+                    dropZone.style.left = `${percentage}%`;
+                    dropZone.style.transform = 'translateX(-50%)';
+                    dropZone.style.width = '20px';
+                    dropZone.style.height = '24px';
+                    dropZone.style.backgroundColor = 'transparent';
+
+                    dropZone.addEventListener('dragenter', function (e) {
+                        e.preventDefault();
+                        if (isDragging) {
+                            dropTargetIndex = parseInt(this.getAttribute('data-index'));
+                            updateDropIndicator(dropTargetIndex);
+                        }
+                    });
+
+                    dropZone.addEventListener('dragover', function (e) {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                        if (isDragging) {
+                            dropTargetIndex = parseInt(this.getAttribute('data-index'));
+                            updateDropIndicator(dropTargetIndex);
+                        }
+                    });
+
+                    dropZonesContainer.appendChild(dropZone);
+                }
+
+                timelineContainer.appendChild(dropZonesContainer);
+            }
+
+            function createDropZones(index, container, totalPoints) {
+                if (index === 0) {
+                    const beforeDropZone = document.createElement('div');
+                    beforeDropZone.className = 'drop-zone';
+                    beforeDropZone.setAttribute('data-index', 0);
+                    beforeDropZone.style.position = 'absolute';
+                    beforeDropZone.style.left = '-20px';
+                    beforeDropZone.style.top = '0';
+                    beforeDropZone.style.width = '20px';
+                    beforeDropZone.style.height = '24px';
+                    beforeDropZone.style.backgroundColor = 'transparent';
+                    container.appendChild(beforeDropZone);
+                }
+
+                const afterDropZone = document.createElement('div');
+                afterDropZone.className = 'drop-zone';
+                afterDropZone.setAttribute('data-index', index + 1);
+                afterDropZone.style.position = 'absolute';
+                afterDropZone.style.right = '-20px';
+                afterDropZone.style.top = '0';
+                afterDropZone.style.width = '20px';
+                afterDropZone.style.height = '24px';
+                afterDropZone.style.backgroundColor = 'transparent';
+                container.appendChild(afterDropZone);
+            }
+
+            function handleDragStart(e) {
+                draggedEvent = parseInt(this.getAttribute('data-id'));
+                draggedElement = this;
+                draggedIndex = parseInt(this.getAttribute('data-index'));
+                isDragging = true;
+
+                var dragImage = document.createElement('div');
+                dragImage.style.width = '1px';
+                dragImage.style.height = '1px';
+                dragImage.style.opacity = '0.01';
+                document.body.appendChild(dragImage);
+
+                if (e.dataTransfer.setDragImage) {
+                    e.dataTransfer.setDragImage(dragImage, 0, 0);
+                }
+
+                e.dataTransfer.setData('text', draggedEvent);
+
+                this.style.opacity = '0.6';
+
+                dropIndicator.style.display = 'block';
+                updateDropIndicator(draggedIndex);
+
+                document.body.classList.add('dragging');
+
+                setTimeout(function () {
+                    document.body.removeChild(dragImage);
+                }, 0);
+
+                highlightAllDropPositions();
+            }
+
+            function highlightAllDropPositions() {
+            }
+
+            function updateDropIndicator(index) {
+                if (!isDragging) return;
+
+                const totalPoints = timelineEvents.length;
+                const timelineRect = timelineLine.getBoundingClientRect();
+                const timelineWidth = timelineRect.width;
+                const timelineLeft = timelineRect.left;
+
+                let percentage;
+
+                if (index === 0) {
+                    percentage = 0;
+                } else if (index >= totalPoints) {
+                    percentage = 100;
+                } else {
+                    percentage = (index / totalPoints) * 100;
+                }
+
+                dropIndicator.style.left = `calc(10% + ${percentage * 0.8}% - 5px)`;
+                dropIndicator.style.display = 'block';
+            }
+
+            function handleDragOver(e) {
+                if (!isDragging) return;
+
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+
+                const mouseX = e.clientX;
+                const timelineRect = timelineLine.getBoundingClientRect();
+                const timelineLeft = timelineRect.left;
+                const timelineWidth = timelineRect.width;
+
+                let relativePosition = (mouseX - timelineLeft) / timelineWidth;
+                relativePosition = Math.max(0, Math.min(1, relativePosition));
+
+                const totalPositions = timelineEvents.length + 1;
+                const exactPosition = relativePosition * timelineEvents.length;
+                const nearestIndex = Math.round(exactPosition);
+
+                if (nearestIndex >= 0 && nearestIndex <= timelineEvents.length) {
+                    if (nearestIndex !== draggedIndex && nearestIndex !== draggedIndex + 1) {
+                        dropTargetIndex = nearestIndex;
+                        updateDropIndicator(dropTargetIndex);
+                    }
+                }
+            }
+
+            function handleDrop(e) {
+                e.preventDefault();
+
+                if (dropTargetIndex === null ||
+                    dropTargetIndex === draggedIndex ||
+                    dropTargetIndex === draggedIndex + 1) {
+                    resetDragState();
+                    return;
+                }
+
+                let newPosition = dropTargetIndex;
+                if (newPosition > draggedIndex) {
+                    newPosition--;
+                }
+
+                const [draggedEventObj] = timelineEvents.splice(draggedIndex, 1);
+
+                timelineEvents.splice(newPosition, 0, draggedEventObj);
+
+                timelineEvents.forEach((event, index) => {
+                    event.id = index + 1;
+                });
+
+                renderTimeline();
+
+                resetDragState();
+            }
+
+            function resetDragState() {
+                isDragging = false;
+
+                if (draggedElement) {
+                    draggedElement.style.opacity = '1';
+                }
+
+                document.body.classList.remove('dragging');
+
+                const dropZones = document.querySelectorAll('.drop-zone');
+                dropZones.forEach(zone => {
+                    zone.style.backgroundColor = 'transparent';
+                });
+
+                setTimeout(() => {
+                    if (!isDragging) {
+                        hideDropIndicator();
+                    }
+                }, 50);
+
+                draggedEvent = null;
+                draggedElement = null;
+                draggedIndex = null;
+                dropTargetIndex = null;
+            }
+
+            function hideDropIndicator() {
+                dropIndicator.style.display = 'none';
+            }
+
+            function handlePointClick(e) {
+                e.stopPropagation();
+
+                const clickedId = parseInt(this.getAttribute('data-id'));
+
+                if (selectedEvent === clickedId) {
+                    selectedEvent = null;
+                    eventDescription.style.display = 'none';
+                } else {
+                    selectedEvent = clickedId;
+                    const event = timelineEvents.find(e => e.id === clickedId);
+
+                    if (event) {
+                        eventDescription.innerHTML = `<strong>${event.name}</strong><br>${event.description}`;
+                        eventDescription.style.display = 'block';
+                    }
+                }
+
+                renderTimeline();
+            }
+
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.timeline-point') && selectedEvent !== null) {
+                    selectedEvent = null;
+                    eventDescription.style.display = 'none';
+                    renderTimeline();
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                if (isDragging) {
+                    updateDropIndicator(dropTargetIndex || draggedIndex);
+                } else {
+                    renderTimeline();
+                }
+            });
+
+            const style = document.createElement('style');
+            style.textContent = `
+        .drop-zone {
+            cursor: pointer;
+            background-color: transparent !important;
+        }
+
+        #drop-indicator {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #000;
+            z-index: 100;
+            top: 8px;
+            transform: rotate(45deg);
+            pointer-events: none;
+        }
+
+        .point-container {
+            position: relative;
+        }
+
+        #timeline-points {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin: 0 auto;
+            position: relative;
+        }
+    `;
+            document.head.appendChild(style);
+
+            setupDropIndicator();
+            renderTimeline();
+        });
+    </script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>NARRATIVE DESIGNER</h1>
+            <div style="display: flex; align-items: center; justify-content: center; position: relative;">
+                <h1>NARRATIVE DESIGNER</h1>
+                <a href="https://u3d.as/3wp2" target="_blank" style="position: absolute; right: -5px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; background-color: #000000; padding: 7px 12px; color: white; text-decoration: none; transition: opacity 0.2s ease; border-radius: 20px;" title="Get on Unity Asset Store" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                    <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">STORE</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 5px;">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
             <p>Quick start guide for Unity developers by Octanta Studio</p>
-            <a href="https://u3d.as/3wp2" target="_blank" class="header-link">
-                GET ON UNITY ASSET STORE →
-            </a>
         </header>
 
-        <div class="two-columns">
-
-            <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.5; font-weight: 500;">
-                <strong>Narrative Designer</strong> is designed to visualize and systematize narrative elements and get AI help with story development.
-            </p>
-
-            <h2>SETUP</h2>
-            <div class="steps">
-                <ul class="sub-steps">
-                    <li>Find NarrativeDesigner.prefab and add it to your scene</li>
-                    <li>Create required components as indicated in the menu</li>
-                </ul>
+        <!-- Tabber Structure -->
+        <div class="tabber">
+            <div class="tabs" style="justify-content: center;">
+                <div class="tab active" data-tab="tab-basics">Basics</div>
+                <div class="tab" data-tab="tab-runtime">Runtime Usage Example</div>
             </div>
 
-            <center>
-                <div style="display: flex; justify-content: space-around; width: 100%; margin-top: 15px;">
-                    <div style="display: flex; flex-direction: column; align-items: center; width: 30%;">
-                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 5px;">CHARACTER BRAIN</div>
-                        <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <circle cx="12" cy="8" r="4" stroke="black"></circle>
-                                <path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2" stroke="black"></path>
-                            </svg>
-                        </div>
-                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Character traits, skills, memories</div>
-                    </div>
-
-                    <div style="display: flex; flex-direction: column; align-items: center; width: 35%;">
-                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 5px;">CHARACTER DATABASE</div>
-                        <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M8 6h13" stroke="black"></path>
-                                <path d="M8 12h13" stroke="black"></path>
-                                <path d="M8 18h13" stroke="black"></path>
-                                <path d="M3 6h.01" stroke="black" stroke-width="2"></path>
-                                <path d="M3 12h.01" stroke="black" stroke-width="2"></path>
-                                <path d="M3 18h.01" stroke="black" stroke-width="2"></path>
-                            </svg>
-                        </div>
-                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Timeline and character relationships</div>
-                    </div>
-                    <div style="display: flex; flex-direction: column; align-items: center; width: 30%;">
-                        <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 5px;">GLOBAL CONTEXT</div>
-                        <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <circle cx="12" cy="12" r="7" stroke="black"></circle>
-                                <ellipse cx="12" cy="12" rx="10" ry="3" stroke="black"></ellipse>
-                            </svg>
-                        </div>
-                        <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Game-wide lore, mechanics, media</div>
-                    </div>
-                </div>
-                <div style="margin-top: 15px; position: relative;">
-                    <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px; color: #666; text-align: center;">LOCAL CONTEXTS (EVENTS ON THE TIMELINE)</div>
-
-                    <div id="interactive-timeline" style="position: relative; margin: 5px 0 5px 0;">
-                        <div id="timeline-line" style="position: absolute; height: 2px; background-color: #999; width: 80%; left: 10%; top: 12px;"></div>
-
-                        <div id="drop-indicator" style="position: absolute; width: 10px; height: 10px; background-color: #000; transform: rotate(45deg); z-index: 4; display: none; top: 8px;"></div>
-
-                        <div id="timeline-points" style="display: flex; justify-content: space-between; width: 80%; margin: 0 auto; position: relative;">
-                        </div>
-
-                        <div id="event-description" style="display: none; margin: 5px auto 0; padding: 10px; background-color: #f7f7f7; border: 1px solid #ddd; max-width: 80%; border-radius: 4px; font-size: 12px; text-align: center;"></div>
-                    </div>
-
-                    <div style="text-align: center; font-size: 11px; color: #666; margin-top: 0px;">
-                        Click on an event to view details. Drag events to reorder them on the timeline.
-                    </div>
-                </div>
-                <script type="text/javascript">
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const timelineEvents = [
-                            { id: 1, name: "Event A", description: "First major plot point in the story" },
-                            { id: 2, name: "Event B", description: "Character development milestone" },
-                            { id: 3, name: "Event C", description: "Major conflict or challenge" },
-                            { id: 4, name: "Event D", description: "Resolution of secondary plot" },
-                            { id: 5, name: "Event E", description: "Final climax or conclusion" }
-                        ];
-
-                        let draggedEvent = null;
-                        let draggedIndex = null;
-                        let selectedEvent = null;
-                        let draggedElement = null;
-                        let dropTargetIndex = null;
-                        let isDragging = false;
-
-                        const timelineContainer = document.getElementById('interactive-timeline');
-                        const timelineLine = document.getElementById('timeline-line');
-                        const timelinePoints = document.getElementById('timeline-points');
-                        const eventDescription = document.getElementById('event-description');
-                        const dropIndicator = document.getElementById('drop-indicator');
-
-                        function setupDropIndicator() {
-                            dropIndicator.style.width = '10px';
-                            dropIndicator.style.height = '10px';
-                            dropIndicator.style.backgroundColor = '#000';
-                            dropIndicator.style.transform = 'rotate(45deg)';
-                            dropIndicator.style.position = 'absolute';
-                            dropIndicator.style.zIndex = '100';
-                            dropIndicator.style.top = '8px';
-                            dropIndicator.style.pointerEvents = 'none';
-                            dropIndicator.style.transition = 'left 0.05s ease';
-                        }
-
-                        function renderTimeline() {
-                            timelinePoints.innerHTML = '';
-
-                            const containerWidth = timelineContainer.offsetWidth;
-                            const effectiveWidth = containerWidth * 0.8;
-                            const pointSpacing = effectiveWidth / (timelineEvents.length - 1);
-
-                            timelineEvents.forEach((event, index) => {
-                                const pointContainer = document.createElement('div');
-                                pointContainer.className = 'point-container';
-                                pointContainer.style.display = 'flex';
-                                pointContainer.style.flexDirection = 'column';
-                                pointContainer.style.alignItems = 'center';
-                                pointContainer.style.width = `${100 / timelineEvents.length}%`;
-                                pointContainer.style.position = 'relative';
-                                pointContainer.setAttribute('data-index', index);
-
-                                const point = document.createElement('div');
-                                point.className = 'timeline-point';
-                                point.setAttribute('data-id', event.id);
-                                point.setAttribute('data-index', index);
-                                point.style.width = '24px';
-                                point.style.height = '24px';
-                                point.style.borderRadius = '50%';
-                                point.style.backgroundColor = selectedEvent === event.id ? '#f0f0f0' : '#fff';
-                                point.style.border = '2px solid #000';
-                                point.style.display = 'flex';
-                                point.style.justifyContent = 'center';
-                                point.style.alignItems = 'center';
-                                point.style.fontSize = '12px';
-                                point.style.fontWeight = 'bold';
-                                point.style.cursor = 'pointer';
-                                point.style.zIndex = '5';
-                                point.style.position = 'relative';
-                                point.style.marginBottom = '5px';
-                                point.textContent = event.id;
-
-                                point.draggable = true;
-
-                                const label = document.createElement('div');
-                                label.style.fontSize = '11px';
-                                label.style.marginTop = '5px';
-                                label.style.fontWeight = '500';
-                                label.style.textAlign = 'center';
-                                label.textContent = event.name;
-
-                                createDropZones(index, pointContainer, timelineEvents.length);
-
-                                pointContainer.appendChild(point);
-                                pointContainer.appendChild(label);
-                                timelinePoints.appendChild(pointContainer);
-
-                                point.addEventListener('dragstart', handleDragStart);
-                                point.addEventListener('click', handlePointClick);
-                            });
-
-                            createEvenlySpacedDropZones();
-
-                            timelineContainer.addEventListener('dragover', handleDragOver);
-                            timelineContainer.addEventListener('drop', handleDrop);
-                            document.addEventListener('dragend', resetDragState);
-                        }
-
-                        function createEvenlySpacedDropZones() {
-                            const dropZonesContainer = document.createElement('div');
-                            dropZonesContainer.className = 'drop-zones-container';
-                            dropZonesContainer.style.position = 'absolute';
-                            dropZonesContainer.style.left = '10%';
-                            dropZonesContainer.style.width = '80%';
-                            dropZonesContainer.style.height = '24px';
-                            dropZonesContainer.style.top = '0';
-                            dropZonesContainer.style.zIndex = '3';
-
-                            const totalDropZones = timelineEvents.length + 1;
-
-                            for (let i = 0; i < totalDropZones; i++) {
-                                const dropZone = document.createElement('div');
-                                dropZone.className = 'drop-zone';
-                                dropZone.setAttribute('data-index', i);
-
-                                const percentage = (i / (totalDropZones - 1)) * 100;
-                                dropZone.style.position = 'absolute';
-                                dropZone.style.left = `${percentage}%`;
-                                dropZone.style.transform = 'translateX(-50%)';
-                                dropZone.style.width = '20px';
-                                dropZone.style.height = '24px';
-                                dropZone.style.backgroundColor = 'transparent';
-
-                                dropZone.addEventListener('dragenter', function (e) {
-                                    e.preventDefault();
-                                    if (isDragging) {
-                                        dropTargetIndex = parseInt(this.getAttribute('data-index'));
-                                        updateDropIndicator(dropTargetIndex);
-                                    }
-                                });
-
-                                dropZone.addEventListener('dragover', function (e) {
-                                    e.preventDefault();
-                                    e.dataTransfer.dropEffect = 'move';
-                                    if (isDragging) {
-                                        dropTargetIndex = parseInt(this.getAttribute('data-index'));
-                                        updateDropIndicator(dropTargetIndex);
-                                    }
-                                });
-
-                                dropZonesContainer.appendChild(dropZone);
-                            }
-
-                            timelineContainer.appendChild(dropZonesContainer);
-                        }
-
-                        function createDropZones(index, container, totalPoints) {
-                            if (index === 0) {
-                                const beforeDropZone = document.createElement('div');
-                                beforeDropZone.className = 'drop-zone';
-                                beforeDropZone.setAttribute('data-index', 0);
-                                beforeDropZone.style.position = 'absolute';
-                                beforeDropZone.style.left = '-20px';
-                                beforeDropZone.style.top = '0';
-                                beforeDropZone.style.width = '20px';
-                                beforeDropZone.style.height = '24px';
-                                beforeDropZone.style.backgroundColor = 'transparent';
-                                container.appendChild(beforeDropZone);
-                            }
-
-                            const afterDropZone = document.createElement('div');
-                            afterDropZone.className = 'drop-zone';
-                            afterDropZone.setAttribute('data-index', index + 1);
-                            afterDropZone.style.position = 'absolute';
-                            afterDropZone.style.right = '-20px';
-                            afterDropZone.style.top = '0';
-                            afterDropZone.style.width = '20px';
-                            afterDropZone.style.height = '24px';
-                            afterDropZone.style.backgroundColor = 'transparent';
-                            container.appendChild(afterDropZone);
-                        }
-
-                        function handleDragStart(e) {
-                            draggedEvent = parseInt(this.getAttribute('data-id'));
-                            draggedElement = this;
-                            draggedIndex = parseInt(this.getAttribute('data-index'));
-                            isDragging = true;
-
-                            var dragImage = document.createElement('div');
-                            dragImage.style.width = '1px';
-                            dragImage.style.height = '1px';
-                            dragImage.style.opacity = '0.01';
-                            document.body.appendChild(dragImage);
-
-                            if (e.dataTransfer.setDragImage) {
-                                e.dataTransfer.setDragImage(dragImage, 0, 0);
-                            }
-
-                            e.dataTransfer.setData('text', draggedEvent);
-
-                            this.style.opacity = '0.6';
-
-                            dropIndicator.style.display = 'block';
-                            updateDropIndicator(draggedIndex);
-
-                            document.body.classList.add('dragging');
-
-                            setTimeout(function () {
-                                document.body.removeChild(dragImage);
-                            }, 0);
-
-                            highlightAllDropPositions();
-                        }
-
-                        function highlightAllDropPositions() {
-                        }
-
-                        function updateDropIndicator(index) {
-                            if (!isDragging) return;
-
-                            const totalPoints = timelineEvents.length;
-                            const timelineRect = timelineLine.getBoundingClientRect();
-                            const timelineWidth = timelineRect.width;
-                            const timelineLeft = timelineRect.left;
-
-                            let percentage;
-
-                            if (index === 0) {
-                                percentage = 0;
-                            } else if (index >= totalPoints) {
-                                percentage = 100;
-                            } else {
-                                percentage = (index / totalPoints) * 100;
-                            }
-
-                            dropIndicator.style.left = `calc(10% + ${percentage * 0.8}% - 5px)`;
-                            dropIndicator.style.display = 'block';
-                        }
-
-                        function handleDragOver(e) {
-                            if (!isDragging) return;
-
-                            e.preventDefault();
-                            e.dataTransfer.dropEffect = 'move';
-
-                            const mouseX = e.clientX;
-                            const timelineRect = timelineLine.getBoundingClientRect();
-                            const timelineLeft = timelineRect.left;
-                            const timelineWidth = timelineRect.width;
-
-                            let relativePosition = (mouseX - timelineLeft) / timelineWidth;
-                            relativePosition = Math.max(0, Math.min(1, relativePosition));
-
-                            const totalPositions = timelineEvents.length + 1;
-                            const exactPosition = relativePosition * timelineEvents.length;
-                            const nearestIndex = Math.round(exactPosition);
-
-                            if (nearestIndex >= 0 && nearestIndex <= timelineEvents.length) {
-                                if (nearestIndex !== draggedIndex && nearestIndex !== draggedIndex + 1) {
-                                    dropTargetIndex = nearestIndex;
-                                    updateDropIndicator(dropTargetIndex);
-                                }
-                            }
-                        }
-
-                        function handleDrop(e) {
-                            e.preventDefault();
-
-                            if (dropTargetIndex === null ||
-                                dropTargetIndex === draggedIndex ||
-                                dropTargetIndex === draggedIndex + 1) {
-                                resetDragState();
-                                return;
-                            }
-
-                            let newPosition = dropTargetIndex;
-                            if (newPosition > draggedIndex) {
-                                newPosition--;
-                            }
-
-                            const [draggedEventObj] = timelineEvents.splice(draggedIndex, 1);
-
-                            timelineEvents.splice(newPosition, 0, draggedEventObj);
-
-                            timelineEvents.forEach((event, index) => {
-                                event.id = index + 1;
-                            });
-
-                            renderTimeline();
-
-                            resetDragState();
-                        }
-
-                        function resetDragState() {
-                            isDragging = false;
-
-                            if (draggedElement) {
-                                draggedElement.style.opacity = '1';
-                            }
-
-                            document.body.classList.remove('dragging');
-
-                            const dropZones = document.querySelectorAll('.drop-zone');
-                            dropZones.forEach(zone => {
-                                zone.style.backgroundColor = 'transparent';
-                            });
-
-                            setTimeout(() => {
-                                if (!isDragging) {
-                                    hideDropIndicator();
-                                }
-                            }, 50);
-
-                            draggedEvent = null;
-                            draggedElement = null;
-                            draggedIndex = null;
-                            dropTargetIndex = null;
-                        }
-
-                        function hideDropIndicator() {
-                            dropIndicator.style.display = 'none';
-                        }
-
-                        function handlePointClick(e) {
-                            e.stopPropagation();
-
-                            const clickedId = parseInt(this.getAttribute('data-id'));
-
-                            if (selectedEvent === clickedId) {
-                                selectedEvent = null;
-                                eventDescription.style.display = 'none';
-                            } else {
-                                selectedEvent = clickedId;
-                                const event = timelineEvents.find(e => e.id === clickedId);
-
-                                if (event) {
-                                    eventDescription.innerHTML = `<strong>${event.name}</strong><br>${event.description}`;
-                                    eventDescription.style.display = 'block';
-                                }
-                            }
-
-                            renderTimeline();
-                        }
-
-                        document.addEventListener('click', function (e) {
-                            if (!e.target.closest('.timeline-point') && selectedEvent !== null) {
-                                selectedEvent = null;
-                                eventDescription.style.display = 'none';
-                                renderTimeline();
-                            }
-                        });
-
-                        window.addEventListener('resize', function () {
-                            if (isDragging) {
-                                updateDropIndicator(dropTargetIndex || draggedIndex);
-                            } else {
-                                renderTimeline();
-                            }
-                        });
-
-                        const style = document.createElement('style');
-                        style.textContent = `
-                                                                                                                                                                                        .drop-zone {
-                                                                                                                                                                                            cursor: pointer;
-                                                                                                                                                                                            background-color: transparent !important;
-                                                                                                                                                                                        }
-
-                                                                                                                                                                                        #drop-indicator {
-                                                                                                                                                                                            position: absolute;
-                                                                                                                                                                                            width: 10px;
-                                                                                                                                                                                            height: 10px;
-                                                                                                                                                                                            background-color: #000;
-                                                                                                                                                                                            z-index: 100;
-                                                                                                                                                                                            top: 8px;
-                                                                                                                                                                                            transform: rotate(45deg);
-                                                                                                                                                                                            pointer-events: none;
-                                                                                                                                                                                        }
-
-                                                                                                                                                                                        .point-container {
-                                                                                                                                                                                            position: relative;
-                                                                                                                                                                                        }
-
-                                                                                                                                                                                        #timeline-points {
-                                                                                                                                                                                            display: flex;
-                                                                                                                                                                                            justify-content: space-between;
-                                                                                                                                                                                            width: 80%;
-                                                                                                                                                                                            margin: 0 auto;
-                                                                                                                                                                                            position: relative;
-                                                                                                                                                                                        }
-                                                                                                                                                                                    `;
-                        document.head.appendChild(style);
-
-                        setupDropIndicator();
-
-                        renderTimeline();
-                    });
-                </script>
-            </center>
-
-            <div class="screenshot">
-                <img src="https://www.gitbook.com/cdn-cgi/image/dpr=2,width=1920,onerror=redirect,format=auto/https%3A%2F%2Ffiles.gitbook.com%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F4xTYAUCIqQKIhDrUF5Jj%252Fuploads%252FBak0zfSvvOduIgQwlBLF%252Fimage.png%3Falt%3Dmedia%26token%3Dff31dc2a-e2a7-4b4b-b27d-0f600a51b033" alt="Narrative Designer Interface" style="width: 100%;">
-            </div>
-            <h2>CHARACTER MATRIX</h2>
-            <ul class="sub-steps">
-                <li>Click 'Open Full Matrix View' to see a global timeline</li>
-                <li>Use 'Descriptive View' for text descriptions or 'Numeric View' for impact values</li>
-                <li>Black-and-white scale shows constructive vs. destructive character states during these events</li>
-            </ul>
-            <div style="display: flex; justify-content: center; align-items: center; background-color: #f7f7f7; border-radius: 4px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; font-size: 10px; flex-wrap: wrap; justify-content: center;">
-                    <span style="width: 14px; height: 14px; background-color: black; display: inline-block; margin-right: 4px;"></span>
-                    <span style="margin-right: 10px;">Destructive (-100)</span>
-
-                    <span style="width: 14px; height: 14px; background-color: white; border: 1px solid #ccc; display: inline-block; margin-right: 4px;"></span>
-                    <span style="margin-right: 10px;">Constructive (100)</span>
-
-                    <span style="font-style: italic;">0 = No knowledge of event</span>
-                </div>
-            </div>
-            <div class="section">
-                <div class="steps">
-                    <div class="step">
-                        <div class="step-title">CREATE TIMELINE EVENTS</div>
+            <!-- Tab Content -->
+            <div id="tab-basics" class="tab-content active">
+                <div class="two-columns">
+                    <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.5; font-weight: 500;">
+                        <strong>Narrative Designer</strong> is designed to visualize and systematize narrative elements and get AI help with story development.
+                    </p>
+
+                    <h2>SETUP</h2>
+                    <div class="steps">
                         <ul class="sub-steps">
-                            <li>Open the Character Database object</li>
-                            <li>In the Selected Event section, enter a description of your story event</li>
-                            <li>Drag a sprite into the illustration field</li>
-                            <li>Under Character Effects, set how this event impacts each character (-100 to +100)</li>
-                            <li>Expand the '+' next to each character name to add specific behavior details</li>
-                            <li>Click 'Save Event As New' to add it to the global timeline</li>
+                            <li>Find NarrativeDesigner.prefab and add it to your scene</li>
+                            <li>Create required components as indicated in the menu</li>
                         </ul>
                     </div>
 
-                    <div class="step">
-                        <div class="step-title">MANAGE TIMELINE EVENTS</div>
-                        <ul class="sub-steps">
-                            <li>All created events appear in the Timeline Events list & matrix below the edit area</li>
-                            <li>Click on any event to load and edit its details</li>
-                            <li>Drag events to reorder them in the timeline</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+                    <center>
+                        <div style="display: flex; justify-content: space-around; width: 100%; margin-top: 15px;">
+                            <div style="display: flex; flex-direction: column; align-items: center; width: 30%;">
+                                <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 5px;">CHARACTER BRAIN</div>
+                                <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="12" cy="8" r="4" stroke="black"></circle>
+                                        <path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2" stroke="black"></path>
+                                    </svg>
+                                </div>
+                                <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Character traits, skills, memories</div>
+                            </div>
 
-            <div class="strategic-board-content">
-                <div class="strategic-board-image">
-                    <div class="screenshot" style="margin: 0;">
-                        <img src="https://octanta-studio.gitbook.io/~gitbook/image?url=https%3A%2F%2F982414592-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fb0qpeQUsDr1dTsID7c0e%252Fuploads%252FNCUAGKHIhWdHuYGstY1l%252Fimage_2025-04-11_17-46-02.png%3Falt%3Dmedia%26token%3Df3c1dc7b-1d19-47ed-9f55-059b14e1a503&width=768&dpr=4&quality=100&sign=d344b206&sv=2" alt="Strategic Board Interface" style="width: 100%;">
+                            <div style="display: flex; flex-direction: column; align-items: center; width: 35%;">
+                                <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 5px;">CHARACTER DATABASE</div>
+                                <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M8 6h13" stroke="black"></path>
+                                        <path d="M8 12h13" stroke="black"></path>
+                                        <path d="M8 18h13" stroke="black"></path>
+                                        <path d="M3 6h.01" stroke="black" stroke-width="2"></path>
+                                        <path d="M3 12h.01" stroke="black" stroke-width="2"></path>
+                                        <path d="M3 18h.01" stroke="black" stroke-width="2"></path>
+                                    </svg>
+                                </div>
+                                <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Timeline and character relationships</div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; width: 30%;">
+                                <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 5px;">GLOBAL CONTEXT</div>
+                                <div style="width: 50px; height: 50px; margin: 0 auto; display: flex; justify-content: center; align-items: center;">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="12" cy="12" r="7" stroke="black"></circle>
+                                        <ellipse cx="12" cy="12" rx="10" ry="3" stroke="black"></ellipse>
+                                    </svg>
+                                </div>
+                                <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Game-wide lore, mechanics, media</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px; position: relative;">
+                            <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px; color: #666; text-align: center;">LOCAL CONTEXTS (EVENTS ON THE TIMELINE)</div>
+
+                            <div id="interactive-timeline" style="position: relative; margin: 5px 0 5px 0;">
+                                <div id="timeline-line" style="position: absolute; height: 2px; background-color: #999; width: 80%; left: 10%; top: 12px;"></div>
+
+                                <div id="drop-indicator" style="position: absolute; width: 10px; height: 10px; background-color: #000; transform: rotate(45deg); z-index: 4; display: none; top: 8px;"></div>
+
+                                <div id="timeline-points" style="display: flex; justify-content: space-between; width: 80%; margin: 0 auto; position: relative;">
+                                </div>
+
+                                <div id="event-description" style="display: none; margin: 5px auto 0; padding: 10px; background-color: #f7f7f7; border: 1px solid #ddd; max-width: 80%; border-radius: 4px; font-size: 12px; text-align: center;"></div>
+                            </div>
+
+                            <div style="text-align: center; font-size: 11px; color: #666; margin-top: 0px;">
+                                Click on an event to view details. Drag events to reorder them on the timeline.
+                            </div>
+                        </div>
+                    </center>
+
+                    <div class="screenshot">
+                        <img src="https://www.gitbook.com/cdn-cgi/image/dpr=2,width=1920,onerror=redirect,format=auto/https%3A%2F%2Ffiles.gitbook.com%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F4xTYAUCIqQKIhDrUF5Jj%252Fuploads%252FBak0zfSvvOduIgQwlBLF%252Fimage.png%3Falt%3Dmedia%26token%3Dff31dc2a-e2a7-4b4b-b27d-0f600a51b033" alt="Narrative Designer Interface" style="width: 100%;">
                     </div>
-                </div>
-                <div class="strategic-board-text">
-                    <h2>STRATEGIC BOARD</h2>
-                    <ul class="sub-steps" style="margin-top: 0;">
-                        <li>Drag characters to rearrange their positions</li>
-                        <li>Click on lines between characters to edit relationships</li>
-                        <li>Use different colors and dot sizes to indicate character status</li>
-                        <li>Set custom background map of your game world</li>
+                    <h2>CHARACTER MATRIX</h2>
+                    <ul class="sub-steps">
+                        <li>Click 'Open Full Matrix View' to see a global timeline</li>
+                        <li>Use 'Descriptive View' for text descriptions or 'Numeric View' for impact values</li>
+                        <li>Black-and-white scale shows constructive vs. destructive character states during these events</li>
                     </ul>
+                    <div style="display: flex; justify-content: center; align-items: center; background-color: #f7f7f7; border-radius: 4px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; font-size: 10px; flex-wrap: wrap; justify-content: center;">
+                            <span style="width: 14px; height: 14px; background-color: black; display: inline-block; margin-right: 4px;"></span>
+                            <span style="margin-right: 10px;">Destructive (-100)</span>
+
+                            <span style="width: 14px; height: 14px; background-color: white; border: 1px solid #ccc; display: inline-block; margin-right: 4px;"></span>
+                            <span style="margin-right: 10px;">Constructive (100)</span>
+
+                            <span style="font-style: italic;">0 = No knowledge of event</span>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-title">CREATE TIMELINE EVENTS</div>
+                                <ul class="sub-steps">
+                                    <li>Open the Character Database object</li>
+                                    <li>In the Selected Event section, enter a description of your story event</li>
+                                    <li>Drag a sprite into the illustration field</li>
+                                    <li>Under Character Effects, set how this event impacts each character (-100 to +100)</li>
+                                    <li>Expand the '+' next to each character name to add specific behavior details</li>
+                                    <li>Click 'Save Event As New' to add it to the global timeline</li>
+                                </ul>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-title">MANAGE TIMELINE EVENTS</div>
+                                <ul class="sub-steps">
+                                    <li>All created events appear in the Timeline Events list & matrix below the edit area</li>
+                                    <li>Click on any event to load and edit its details</li>
+                                    <li>Drag events to reorder them in the timeline</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="strategic-board-content">
+                        <div class="strategic-board-image">
+                            <div class="screenshot" style="margin: 0;">
+                                <img src="https://octanta-studio.gitbook.io/~gitbook/image?url=https%3A%2F%2F982414592-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fb0qpeQUsDr1dTsID7c0e%252Fuploads%252FNCUAGKHIhWdHuYGstY1l%252Fimage_2025-04-11_17-46-02.png%3Falt%3Dmedia%26token%3Df3c1dc7b-1d19-47ed-9f55-059b14e1a503&width=768&dpr=4&quality=100&sign=d344b206&sv=2" alt="Strategic Board Interface" style="width: 100%;">
+                            </div>
+                        </div>
+                        <div class="strategic-board-text">
+                            <h2>STRATEGIC BOARD</h2>
+                            <ul class="sub-steps" style="margin-top: 0;">
+                                <li>Drag characters to rearrange their positions</li>
+                                <li>Click on lines between characters to edit relationships</li>
+                                <li>Use different colors and dot sizes to indicate character status</li>
+                                <li>Set custom background map of your game world</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 100%; clear: both; margin-top: 5px;">
+                    <h2>Export as TXT/HTML for AI assistance & team collaboration</h2>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 5px;">
+
+                        <div style="background-color: var(--card-bg-color); padding: 10px 12px; border: 1px solid var(--border-color); clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px ); flex: 1; min-width: 200px;">
+                            <div style="display: flex; align-items: flex-start;">
+                                <div style="width: 18px; height: 18px; margin-right: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--accent-color);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                </div>
+                                <div style="font-size: 12px; font-weight: 500;">Export character to get roleplay sessions, quotes, psychology suggestions and design ideas</div>
+                            </div>
+                        </div>
+
+                        <div style="background-color: var(--card-bg-color); padding: 10px 12px; border: 1px solid var(--border-color); clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px ); flex: 1; min-width: 200px;">
+                            <div style="display: flex; align-items: flex-start;">
+                                <div style="width: 18px; height: 18px; margin-right: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--accent-color);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                </div>
+                                <div style="font-size: 12px; font-weight: 500;">Export event to request scene dialogue drafts, visualization references and plot twist ideas</div>
+                            </div>
+                        </div>
+
+                        <div style="background-color: var(--card-bg-color); padding: 10px 12px; border: 1px solid var(--border-color); clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px ); flex: 1; min-width: 200px;">
+                            <div style="display: flex; align-items: flex-start;">
+                                <div style="width: 18px; height: 18px; margin-right: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--accent-color);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                </div>
+                                <div style="font-size: 12px; font-weight: 500;">Export global context to analyze plot holes, pacing consistency and target audience match</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; font-size: 11px; margin-top: 5px;">
+                        <i>Remember: AI outputs should always be reviewed and curated by a human before implementation</i>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div style="width: 100%; clear: both; margin-top: 5px;">
-            <h2>Export as TXT/HTML for AI assistance & team collaboration</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 5px;">
 
-                <div style="background-color: var(--card-bg-color); padding: 10px 12px; border: 1px solid var(--border-color); clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px ); flex: 1; min-width: 200px;">
-                    <div style="display: flex; align-items: flex-start;">
-                        <div style="width: 18px; height: 18px; margin-right: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--accent-color);">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                        </div>
-                        <div style="font-size: 12px; font-weight: 500;">Export character to get roleplay sessions, quotes, psychology suggestions and design ideas</div>
-                    </div>
+            <div id="tab-runtime" class="tab-content">
+                <div class="two-columns">
+                    <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.5; font-weight: 500;">
+                        Content for the Runtime Usage Example tab will be added soon.
+                    </p>
                 </div>
-
-                <div style="background-color: var(--card-bg-color); padding: 10px 12px; border: 1px solid var(--border-color); clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px ); flex: 1; min-width: 200px;">
-                    <div style="display: flex; align-items: flex-start;">
-                        <div style="width: 18px; height: 18px; margin-right: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--accent-color);">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                        </div>
-                        <div style="font-size: 12px; font-weight: 500;">Export event to request scene dialogue drafts, visualization references and plot twist ideas</div>
-                    </div>
-                </div>
-
-                <div style="background-color: var(--card-bg-color); padding: 10px 12px; border: 1px solid var(--border-color); clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px ); flex: 1; min-width: 200px;">
-                    <div style="display: flex; align-items: flex-start;">
-                        <div style="width: 18px; height: 18px; margin-right: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--accent-color);">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                        </div>
-                        <div style="font-size: 12px; font-weight: 500;">Export global context to analyze plot holes, pacing consistency and target audience match</div>
-                    </div>
-                </div>
-            </div>
-            <div style="text-align: center; font-size: 11px; margin-top: 5px;">
-                <i>Remember: AI outputs should always be reviewed and curated by a human before implementation</i>
             </div>
         </div>
 
@@ -1013,9 +1132,6 @@
         <footer>
             © 2025 OCTANTA STUDIO. NARRATIVE DESIGNER
         </footer>
-
-        <div class="container">
-        </div>
     </div>
 </body>
 </html>
