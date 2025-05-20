@@ -901,10 +901,10 @@
 
         <!-- Tabber Structure -->
         <div class="tabber">
-            <div class="tabs" style="justify-content: center;">
+            <!--<div class="tabs" style="justify-content: center;">
                 <div class="tab active" data-tab="tab-basics">Basics</div>
                 <div class="tab" data-tab="tab-runtime">Runtime Usage Example</div>
-            </div>
+            </div>-->
 
             <!-- Tab Content -->
             <div id="tab-basics" class="tab-content active">
@@ -1090,13 +1090,200 @@
                 </div>
             </div>
 
-            <div id="tab-runtime" class="tab-content">
-                <div class="two-columns">
-                    <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.5; font-weight: 500;">
-                        Content for the Runtime Usage Example tab will be added soon.
-                    </p>
+            <!--<div id="tab-runtime" class="tab-content">
+              
+                <div class="section">
+                    <div class="step">
+                        <div class="step-title">Switching Between Events</div>
+                        <ul class="sub-steps">
+                            <li>Select an event from the global timeline to set and get the current narrative context of the game</li>
+                            <li>Event selection can trigger dialogues, scenes, and other gameplay logic</li>
+                        </ul>-->
+
+                        <!-- Code with two methods - compact version -->
+                        <!--<div style="display: flex; gap: 10px; margin-top: 8px;">
+                            <div style="flex: 1; background-color: #f7f7f7; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 10px;">
+                                <pre style="margin: 0; white-space: pre-wrap; font-family: monospace;">
+// Method 1: Select by index
+menu.dataInserter.SelectEvent(0);
+GlobalEvent newEvent = menu.dataInserter.GetCurrentSelectedEvent();
+// Operations with newEvent...
+</pre>
+                            </div>
+                            <div style="flex: 1; background-color: #f7f7f7; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 10px;">
+                                <pre style="margin: 0; white-space: pre-wrap; font-family: monospace;">
+// Method 2: Select by GUID regardless of the timeline
+// Select new event from EventSelector
+GlobalEvent newEvent = menu.eventSelector.GetEvent();
+menu.dataInserter.SelectEvent(newEvent);
+// Operations with newEvent...
+</pre>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; margin-top: 10px; margin-bottom: 10px;">
+                            <div style="flex: 1; height: 2px; background-color: #ddd;"></div>
+                            <div style="display: flex; gap: 8px; margin: 0 5px;">
+                                <div style="width: 24px; height: 24px; border: 1px solid #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; background-color: white;">#0</div>
+                                <div style="width: 24px; height: 24px; border: 2px solid #1890ff; border-radius: 4px; background-color: #e6f7ff; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #1890ff;">#1</div>
+                                <div style="width: 24px; height: 24px; border: 1px solid #52c41a; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; background-color: #f6ffed; color: #52c41a;">#2</div>
+                                <div style="width: 24px; height: 24px; border: 1px solid #fa8c16; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; background-color: #fff7e6; color: #fa8c16;">#3</div>
+                            </div>
+                            <div style="flex: 1; height: 2px; background-color: #ddd;"></div>
+                        </div>-->
+
+                        <!-- Current Event Box - Compact -->
+                        <!--<div style="padding: 8px; margin-bottom: 8px; border: 1px solid #1890ff; border-radius: 4px; background-color: white; text-align: left; font-size: 11px; position: relative;">
+                            <div style="position: absolute; top: -6px; left: 8px; background-color: white; padding: 0 4px; font-size: 9px; color: #1890ff;">Current Event (#1)</div>
+                            "Character discovers a hidden cave with strange markings on the walls."
+                        </div>-->
+
+                        <!-- Player Choice - Compact -->
+                        <!--<div style="display: flex; gap: 15px; justify-content: center;">
+                            <div style="flex: 1; text-align: center;">
+                                <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #1890ff; margin: 0 auto 5px;"></div>
+                                <div style="padding: 6px; border: 1px solid #52c41a; border-radius: 4px; background-color: #f6ffed; font-size: 10px; text-align: center;">Explore the cave<div style="font-size: 8px; color: #52c41a; margin-top: 2px;">Next: #2</div></div>
+                            </div>
+                            <div style="flex: 1; text-align: center;">
+                                <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #1890ff; margin: 0 auto 5px;"></div>
+                                <div style="padding: 6px; border: 1px solid #fa8c16; border-radius: 4px; background-color: #fff7e6; font-size: 10px; text-align: center;">Continue on path<div style="font-size: 8px; color: #fa8c16; margin-top: 2px;">Next: #3</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-title">EDIT EVENT STATES</div>
+                        <ul class="sub-steps">
+                            <li>Based on player's choice, events can change, namely the memory of them and their impact on characters</li>
+                            <li>Set the event impact on the character to 0 to erase the event from his memory</li>
+                            <li>In case of non-linear narrative, rearrange events along the timeline depending on how the player chooses them</li>
+                        </ul>-->
+                        <!-- Code with single method - compact version -->
+                        <!--<div style="display: flex; gap: 10px; margin-top: 8px;">
+                            <div style="flex: 1; background-color: #f7f7f7; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 10px;">
+                                <pre style="margin: 0; white-space: pre-wrap; font-family: monospace;">
+// Handle player choice in non-linear narrative
+public void OnPlayerMadeChoice(int choiceIndex, bool foundHiddenItem) {
+// Get current position in timeline
+GlobalEvent currentEvent = menu.dataInserter.GetCurrentSelectedEvent();
+int currentPosition = currentEvent != null ? currentEvent.timelinePosition : 0;
+
+// Get all available events from selector
+List&lt;GlobalEvent&gt; availableEvents = menu.eventSelector.GetEvents();
+
+// Select chosen event
+GlobalEvent chosenEvent = availableEvents[choiceIndex];
+menu.dataInserter.SelectEvent(chosenEvent);
+
+// Place event after current position in the timeline
+menu.dataInserter.MoveEventToPosition(currentPosition + 1);
+
+// Set initial impact on player character
+menu.dataInserter.SetCharacterEffect(playerCharacter, 1f);
+
+// If player found a hidden item during this event, increase impact
+if (foundHiddenItem) {
+    menu.dataInserter.SetCharacterEffect(playerCharacter, 5f,
+    "Found buried treasure chest");
+}
+
+// Set all non-chosen events to impact 0 (not in character memory)
+for (int i = 0; i < availableEvents.Count; i++) {
+    if (i != choiceIndex) {
+        menu.dataInserter.SetCharacterEffect(playerCharacter, availableEvents[i], 0f);
+    }
+}
+
+// Save changes to database
+menu.dataInserter.SaveChanges();
+}
+            </pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-title">GET CHARACTER MEMORIES</div>
+                        <ul class="sub-steps">
+                            <li>Access a character's memories before the current event</li>
+                            <li>Characters will only remember events with non-zero impact</li>
+                            <li>Use memories to determine dialogue availability</li>
+                        </ul>
+                        <div style="background-color: #f7f7f7; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; white-space: pre; overflow-x: auto; margin-top: 10px;">
+                            // Check if character remembers a specific previous event
+                            public bool DoesCharacterRemember(CharacterBrain character,
+                            string eventDescription) {
+                            // Get all events affecting this character
+                            List&lt;GlobalEvent&gt; affectingEvents =
+                            menu.dataExtractor.GetEventsAffectingCharacter(character);
+
+                            // Check if any of the events match the description
+                            foreach (var evt in affectingEvents) {
+                            if (evt.description.Contains(eventDescription)) {
+                            float impact = menu.dataExtractor.GetEventImpactOnCharacter(
+                            evt, character);
+
+                            // If impact is non-zero, character remembers this event
+                            return impact != 0;
+                            }
+                            }
+
+                            return false;
+                            }
+
+                            // In dialogue system:
+                            if (DoesCharacterRemember(npcCharacter, "discovered a hidden cave")) {
+                            // NPC remembers the cave discovery event
+                            // Unlock special dialogue options
+                            UnlockDialogueOption("Ask about the cave");
+                            }
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-title">CHECK CHARACTER STATE</div>
+                        <ul class="sub-steps">
+                            <li>Check a character's current state value in the current event</li>
+                            <li>Highly negative states (-100 to -50) trigger hostility or combat</li>
+                            <li>Positive states (0 to 100) allow for friendly interactions</li>
+                        </ul>
+                        <div style="background-color: #f7f7f7; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; white-space: pre; overflow-x: auto; margin-top: 10px;">
+                            // Get character state at current event
+                            GlobalEvent currentEvent = menu.dataExtractor.GetCurrentSelectedEvent();
+                            CharacterBrain guardCharacter = menu.dataExtractor.GetCharacterByName("Guard");
+
+                            // Get character's state in the current event
+                            CharacterStateEvent stateAtEvent =
+                            menu.dataExtractor.GetCharacterStateAtEvent(guardCharacter, currentEvent);
+
+                            if (stateAtEvent != null) {
+                            float currentState = stateAtEvent.stateAfter;
+
+                            // Check character's state to determine reaction
+                            if (currentState < -50f) {
+                            // Very negative state - initiate combat
+                            Debug.Log("Guard is hostile and attacks!");
+                            InitiateCombat(guardCharacter);
+                            }
+                            else if (currentState < 0f) {
+                            // Somewhat negative - unfriendly but not hostile
+                            Debug.Log("Guard is suspicious and unfriendly");
+                            ShowUnfriendlyDialogue(guardCharacter);
+                            }
+                            else {
+                            // Positive state - friendly interaction
+                            Debug.Log("Guard is friendly and helpful");
+                            ShowFriendlyDialogue(guardCharacter);
+                            }
+                            }
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <div style="margin-top: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 4px; font-size: 12px;">
+                    <strong>Note:</strong> This example demonstrates a basic implementation of runtime narrative logic. You can extend this approach for more complex branching stories, character development, and gameplay systems.
+                </div>
+            </div>-->
         </div>
 
         <div class="support-links" style="margin-top: 0px; width: 33%; max-width: 300px; margin-left: auto; margin-right: auto;">
