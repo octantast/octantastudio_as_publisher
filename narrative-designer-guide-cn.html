@@ -494,13 +494,12 @@
             if (tabs.length > 0) {
                 tabs[0].click();
             }
-
             const timelineEvents = [
-                { id: 1, name: "Event A", description: "First major plot point in the story" },
-                { id: 2, name: "Event B", description: "Character development milestone" },
-                { id: 3, name: "Event C", description: "Major conflict or challenge" },
-                { id: 4, name: "Event D", description: "Resolution of secondary plot" },
-                { id: 5, name: "Event E", description: "Final climax or conclusion" }
+                { id: 1, name: "Подія A", description: "Перша основна сюжетна точка в історії" },
+                { id: 2, name: "Подія B", description: "Етап розвитку персонажа" },
+                { id: 3, name: "Подія C", description: "Головний конфлікт або виклик" },
+                { id: 4, name: "Подія D", description: "Вирішення другорядної сюжетної лінії" },
+                { id: 5, name: "Подія E", description: "Фінальна кульмінація або завершення" }
             ];
 
             let draggedEvent = null;
@@ -845,34 +844,34 @@
 
             const style = document.createElement('style');
             style.textContent = `
-            .drop-zone {
-                cursor: pointer;
-                background-color: transparent !important;
-            }
+                .drop-zone {
+                    cursor: pointer;
+                    background-color: transparent !important;
+                }
 
-            #drop-indicator {
-                position: absolute;
-                width: 10px;
-                height: 10px;
-                background-color: #000;
-                z-index: 100;
-                top: 8px;
-                transform: rotate(45deg);
-                pointer-events: none;
-            }
+                #drop-indicator {
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+                    background-color: #000;
+                    z-index: 100;
+                    top: 8px;
+                    transform: rotate(45deg);
+                    pointer-events: none;
+                }
 
-            .point-container {
-                position: relative;
-            }
+                .point-container {
+                    position: relative;
+                }
 
-            #timeline-points {
-                display: flex;
-                justify-content: space-between;
-                width: 80%;
-                margin: 0 auto;
-                position: relative;
-            }
-        `;
+                #timeline-points {
+                    display: flex;
+                    justify-content: space-between;
+                    width: 80%;
+                    margin: 0 auto;
+                    position: relative;
+                }
+            `;
             document.head.appendChild(style);
 
             setupDropIndicator();
@@ -893,9 +892,10 @@
                     </svg>
                 </a>
             </div>
-            <p>Quick start guide for Unity developers by Octanta Studio</p>
+            <p>Unity开发者快速入门指南，由Octanta Studio提供</p>
         </header>
 
+        <!-- Tabber Structure -->
         <div class="tabber">
             <!--<div class="tabs" style="justify-content: center;">
                 <div class="tab active" data-tab="tab-basics">Basics</div>
@@ -905,14 +905,14 @@
             <div id="tab-basics" class="tab-content active">
                 <div class="two-columns">
                     <p style="margin: 0 0 12px 0; font-size: 14px; line-height: 1.5; font-weight: 500;">
-                        <strong>Narrative Designer</strong> is designed to visualize and systematize narrative elements and get AI help with story development.
+                        叙事设计师旨在可视化和系统化叙事元素，并获得AI帮助进行故事开发。
                     </p>
 
                     <h2>SETUP</h2>
                     <div class="steps">
                         <ul class="sub-steps">
-                            <li>Find NarrativeDesigner.prefab and add it to your scene</li>
-                            <li>Create required components as indicated in the menu</li>
+                            <li>找到NarrativeDesigner.prefab并将其添加到你的场景中</li>
+                            <li>按照菜单中的指示创建所需组件</li>
                         </ul>
                     </div>
 
@@ -926,7 +926,7 @@
                                         <path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2" stroke="black"></path>
                                     </svg>
                                 </div>
-                                <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Character traits, skills, memories</div>
+                                <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">角色特征、技能、记忆</div>
                             </div>
 
                             <div style="display: flex; flex-direction: column; align-items: center; width: 35%;">
@@ -941,7 +941,7 @@
                                         <path d="M3 18h.01" stroke="black" stroke-width="2"></path>
                                     </svg>
                                 </div>
-                                <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Timeline and character relationships</div>
+                                <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">时间线和角色关系</div>
                             </div>
                             <div style="display: flex; flex-direction: column; align-items: center; width: 30%;">
                                 <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 5px;">GLOBAL CONTEXT</div>
@@ -951,11 +951,11 @@
                                         <ellipse cx="12" cy="12" rx="10" ry="3" stroke="black"></ellipse>
                                     </svg>
                                 </div>
-                                <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">Game-wide lore, mechanics, media</div>
+                                <div style="font-size: 11px; text-align: center; margin-top: 5px; padding: 0 5px;">游戏范围的传说、机制、媒体</div>
                             </div>
                         </div>
                         <div style="margin-top: 15px; position: relative;">
-                            <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px; color: #666; text-align: center;">LOCAL CONTEXTS (EVENTS ON THE TIMELINE)</div>
+                            <div style="font-weight: bold; text-transform: uppercase; font-size: 10px; margin-bottom: 5px; color: #666; text-align: center;">本地背景（时间线上的事件）</div>
 
                             <div id="interactive-timeline" style="position: relative; margin: 5px 0 5px 0;">
                                 <div id="timeline-line" style="position: absolute; height: 2px; background-color: #999; width: 80%; left: 10%; top: 12px;"></div>
@@ -969,7 +969,7 @@
                             </div>
 
                             <div style="text-align: center; font-size: 11px; color: #666; margin-top: 0px;">
-                                Click on an event to view details. Drag events to reorder them on the timeline.
+                                点击事件查看详情。拖动事件以在时间线上重新排序它们。
                             </div>
                         </div>
                     </center>
@@ -977,43 +977,43 @@
                     <div class="screenshot">
                         <img src="https://www.gitbook.com/cdn-cgi/image/dpr=2,width=1920,onerror=redirect,format=auto/https%3A%2F%2Ffiles.gitbook.com%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F4xTYAUCIqQKIhDrUF5Jj%252Fuploads%252FBak0zfSvvOduIgQwlBLF%252Fimage.png%3Falt%3Dmedia%26token%3Dff31dc2a-e2a7-4b4b-b27d-0f600a51b033" alt="Narrative Designer Interface" style="width: 100%;">
                     </div>
-                    <h2>CHARACTER MATRIX</h2>
+                    <h2>角色矩阵</h2>
                     <ul class="sub-steps">
-                        <li>Click 'Open Full Matrix View' to see a global timeline</li>
-                        <li>Use 'Descriptive View' for text descriptions or 'Numeric View' for impact values</li>
-                        <li>Black-and-white scale shows constructive vs. destructive character states during these events</li>
+                        <li>点击'打开完整矩阵视图'以查看全局时间线</li>
+                        <li>使用'描述性视图'获取文本描述或'数值视图'获取影响值</li>
+                        <li>黑白量表显示在这些事件期间角色状态的建设性与破坏性</li>
                     </ul>
                     <div style="display: flex; justify-content: center; align-items: center; background-color: #f7f7f7; border-radius: 4px; flex-wrap: wrap;">
                         <div style="display: flex; align-items: center; font-size: 10px; flex-wrap: wrap; justify-content: center;">
                             <span style="width: 14px; height: 14px; background-color: black; display: inline-block; margin-right: 4px;"></span>
-                            <span style="margin-right: 10px;">Destructive (-100)</span>
+                            <span style="margin-right: 10px;">破坏性（-100)</span>
 
                             <span style="width: 14px; height: 14px; background-color: white; border: 1px solid #ccc; display: inline-block; margin-right: 4px;"></span>
-                            <span style="margin-right: 10px;">Constructive (100)</span>
+                            <span style="margin-right: 10px;">建设性（100)</span>
 
-                            <span style="font-style: italic;">0 = No knowledge of event</span>
+                            <span style="font-style: italic;">0 = 不了解事件</span>
                         </div>
                     </div>
                     <div class="section">
                         <div class="steps">
                             <div class="step">
-                                <div class="step-title">CREATE TIMELINE EVENTS</div>
+                                <div class="step-title">创建时间线事件</div>
                                 <ul class="sub-steps">
-                                    <li>Open the Character Database object</li>
-                                    <li>In the Selected Event section, enter a description of your story event</li>
-                                    <li>Drag a sprite into the illustration field</li>
-                                    <li>Under Character Effects, set how this event impacts each character (-100 to +100)</li>
-                                    <li>Expand the '+' next to each character name to add specific behavior details</li>
-                                    <li>Click 'Save Event As New' to add it to the global timeline</li>
+                                    <li>打开角色数据库对象</li>
+                                    <li>在所选事件部分，输入你的故事事件描述</li>
+                                    <li>将精灵拖入插图字段</li>
+                                    <li>在角色效果下，设置此事件如何影响每个角色（-100至+100）</li>
+                                    <li>展开每个角色名称旁边的'+'以添加特定行为详情</li>
+                                    <li>点击'保存事件为新事件'以将其添加到全局时间线</li>
                                 </ul>
                             </div>
 
                             <div class="step">
-                                <div class="step-title">MANAGE TIMELINE EVENTS</div>
+                                <div class="step-title">管理时间线事件</div>
                                 <ul class="sub-steps">
-                                    <li>All created events appear in the Timeline Events list & matrix below the edit area</li>
-                                    <li>Click on any event to load and edit its details</li>
-                                    <li>Drag events to reorder them in the timeline</li>
+                                    <li>所有创建的事件都会显示在时间线事件列表和编辑区域下方的矩阵中</li>
+                                    <li>点击任何事件以加载和编辑其详情</li>
+                                    <li>拖动事件以在时间线中重新排序</li>
                                 </ul>
                             </div>
                         </div>
@@ -1026,18 +1026,18 @@
                             </div>
                         </div>
                         <div class="strategic-board-text">
-                            <h2>STRATEGIC BOARD</h2>
+                            <h2>策略板</h2>
                             <ul class="sub-steps" style="margin-top: 0;">
-                                <li>Drag characters to rearrange their positions</li>
-                                <li>Click on lines between characters to edit relationships</li>
-                                <li>Use different colors and dot sizes to indicate character status</li>
-                                <li>Set custom background map of your game world</li>
+                                <li>拖动角色以重新安排他们的位置</li>
+                                <li>点击角色之间的线条以编辑关系</li>
+                                <li>使用不同的颜色和点大小来表示角色状态</li>
+                                <li>设置你的游戏世界的自定义背景地图</li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div style="width: 100%; clear: both; margin-top: 5px;">
-                    <h2>Export as TXT/HTML for AI assistance & team collaboration</h2>
+                    <h2>导出为TXT/HTML以获取AI辅助和团队协作</h2>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 5px;">
 
                         <div style="background-color: var(--card-bg-color); padding: 10px 12px; border: 1px solid var(--border-color); clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px ); flex: 1; min-width: 200px;">
@@ -1049,7 +1049,7 @@
                                         <line x1="12" y1="15" x2="12" y2="3"></line>
                                     </svg>
                                 </div>
-                                <div style="font-size: 12px; font-weight: 500;">Export character to get roleplay sessions, quotes, psychology suggestions and design ideas</div>
+                                <div style="font-size: 12px; font-weight: 500;">导出角色以获取角色扮演会话、引用、心理学建议和设计理念</div>
                             </div>
                         </div>
 
@@ -1062,7 +1062,7 @@
                                         <line x1="12" y1="15" x2="12" y2="3"></line>
                                     </svg>
                                 </div>
-                                <div style="font-size: 12px; font-weight: 500;">Export event to request scene dialogue drafts, visualization references and plot twist ideas</div>
+                                <div style="font-size: 12px; font-weight: 500;">导出事件以请求场景对话草稿、可视化参考和情节转折创意</div>
                             </div>
                         </div>
 
@@ -1075,207 +1075,16 @@
                                         <line x1="12" y1="15" x2="12" y2="3"></line>
                                     </svg>
                                 </div>
-                                <div style="font-size: 12px; font-weight: 500;">Export global context to analyze plot holes, pacing consistency and target audience match</div>
+                                <div style="font-size: 12px; font-weight: 500;">导出全局背景以分析情节漏洞、节奏一致性和目标受众匹配</div>
                             </div>
                         </div>
                     </div>
                     <div style="text-align: center; font-size: 11px; margin-top: 5px;">
-                        <i>Remember: AI outputs should always be reviewed and curated by a human before implementation</i>
+                        <i>请记住：所有输出在实施前应始终由人类审核和整理</i>
                     </div>
                 </div>
             </div>
 
-            <!--<div id="tab-runtime" class="tab-content">
-
-                <div class="section">
-                    <div class="step">
-                        <div class="step-title">Switching Between Events</div>
-                        <ul class="sub-steps">
-                            <li>Select an event from the global timeline to set and get the current narrative context of the game</li>
-                            <li>Event selection can trigger dialogues, scenes, and other gameplay logic</li>
-                        </ul>-->
-            <!-- Code with two methods - compact version -->
-            <!--<div style="display: flex; gap: 10px; margin-top: 8px;">
-                                        <div style="flex: 1; background-color: #f7f7f7; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 10px;">
-                                            <pre style="margin: 0; white-space: pre-wrap; font-family: monospace;">
-            // Method 1: Select by index
-            menu.dataInserter.SelectEvent(0);
-            GlobalEvent newEvent = menu.dataInserter.GetCurrentSelectedEvent();
-            // Operations with newEvent...
-            </pre>
-                                        </div>
-                                        <div style="flex: 1; background-color: #f7f7f7; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 10px;">
-                                            <pre style="margin: 0; white-space: pre-wrap; font-family: monospace;">
-            // Method 2: Select by GUID regardless of the timeline
-            // Select new event from EventSelector
-            GlobalEvent newEvent = menu.eventSelector.GetEvent();
-            menu.dataInserter.SelectEvent(newEvent);
-            // Operations with newEvent...
-            </pre>
-                                        </div>
-                                    </div>
-
-                                    <div style="display: flex; align-items: center; margin-top: 10px; margin-bottom: 10px;">
-                                        <div style="flex: 1; height: 2px; background-color: #ddd;"></div>
-                                        <div style="display: flex; gap: 8px; margin: 0 5px;">
-                                            <div style="width: 24px; height: 24px; border: 1px solid #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; background-color: white;">#0</div>
-                                            <div style="width: 24px; height: 24px; border: 2px solid #1890ff; border-radius: 4px; background-color: #e6f7ff; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #1890ff;">#1</div>
-                                            <div style="width: 24px; height: 24px; border: 1px solid #52c41a; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; background-color: #f6ffed; color: #52c41a;">#2</div>
-                                            <div style="width: 24px; height: 24px; border: 1px solid #fa8c16; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; background-color: #fff7e6; color: #fa8c16;">#3</div>
-                                        </div>
-                                        <div style="flex: 1; height: 2px; background-color: #ddd;"></div>
-                                    </div>-->
-            <!-- Current Event Box - Compact -->
-            <!--<div style="padding: 8px; margin-bottom: 8px; border: 1px solid #1890ff; border-radius: 4px; background-color: white; text-align: left; font-size: 11px; position: relative;">
-                <div style="position: absolute; top: -6px; left: 8px; background-color: white; padding: 0 4px; font-size: 9px; color: #1890ff;">Current Event (#1)</div>
-                "Character discovers a hidden cave with strange markings on the walls."
-            </div>-->
-            <!-- Player Choice - Compact -->
-            <!--<div style="display: flex; gap: 15px; justify-content: center;">
-                    <div style="flex: 1; text-align: center;">
-                        <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #1890ff; margin: 0 auto 5px;"></div>
-                        <div style="padding: 6px; border: 1px solid #52c41a; border-radius: 4px; background-color: #f6ffed; font-size: 10px; text-align: center;">Explore the cave<div style="font-size: 8px; color: #52c41a; margin-top: 2px;">Next: #2</div></div>
-                    </div>
-                    <div style="flex: 1; text-align: center;">
-                        <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #1890ff; margin: 0 auto 5px;"></div>
-                        <div style="padding: 6px; border: 1px solid #fa8c16; border-radius: 4px; background-color: #fff7e6; font-size: 10px; text-align: center;">Continue on path<div style="font-size: 8px; color: #fa8c16; margin-top: 2px;">Next: #3</div></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="step">
-                <div class="step-title">EDIT EVENT STATES</div>
-                <ul class="sub-steps">
-                    <li>Based on player's choice, events can change, namely the memory of them and their impact on characters</li>
-                    <li>Set the event impact on the character to 0 to erase the event from his memory</li>
-                    <li>In case of non-linear narrative, rearrange events along the timeline depending on how the player chooses them</li>
-                </ul>-->
-            <!-- Code with single method - compact version -->
-            <!--<div style="display: flex; gap: 10px; margin-top: 8px;">
-                                        <div style="flex: 1; background-color: #f7f7f7; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 10px;">
-                                            <pre style="margin: 0; white-space: pre-wrap; font-family: monospace;">
-            // Handle player choice in non-linear narrative
-            public void OnPlayerMadeChoice(int choiceIndex, bool foundHiddenItem) {
-            // Get current position in timeline
-            GlobalEvent currentEvent = menu.dataInserter.GetCurrentSelectedEvent();
-            int currentPosition = currentEvent != null ? currentEvent.timelinePosition : 0;
-
-            // Get all available events from selector
-            List&lt;GlobalEvent&gt; availableEvents = menu.eventSelector.GetEvents();
-
-            // Select chosen event
-            GlobalEvent chosenEvent = availableEvents[choiceIndex];
-            menu.dataInserter.SelectEvent(chosenEvent);
-
-            // Place event after current position in the timeline
-            menu.dataInserter.MoveEventToPosition(currentPosition + 1);
-
-            // Set initial impact on player character
-            menu.dataInserter.SetCharacterEffect(playerCharacter, 1f);
-
-            // If player found a hidden item during this event, increase impact
-            if (foundHiddenItem) {
-                menu.dataInserter.SetCharacterEffect(playerCharacter, 5f,
-                "Found buried treasure chest");
-            }
-
-            // Set all non-chosen events to impact 0 (not in character memory)
-            for (int i = 0; i < availableEvents.Count; i++) {
-                if (i != choiceIndex) {
-                    menu.dataInserter.SetCharacterEffect(playerCharacter, availableEvents[i], 0f);
-                }
-            }
-
-            // Save changes to database
-            menu.dataInserter.SaveChanges();
-            }
-                        </pre>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="step">
-                                    <div class="step-title">GET CHARACTER MEMORIES</div>
-                                    <ul class="sub-steps">
-                                        <li>Access a character's memories before the current event</li>
-                                        <li>Characters will only remember events with non-zero impact</li>
-                                        <li>Use memories to determine dialogue availability</li>
-                                    </ul>
-                                    <div style="background-color: #f7f7f7; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; white-space: pre; overflow-x: auto; margin-top: 10px;">
-                                        // Check if character remembers a specific previous event
-                                        public bool DoesCharacterRemember(CharacterBrain character,
-                                        string eventDescription) {
-                                        // Get all events affecting this character
-                                        List&lt;GlobalEvent&gt; affectingEvents =
-                                        menu.dataExtractor.GetEventsAffectingCharacter(character);
-
-                                        // Check if any of the events match the description
-                                        foreach (var evt in affectingEvents) {
-                                        if (evt.description.Contains(eventDescription)) {
-                                        float impact = menu.dataExtractor.GetEventImpactOnCharacter(
-                                        evt, character);
-
-                                        // If impact is non-zero, character remembers this event
-                                        return impact != 0;
-                                        }
-                                        }
-
-                                        return false;
-                                        }
-
-                                        // In dialogue system:
-                                        if (DoesCharacterRemember(npcCharacter, "discovered a hidden cave")) {
-                                        // NPC remembers the cave discovery event
-                                        // Unlock special dialogue options
-                                        UnlockDialogueOption("Ask about the cave");
-                                        }
-                                    </div>
-                                </div>
-
-                                <div class="step">
-                                    <div class="step-title">CHECK CHARACTER STATE</div>
-                                    <ul class="sub-steps">
-                                        <li>Check a character's current state value in the current event</li>
-                                        <li>Highly negative states (-100 to -50) trigger hostility or combat</li>
-                                        <li>Positive states (0 to 100) allow for friendly interactions</li>
-                                    </ul>
-                                    <div style="background-color: #f7f7f7; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; white-space: pre; overflow-x: auto; margin-top: 10px;">
-                                        // Get character state at current event
-                                        GlobalEvent currentEvent = menu.dataExtractor.GetCurrentSelectedEvent();
-                                        CharacterBrain guardCharacter = menu.dataExtractor.GetCharacterByName("Guard");
-
-                                        // Get character's state in the current event
-                                        CharacterStateEvent stateAtEvent =
-                                        menu.dataExtractor.GetCharacterStateAtEvent(guardCharacter, currentEvent);
-
-                                        if (stateAtEvent != null) {
-                                        float currentState = stateAtEvent.stateAfter;
-
-                                        // Check character's state to determine reaction
-                                        if (currentState < -50f) {
-                                        // Very negative state - initiate combat
-                                        Debug.Log("Guard is hostile and attacks!");
-                                        InitiateCombat(guardCharacter);
-                                        }
-                                        else if (currentState < 0f) {
-                                        // Somewhat negative - unfriendly but not hostile
-                                        Debug.Log("Guard is suspicious and unfriendly");
-                                        ShowUnfriendlyDialogue(guardCharacter);
-                                        }
-                                        else {
-                                        // Positive state - friendly interaction
-                                        Debug.Log("Guard is friendly and helpful");
-                                        ShowFriendlyDialogue(guardCharacter);
-                                        }
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div style="margin-top: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 4px; font-size: 12px;">
-                                <strong>Note:</strong> This example demonstrates a basic implementation of runtime narrative logic. You can extend this approach for more complex branching stories, character development, and gameplay systems.
-                            </div>
-                        </div>-->
         </div>
 
         <div class="support-links" style="margin-top: 0px; width: 33%; max-width: 300px; margin-left: auto; margin-right: auto;">
