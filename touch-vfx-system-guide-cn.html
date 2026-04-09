@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>触控VFX系统 快速指南</title>
+    <style>
+        @page { size: A4; margin: 1cm; }
+
+        :root {
+            --main-bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-color: #000000;
+            --card-bg-color: #f7f7f7;
+            --border-color: #cccccc;
+            --secondary-color: #555555;
+            --heading-bg: #f2f2f2;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--main-bg-color);
+            color: var(--text-color);
+            margin: 0; padding: 0;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 5mm 0;
+            column-count: 2;
+            column-gap: 10mm;
+            column-fill: balance;
+        }
+
+        header {
+            column-span: all;
+            text-align: center;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            break-inside: avoid;
+        }
+
+        header .logo { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+
+        header .logo-text {
+            width: 60px; height: 60px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent-color); font-weight: bold; font-size: 20px;
+            letter-spacing: 1px; position: relative; transform: rotate(45deg);
+        }
+
+        header .logo-text::before {
+            content: ""; position: absolute; width: 100%; height: 100%;
+            border: 2px solid var(--accent-color);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        header .logo-text span { transform: rotate(-45deg); position: relative; z-index: 2; }
+
+        header h1 {
+            font-size: 32px; margin: 5px 0; color: var(--accent-color);
+            font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
+        }
+
+        header p { font-size: 14px; margin: 10px 0; font-weight: 500; color: var(--secondary-color); }
+
+        .header-link {
+            display: inline-block; margin-top: 20px; padding: 10px 24px;
+            background-color: var(--accent-color); color: white;
+            text-decoration: none; font-size: 14px; font-weight: 600;
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+        }
+
+        .section {
+            background-color: var(--main-bg-color); padding: 15px; margin-bottom: 20px;
+            break-inside: avoid; border: 1px solid var(--border-color);
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+        }
+
+        h2 {
+            font-size: 18px; margin: 0 0 15px; color: var(--accent-color);
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            position: relative; padding: 6px 10px; background-color: var(--heading-bg);
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+        }
+
+        h2::after {
+            content: ""; position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 1px; background: var(--accent-color);
+        }
+
+        .steps { counter-reset: step; }
+
+        .step {
+            position: relative; padding-left: 36px;
+            margin-bottom: 15px; padding-bottom: 10px;
+        }
+
+        .step:last-child { margin-bottom: 0; padding-bottom: 0; }
+
+        .step::before {
+            counter-increment: step; content: counter(step);
+            position: absolute; left: 0; top: 0;
+            width: 26px; height: 26px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: white; font-size: 14px;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            background: var(--accent-color);
+        }
+
+        .step p { font-size: 13px; margin: 0; }
+
+        .code-block {
+            background-color: var(--card-bg-color); border: 1px solid var(--border-color);
+            padding: 8px 12px; font-family: 'Courier New', monospace; font-size: 11px;
+            margin: 8px 0 0;
+            clip-path: polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px);
+            color: #333; line-height: 1.6; white-space: pre;
+        }
+
+        .code-comment { color: #888; }
+
+        .sub-steps { list-style-type: none; padding-left: 0; margin: 6px 0 0; }
+
+        .sub-steps li {
+            position: relative; padding-left: 18px;
+            margin-bottom: 6px; font-size: 13px;
+            display: flex; align-items: flex-start;
+        }
+
+        .sub-steps li::before {
+            content: "→"; position: absolute; left: 0;
+            color: var(--accent-color); font-size: 12px; top: 2px;
+        }
+
+        .support-links {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-top: 15px; padding-top: 15px;
+        }
+
+        .support-link {
+            display: flex; flex-direction: row; align-items: center;
+            justify-content: center; text-decoration: none; color: var(--text-color);
+            width: 33%; text-align: center; padding: 5px 0;
+        }
+
+        .icon-container {
+            width: 24px; height: 24px; display: flex; align-items: center;
+            justify-content: center; margin-right: 6px; position: relative; flex-shrink: 0;
+        }
+
+        .icon-container::before {
+            content: ""; position: absolute; width: 100%; height: 100%;
+            background-color: var(--card-bg-color);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        .icon-container svg { width: 70%; height: 70%; color: var(--accent-color); position: relative; z-index: 1; }
+
+        .support-link span {
+            font-size: 11px; display: block; text-align: center;
+            text-transform: uppercase; font-weight: 600; color: var(--text-color);
+        }
+
+        footer {
+            column-span: all; text-align: center; margin-top: 40px;
+            font-size: 11px; color: var(--accent-color); padding-top: 20px;
+            font-weight: 500; text-transform: uppercase; letter-spacing: 1px; position: relative;
+        }
+
+        footer::before {
+            content: ""; position: absolute; top: 0; left: 20%; right: 20%;
+            height: 1px; background: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <h1>触控VFX系统</h1>
+        <p>程序化生成的视觉特效 — 支持UI画布与世界空间坐标</p>
+    </header>
+
+    <div class="section">
+        <h2>在用户界面中添加视觉反馈：</h2>
+        <div class="steps">
+            <div class="step">
+                <p>Assets → TouchEffectSystem → Prefabs → TouchEffects</p>
+            </div>
+            <div class="step">
+                <p>将任意特效预制体添加到场景画布并解包，例如 <strong>TouchInkTrail</strong></p>
+            </div>
+            <div class="step">
+                <p>检查 InputController → InputSystemType 是否与项目匹配，设为 <strong>Old</strong> 或 <strong>New</strong></p>
+            </div>
+            <div class="step">
+                <p>完成。运行场景测试 — 特效将作为输入响应出现</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>生成UI特效预制体（独立于输入）</h2>
+        <div class="steps">
+            <div class="step">
+                <p>Assets → TouchEffectSystem → Prefabs → TouchEffects → <strong>PreviewEffect</strong></p>
+            </div>
+            <div class="step">
+                <p>复制预制体，替换 <strong>Glow Material</strong> 和 <strong>Sparkle Particle Prefab</strong>，或直接使用原版</p>
+            </div>
+            <div class="step">
+                <p>通过“实例化”在所需上下文中生成预制件</p>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>生成3D世界特效预制体（独立于输入）</h2>
+        <div class="steps">
+            <div class="step">
+                <p>Assets → TouchEffectSystem → Prefabs → <strong>WorldEffects</strong>，选择预制体：</p>
+                <ul class="sub-steps">
+                    <li>URP：使用 <strong>URP_VFXRadialSparks</strong></li>
+                    <li>其他渲染管线：使用 <strong>VFXRadialSparks</strong></li>
+                </ul>
+            </div>
+            <div class="step">
+                <p>复制预制体，替换 <strong>Glow Material</strong>，或直接使用原版</p>
+            </div>
+            <div class="step">
+                <p>通过“实例化”在所需上下文中生成预制件</p>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>自定义材质与支持</h2>
+        <p style="font-size:13px; margin: 0 0 10px;">每种特效中的 <strong>Glow Material</strong> 均为使用系统自定义着色器创建的材质。你可以基于它创建自己的着色器与材质，也可以联系我们获取定制方案。我们随时乐意提供帮助，也欢迎反馈以改进触控VFX系统。</p>
+        <div class="support-links">
+            <a href="https://octanta-studio.gitbook.io/touch-effect-system-for-unity/" class="support-link">
+                <div class="icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                </div>
+                <span>DOCS</span>
+            </a>
+            <a href="https://u.wechat.com/kHluJU-4AdnsB8WCkoDpTI4?s=2" class="support-link">
+                <div class="icon-container">
+                </div>
+                <span>@octanta_studio</span>
+            </a>
+            <a href="mailto:info@octanta-studio.com" class="support-link">
+                <div class="icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                <span>MAIL</span>
+            </a>
+        </div>
+    </div>
+
+    <footer>© 2025 OCTANTA STUDIO. 触控VFX系统</footer>
+</div>
+</body>
+</html>
