@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Procedural VFX Mini - free Unity VFX documentation. Procedurally generated shader effects for UI Canvas and 2D/3D world space. Works with URP, HDRP, and Built-in render pipelines. Unique shape every playback cycle.">
+    <meta name="keywords" content="Unity, VFX, procedural VFX, shader effects, URP, HDRP, Built-in, UI effects, world space VFX, game VFX, Unity asset, RenderTexture, particle effects">
+    <title>Procedural VFX Mini Docs</title>
+    <!--
+        Procedural VFX Mini - Unity Asset Documentation
+        Free procedurally generated shader-based visual effects (VFX) for Unity.
+        Effects work on UI Canvas and in 2D/3D world space.
+        Compatible with Universal Render Pipeline (URP), High Definition Render Pipeline (HDRP), and Built-in pipeline.
+        Every playback cycle generates a unique shape driven by a per-cycle random seed.
+        Core components: GlowMeshPlayer (world), ParticlePreviewPlayer (UI), VfxController, VfxEffectPrefabWizard.
+        Developed by Octanta Studio.
+    -->
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+
+        :root {
+            --main-bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-color: #000000;
+            --card-bg-color: #f7f7f7;
+            --border-color: #cccccc;
+            --secondary-color: #555555;
+            --heading-bg: #f2f2f2;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--main-bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0 16px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 5mm 0;
+        }
+
+        a {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+            a:hover {
+                color: var(--secondary-color);
+            }
+
+        header {
+            text-align: center;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+        }
+
+            header h1 {
+                font-size: 32px;
+                margin: 5px 0;
+                color: var(--accent-color);
+                font-weight: 900;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+
+            header p {
+                font-size: 14px;
+                margin: 10px 0;
+                font-weight: 500;
+                color: var(--secondary-color);
+            }
+
+                header p a {
+                    color: var(--secondary-color);
+                }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            margin: 15px 0 10px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background-color: var(--heading-bg);
+            color: var(--text-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
+            transition: all 0.2s ease;
+        }
+
+            .tab:hover {
+                background-color: var(--accent-color);
+                color: #ffffff;
+            }
+
+        .header-link {
+            display: inline-block;
+            padding: 10px 24px;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+        }
+
+            .header-link:hover {
+                color: #ffffff;
+                opacity: 0.85;
+            }
+
+        .section {
+            background-color: var(--main-bg-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 0 0 15px;
+            color: var(--accent-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding: 6px 10px;
+            background-color: var(--heading-bg);
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+        }
+
+            h2::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: var(--accent-color);
+            }
+
+        h3 {
+            font-size: 14px;
+            margin: 18px 0 10px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .section > h3:first-of-type {
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 14px;
+            margin: 0 0 12px;
+        }
+
+        .lead {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .note {
+            margin: 12px 0;
+            padding: 10px 12px;
+            background-color: var(--card-bg-color);
+            border-left: 3px solid var(--accent-color);
+            font-size: 13px;
+        }
+
+        .screenshot {
+            margin: 0;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+        }
+
+            .screenshot img {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+        /* Overview two-column grid: shader customization screenshot on the left, intro text on the right */
+        .overview-grid {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .overview-image {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .overview-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+            .overview-text p:last-child {
+                margin-bottom: 0;
+            }
+
+        .sub-steps {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0 0 12px;
+        }
+
+            .sub-steps li {
+                position: relative;
+                padding-left: 18px;
+                margin-bottom: 6px;
+                font-size: 14px;
+                display: block;
+            }
+
+                .sub-steps li::before {
+                    content: "→";
+                    position: absolute;
+                    left: 0;
+                    color: var(--accent-color);
+                    font-size: 12px;
+                }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 36px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+            .step::before {
+                counter-increment: step;
+                content: counter(step);
+                position: absolute;
+                left: 0;
+                top: -1px;
+                width: 26px;
+                height: 26px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: #ffffff;
+                font-size: 13px;
+                clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+                background: var(--accent-color);
+            }
+
+        .tag {
+            display: inline-block;
+            margin-right: 6px;
+            padding: 1px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-color: var(--heading-bg);
+            border: 1px solid var(--border-color);
+            clip-path: polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px);
+        }
+
+        .support-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin: 15px 0 5px;
+            padding-top: 10px;
+        }
+
+        .support-link {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 5px 0;
+        }
+
+        .icon-container {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 6px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+            .icon-container::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: var(--card-bg-color);
+                clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            }
+
+            .icon-container svg {
+                width: 70%;
+                height: 70%;
+                color: var(--accent-color);
+                position: relative;
+                z-index: 1;
+            }
+
+        .support-link span {
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: var(--accent-color);
+            padding-top: 20px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+            footer::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 20%;
+                right: 20%;
+                height: 1px;
+                background: var(--accent-color);
+            }
+
+            footer a {
+                color: var(--accent-color);
+            }
+
+        @media screen and (max-width: 768px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                text-align: center;
+            }
+
+            .support-links {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .overview-grid {
+                flex-direction: column;
+            }
+
+            .overview-image {
+                width: 100%;
+            }
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 0;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .tabs {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header: Procedural VFX Mini - Unity asset documentation, Octanta Studio -->
+        <header>
+            <h1>PROCEDURAL VFX MINI</h1>
+            <p>Documentation for Unity developers. Developed by <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 2024.</p>
+            <!-- Navigation tabs: Overview, Setup, Customization, Components, Contacts -->
+            <nav class="tabs">
+                <a class="tab" href="#overview">Overview</a>
+                <a class="tab" href="#setup">Setup</a>
+                <a class="tab" href="#customization">Customization</a>
+                <a class="tab" href="#components">Components</a>
+                <a class="tab" href="#contacts">Contacts</a>
+            </nav>
+        </header>
+
+        <!--
+            Overview section
+            What Procedural VFX Mini is: free procedural shader-based VFX for Unity.
+            Compatible with URP (Universal Render Pipeline), HDRP (High Definition Render Pipeline), and Built-in.
+            Self-contained quad prefabs, UI Canvas and 2D/3D world space placement.
+            RenderTexture-based rendering, unique shape generated on every playback cycle.
+            Link to the full Procedural VFX Toolkit asset.
+        -->
+        <div class="section" id="overview">
+            <h2>Overview</h2>
+
+            <div class="overview-grid">
+                <div class="overview-image">
+                    <div class="screenshot">
+                        <img src="https://octanta-studio.gitbook.io/touch-effect-system-for-unity/~gitbook/image?url=https%3A%2F%2F1414976141-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FnBd5BNyGKTZYEzDTuKCp%252Fuploads%252Fvm21RJpnDxNwKITz3X9g%252FShaderPlayer.png%3Falt%3Dmedia%26token%3Df15d88b4-9095-4afb-8f90-98af456587fd&width=400&dpr=3&quality=100&sign=27a4dddbb140ab590ff390159d6671e4&sv=3" alt="Shader customization in the Inspector - Unity VFX parameters" loading="lazy">
+                    </div>
+                </div>
+                <div class="overview-text">
+                    <p class="lead">
+                        <strong>Procedural VFX Mini</strong> is a free set of procedurally generated VFX. Each effect is a self-contained quad that renders an animated shader. Instantiate it anywhere - on the UI Canvas, in 2D/3D world space - however you rotate it. It works with URP, HDRP, and Built-in pipelines. Effects are rendered through a RenderTexture, keeping them lightweight and pipeline-agnostic. Every playback cycle generates a unique shape: the same effect played twice never looks identical.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Call to action: upgrade to the full Procedural VFX Toolkit -->
+            <p class="center" style="margin: 20px 0 12px;">For a more feature-rich system, explore <a href="https://u3d.as/3C7x">this advanced asset</a>.</p>
+
+            <p class="center" style="margin: 0;">
+                <a href="https://u3d.as/3C7x" target="_blank" class="header-link">GET FULL VERSION →</a>
+            </p>
+        </div>
+
+        <!--
+            Customization section
+            How to adjust shader parameters in the Inspector (colors, counts, speeds, sizes).
+            How to create a new prefab from a shader using the editor wizard (Create > Procedural VFX Mini > Effect Prefab).
+            How to use the included shaders as templates for building custom VFX.
+        -->
+        <div class="section" id="customization">
+            <h2>Customization</h2>
+            <p>Every shader exposes its parameters as sliders, colors, and toggles in the Inspector. Select the material used by an effect and tune the look interactively - no code required.</p>
+
+            <h3>Adjust an effect</h3>
+            <ul class="sub-steps">
+                <li>Select the effect in the scene and open its Glow Material in the Inspector.</li>
+                <li>Adjust color, count, speed, size, and other parameters - changes apply immediately while the scene is running.</li>
+                <li>Changes saved to a prefab take effect on respawn or scene restart. Existing instances keep their previous values.</li>
+            </ul>
+
+            <h3>Create your own effect</h3>
+            <ul class="sub-steps">
+                <li>Right-click in the Project window and choose <code>Create → Procedural VFX Mini → Effect Prefab...</code>.</li>
+                <li>Pick Target: <b>World</b> or <b>UI</b>, then pick one of the 12 shaders from the dropdown.</li>
+                <li>Give the effect a name and click <b>Create Prefab</b> - the wizard creates the prefab and its material automatically.</li>
+            </ul>
+
+            <h3>Create your own shaders</h3>
+            <p>Use the included shaders as templates to build your own, then plug their materials in to experiment with new effects. The image below shows shader materials applied to flat meshes.</p>
+
+            <!-- Screenshot: VFX shader materials applied to flat 2D/3D meshes (not UI) -->
+            <div class="screenshot">
+                <img src="https://octanta-studio.gitbook.io/touch-effect-system-for-unity/~gitbook/image?url=https%3A%2F%2F1414976141-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FnBd5BNyGKTZYEzDTuKCp%252Fuploads%252FqsD1C1aRH9ypmc4gGsNY%252FVFX%2520Toolkit.png%3Falt%3Dmedia%26token%3D0a750093-a869-49d8-ac7d-668538f9b6f1&width=400&dpr=3&quality=100&sign=9d560d8c5ec50a9d44f92e2efe269f27&sv=3" alt="Procedural VFX shader materials applied to flat meshes in Unity" loading="lazy">
+            </div>
+        </div>
+
+        <!--
+            Core Components section
+            GlowMeshPlayer.cs - world space VFX player, RenderTexture blit, looping and one-shot playback.
+            ParticlePreviewPlayer.cs - UI VFX player through RawImage and per-instance material.
+            VfxController.cs - managed spawning with automatic cleanup of one-shot effects.
+            VfxEffectPrefabWizard.cs - editor wizard for creating prefabs from any shader.
+            Shaders - 12 procedural VFX shaders with unique per-cycle randomization.
+        -->
+        <div class="section" id="components">
+            <h2>Core Components</h2>
+
+            <h3>GlowMeshPlayer.cs</h3>
+            <p>Drives a world-space effect by blitting frames into a RenderTexture and displaying the result on a MeshRenderer. Handles looping, one-shot playback, pause between cycles, and playback speed.</p>
+
+            <h3>ParticlePreviewPlayer.cs</h3>
+            <p>UI counterpart of GlowMeshPlayer. Plays a shader effect on the UI layer through a RawImage and a per-instance Material - use it to overlay VFX on buttons, cards, or upgrades.</p>
+
+            <h3>VfxController.cs</h3>
+            <p>Optional manager for spawning world effects with automatic cleanup. Call <code>SpawnUniversalVfxEffect()</code> to instantiate an effect and have it destroyed after one cycle. Looping effects are ignored by auto-cleanup.</p>
+
+            <h3>VfxEffectPrefabWizard.cs</h3>
+            <p>Editor wizard for creating prefabs from any shader. Accessible via <code>Create → Procedural VFX Mini → Effect Prefab...</code>. Two targets: <b>UI</b> and <b>World</b>.</p>
+
+            <h3>Shaders</h3>
+            <ul class="sub-steps">
+                <li>All 12 shaders are located in <code>Assets → OctantaStudio → ProceduralVFXMini → Shaders</code>.</li>
+                <li>Each shader exposes its parameters as sliders, colors, and toggles in the Inspector.</li>
+                <li>Every cycle generates a new random seed, so the same effect never looks identical twice.</li>
+            </ul>
+        </div>
+
+        <!-- Contacts section: email, Discord support, Octanta Studio developer channels -->
+        <div class="section" id="contacts">
+            <h2>Contacts</h2>
+            <p>Need help? Contact us:</p>
+            <ul class="sub-steps">
+                <li>Email: <a href="mailto:octantastudio@gmail.com">octantastudio@gmail.com</a>.</li>
+                <li>Discord: Join Octanta Studio channel <a href="https://discord.gg/6SPxKpFZFC">https://discord.gg/6SPxKpFZFC</a> and use branch 'to-developers'. We will provide an answer or create a special YouTube tutorial.</li>
+            </ul>
+
+            <div class="support-links">
+                <a href="https://discord.gg/6SPxKpFZFC" class="support-link">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25-1.845-.276-3.68-.276-5.487 0-.164-.393-.406-.874-.618-1.25a.077.077 0 0 0-.078-.037 19.736 19.736 0 0 0-4.885 1.515.07.07 0 0 0-.032.028C.533 9.046-.319 13.58.099 18.058a.082.082 0 0 0 .031.056c2.053 1.508 4.041 2.423 5.993 3.029a.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 12.21 12.21 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .079.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029c1.961-.607 3.95-1.522 6.002-3.03a.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.029" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <span>DISCORD</span>
+                </a>
+                <a href="mailto:octantastudio@gmail.com" class="support-link">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </div>
+                    <span>EMAIL</span>
+                </a>
+            </div>
+        </div>
+
+        <nav class="tabs">
+            <a class="tab" href="#overview">Overview</a>
+            <a class="tab" href="#setup">Setup</a>
+            <a class="tab" href="#customization">Customization</a>
+            <a class="tab" href="#components">Components</a>
+            <a class="tab" href="#contacts">Contacts</a>
+        </nav>
+
+        <!-- Footer: Procedural VFX Mini by Octanta Studio -->
+        <footer>
+            Developed by <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 2024. Procedural VFX Mini
+        </footer>
+    </div>
+</body>
+</html>
