@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Touch Effect System (Mini) Docs</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+
+        :root {
+            --main-bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-color: #000000;
+            --card-bg-color: #f7f7f7;
+            --border-color: #cccccc;
+            --secondary-color: #555555;
+            --heading-bg: #f2f2f2;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--main-bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0 16px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 5mm 0;
+        }
+
+        a {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+            a:hover {
+                color: var(--secondary-color);
+            }
+
+        header {
+            text-align: center;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+        }
+
+            header h1 {
+                font-size: 32px;
+                margin: 5px 0;
+                color: var(--accent-color);
+                font-weight: 900;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+
+            header p {
+                font-size: 14px;
+                margin: 10px 0;
+                font-weight: 500;
+                color: var(--secondary-color);
+            }
+
+                header p a {
+                    color: var(--secondary-color);
+                }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            margin: 15px 0 10px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background-color: var(--heading-bg);
+            color: var(--text-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            clip-path: polygon( 6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px );
+            transition: all 0.2s ease;
+        }
+
+            .tab:hover {
+                background-color: var(--accent-color);
+                color: #ffffff;
+            }
+
+        .header-link {
+            display: inline-block;
+            padding: 10px 24px;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            clip-path: polygon( 8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px );
+        }
+
+            .header-link:hover {
+                color: #ffffff;
+                opacity: 0.85;
+            }
+
+        .section {
+            background-color: var(--main-bg-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            clip-path: polygon( 8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px );
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 0 0 15px;
+            color: var(--accent-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding: 6px 10px;
+            background-color: var(--heading-bg);
+            clip-path: polygon( 0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100% );
+        }
+
+            h2::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: var(--accent-color);
+            }
+
+        h3 {
+            font-size: 14px;
+            margin: 18px 0 10px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .section > h3:first-of-type {
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 14px;
+            margin: 0 0 12px;
+        }
+
+        .lead {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .note {
+            margin: 12px 0;
+            padding: 10px 12px;
+            background-color: var(--card-bg-color);
+            border-left: 3px solid var(--accent-color);
+            font-size: 13px;
+        }
+
+        .screenshot {
+            margin: 15px 0;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            clip-path: polygon( 10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px );
+        }
+
+            .screenshot img {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+
+        .sub-steps {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0 0 12px;
+        }
+
+            .sub-steps li {
+                position: relative;
+                padding-left: 18px;
+                margin-bottom: 6px;
+                font-size: 14px;
+                display: block;
+            }
+
+                .sub-steps li::before {
+                    content: "→";
+                    position: absolute;
+                    left: 0;
+                    color: var(--accent-color);
+                    font-size: 12px;
+                }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 36px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+            .step::before {
+                counter-increment: step;
+                content: counter(step);
+                position: absolute;
+                left: 0;
+                top: -1px;
+                width: 26px;
+                height: 26px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: #ffffff;
+                font-size: 13px;
+                clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+                background: var(--accent-color);
+            }
+
+        .tag {
+            display: inline-block;
+            margin-right: 6px;
+            padding: 1px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-color: var(--heading-bg);
+            border: 1px solid var(--border-color);
+            clip-path: polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px);
+        }
+
+        .table-wrap {
+            margin: 15px 0 5px;
+            border: 1px solid var(--border-color);
+            clip-path: polygon( 8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px );
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--heading-bg);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td.c, th.c {
+            text-align: center;
+            width: 90px;
+        }
+
+        td.yes {
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        td.no {
+            color: #999999;
+        }
+
+        .support-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin: 15px 0 5px;
+            padding-top: 10px;
+        }
+
+        .support-link {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 5px 0;
+        }
+
+        .icon-container {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 6px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+            .icon-container::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: var(--card-bg-color);
+                clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            }
+
+            .icon-container svg {
+                width: 70%;
+                height: 70%;
+                color: var(--accent-color);
+                position: relative;
+                z-index: 1;
+            }
+
+        .support-link span {
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: var(--accent-color);
+            padding-top: 20px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+            footer::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 20%;
+                right: 20%;
+                height: 1px;
+                background: var(--accent-color);
+            }
+
+            footer a {
+                color: var(--accent-color);
+            }
+
+        @media screen and (max-width: 768px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                text-align: center;
+            }
+
+            .support-links {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            td.c, th.c {
+                width: 60px;
+            }
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 0;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .tabs {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TOUCH EFFECT SYSTEM (MINI)</h1>
+            <p>Documentation for Unity developers. Developed by <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 2024.</p>
+            <nav class="tabs">
+                <a class="tab" href="#overview">Overview</a>
+                <a class="tab" href="#setup">Setup</a>
+                <a class="tab" href="#components">Components</a>
+                <a class="tab" href="#contacts">Contacts</a>
+            </nav>
+        </header>
+
+        <!-- OVERVIEW -->
+        <div class="section" id="overview">
+            <h2>Overview</h2>
+            <p class="lead">
+                <strong>Touch Effect System Mini</strong> is an easy-to-use Unity asset tailored for touch effects. It’s suitable for point-and-click games, as well as any other projects that require touch visualization. The demo version includes basic One-Touch effects to use. For a more feature-rich system, explore <a href="https://u3d.as/3C7x">this advanced asset</a>.
+            </p>
+
+            <h3>Technical details</h3>
+            <ul class="sub-steps">
+                <li>Developed using Unity 6000.0.42f1.</li>
+                <li>Tested on mid-range Android devices (API 24+) and Windows 10/11 PCs with consistent performance.</li>
+                <li>The asset relies only on standard Unity components and classes, with no third-party dependencies required.</li>
+            </ul>
+
+            <div class="table-wrap">
+                <table>
+                    <tr><th>Feature</th><th class="c">Free Version</th><th class="c">Full Version</th></tr>
+                    <tr><td>OneTouch basic effects with easy drag-and-drop prefab setup</td><td class="c yes">✓</td><td class="c yes">✓</td></tr>
+                    <tr><td>Cross-platform input support</td><td class="c yes">✓</td><td class="c yes">✓</td></tr>
+                    <tr><td>Universal rendering and layering system</td><td class="c yes">✓</td><td class="c yes">✓</td></tr>
+                    <tr><td>Adaptability to screen resolutions and devices</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                    <tr><td>Extensive shader library (25+ variants)</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                    <tr><td>Trail system with advanced controls</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                    <tr><td>Sprite-based particle system (SparkleSpawner)</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                    <tr><td>Preview system (ParticlePreviewPlayer)</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                    <tr><td>Playback Conditions support</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                    <tr><td>Logic for holding the effect</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                    <tr><td>Technical support and custom development services</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                </table>
+            </div>
+
+            <p class="center" style="margin-top: 18px;">
+                <a href="https://u3d.as/3C7x" target="_blank" class="header-link">GET FULL VERSION →</a>
+            </p>
+        </div>
+
+        <!-- SETUP -->
+        <div class="section" id="setup">
+            <h2>Setup</h2>
+
+            <div class="screenshot">
+                <img src="https://octanta-studio.gitbook.io/touch-effect-system-for-unity-ua/~gitbook/image?url=https%3A%2F%2F2168082229-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FCr5sN2zDHwaviOprY28q%252Fuploads%252FDYtBqUeHPTxQ6wKSWp2I%252Fsetup%2520%282%29.png%3Falt%3Dmedia%26token%3De592a423-e771-4506-8be5-c9b6bdd2c830&amp;width=400&amp;dpr=3&amp;quality=100&amp;sign=16cc429664d04fb6163f2a3487376c7f&amp;sv=3" alt="Setup" loading="lazy">
+            </div>
+
+            <div class="steps">
+                <div class="step">Import the asset and locate the TouchEffects prefabs folder (Assets → OctantaStudio → TouchEffectSystem → Prefabs → TouchEffects).</div>
+                <div class="step">Add an effect prefab to your Canvas, for example, the TouchCircle for simple touch response.</div>
+                <div class="step">Assign Target Canvas in component or it will be auto-detected.</div>
+                <div class="step"><b>Check if the Input Controller component inside the prefab matches your Input System (Old/New).</b> See Core Components &gt; InputController.</div>
+
+                <div class="note">The asset is ready to use immediately after Canvas setup. Run the scene to test.</div>
+
+                <div class="step"><span class="tag">Recommended</span>Unpack prefab.</div>
+                <div class="step"><span class="tag">Recommended</span>Open the Glow Material set in the TouchGlowUI component to experiment with the effect color or other available settings. After adjusting, restart the scene to test the touch visual.</div>
+                <div class="step"><span class="tag">Recommended</span>Use DemoScene to explore all available prefabs. Run the scene, enable and disable the prefabs on the canvas, and watch the touch effects in the Game window.</div>
+            </div>
+        </div>
+
+        <!-- COMPONENTS -->
+        <div class="section" id="components">
+            <h2>Core Components</h2>
+
+            <h3>Input Controller.cs</h3>
+            <p>A cross-platform input system with automatic configuration for desktops and mobile devices. Not intended for manual editing. Contains public field to set Input System. By default, the system is set up for the Old Input Manager. To fully switch, follow these steps:</p>
+            <ul class="sub-steps">
+                <li>Open Edit → Project Settings → Player → Configuration, and set Active Input Handling to New/Old. For New one: install the Input System Unity package. For Old: delete this package. Check the EventSystem on the scene to see if it is set up correctly for the current input.</li>
+                <li>Set inputSystemType to New/Old in the InputController component.</li>
+            </ul>
+
+            <h3>TouchGlowUI.cs</h3>
+            <p>Main system controller managing effect generation. Not intended for manual editing. Contains important references for assignment and public settings:</p>
+            <ul class="sub-steps">
+                <li>Target Canvas (UI canvas on the scene for positioning and scaling).</li>
+                <li>Input Controller (component reference).</li>
+                <li>Glow Material (material created from shader for visual particle effect).</li>
+                <li>Point Prefab (template GameObject for trail UI points).</li>
+                <li>Glow Lifetime (1s) - how long each touch effect stays visible before fading.</li>
+                <li>Desktop Point Size (120x120px) - dimensions of individual touch effects in pixels.</li>
+            </ul>
+
+            <h3>Shaders</h3>
+            <ul class="sub-steps">
+                <li>TouchPointCircle, TouchPointDiamond, TouchPointSquare, TouchPointTriangle, TouchPointPlus, TouchPointSparkle - geometric shapes with customizable core, glow, and ring layers for one-touch.</li>
+            </ul>
+            <p>
+                Try generating your own touch effect using the system's capabilities and neural networks.<br>
+                <a href="https://www.youtube.com/watch?v=vp_m3pRJC6w">Watch the YouTube tutorial on AI generation →</a>
+            </p>
+
+            <div class="screenshot">
+                <img src="https://octanta-studio.gitbook.io/touch-effect-system-for-unity-ua/~gitbook/image?url=https%3A%2F%2F2168082229-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FCr5sN2zDHwaviOprY28q%252Fuploads%252FYYn2uNquHYvFlU16MJKg%252FVFX%2520Toolkit.png%3Falt%3Dmedia%26token%3D057b7b86-2f08-4009-9e37-4d5ea691b265&amp;width=400&amp;dpr=3&amp;quality=100&amp;sign=c2b477746f2791f4ab7e7c8f8245ab1a&amp;sv=3" alt="UI Shader → Material → UI particle" loading="lazy">
+            </div>
+
+            <h3>TouchTextUI.cs</h3>
+            <p>Additional controller managing TMP Text effect generation. Not intended for manual editing. Contains important references for assignment and public settings:</p>
+            <ul class="sub-steps">
+                <li>Target Canvas (UI canvas on the scene for positioning and scaling).</li>
+                <li>Input Controller (component reference).</li>
+                <li>Text Prefab (template GameObject).</li>
+                <li>Font Asset, Font Style, Font Size (basic text visual settings).</li>
+                <li>Main Sprite Asset (to insert sprites into text).</li>
+                <li>Text Strings, Text Colors (values and colors to choose from for randomization).</li>
+                <li>Appearance Animation type (None/Radial/Directional).</li>
+                <li>Text Lifetime (1s) - how long each touch effect stays visible before fading.</li>
+                <li>Min / Max Move Distance (50/150px) - distance from touch where the effect begins and ends.</li>
+            </ul>
+        </div>
+
+        <!-- CONTACTS -->
+        <div class="section" id="contacts">
+            <h2>Contacts</h2>
+            <p>Need help? Contact us:</p>
+            <ul class="sub-steps">
+                <li>Email: <a href="mailto:octantastudio@gmail.com">octantastudio@gmail.com</a>.</li>
+                <li>Discord: Join Octanta Studio channel <a href="https://discord.gg/6SPxKpFZFC">https://discord.gg/6SPxKpFZFC</a> and use branch ‘to-developers’. We will provide an answer or create a special YouTube tutorial.</li>
+            </ul>
+
+            <div class="support-links">
+                <a href="https://discord.gg/6SPxKpFZFC" class="support-link">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25-1.845-.276-3.68-.276-5.487 0-.164-.393-.406-.874-.618-1.25a.077.077 0 0 0-.078-.037 19.736 19.736 0 0 0-4.885 1.515.07.07 0 0 0-.032.028C.533 9.046-.319 13.58.099 18.058a.082.082 0 0 0 .031.056c2.053 1.508 4.041 2.423 5.993 3.029a.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 12.21 12.21 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .079.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029c1.961-.607 3.95-1.522 6.002-3.03a.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.029" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <span>DISCORD</span>
+                </a>
+                <a href="mailto:octantastudio@gmail.com" class="support-link">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </div>
+                    <span>EMAIL</span>
+                </a>
+            </div>
+        </div>
+
+        <nav class="tabs">
+            <a class="tab" href="#overview">Overview</a>
+            <a class="tab" href="#setup">Setup</a>
+            <a class="tab" href="#components">Components</a>
+            <a class="tab" href="#contacts">Contacts</a>
+        </nav>
+
+        <footer>
+            Developed by <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 2024. Touch Effect System (Mini)
+        </footer>
+    </div>
+</body>
+</html>
