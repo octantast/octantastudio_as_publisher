@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynamic Photo Camera (Mini) — Документація</title>
+<style>
+@page{size:A4;margin:1cm}
+:root{--main-bg-color:#fff;--text-color:#000;--accent-color:#000;--card-bg-color:#f7f7f7;--border-color:#ccc;--secondary-color:#555;--heading-bg:#f2f2f2}
+html{scroll-behavior:smooth}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--main-bg-color);color:var(--text-color);margin:0;padding:0 16px;line-height:1.5}
+.container{max-width:210mm;margin:0 auto;padding:5mm 0}
+a{color:var(--accent-color);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+a:hover{color:var(--secondary-color)}
+code{font-family:Consolas,monospace;font-size:13px;background:var(--heading-bg);border:1px solid var(--border-color);padding:0 5px}
+.section,.tab,.header-link,.screenshot,.issue{--c:8px;clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% var(--c),100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,var(--c) 100%,0 calc(100% - var(--c)),0 var(--c))}
+header{text-align:center;padding-bottom:10px;margin-bottom:5px}
+header h1{font-size:32px;margin:5px 0;font-weight:900;letter-spacing:1px;text-transform:uppercase}
+header p{font-size:14px;margin:10px 0;font-weight:500;color:var(--secondary-color)}
+header p a{color:var(--secondary-color)}
+.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin:15px 0 10px}
+.tab{--c:6px;padding:10px 20px;background:var(--heading-bg);color:var(--text-color);font-weight:600;text-transform:uppercase;font-size:14px;text-decoration:none;border:1px solid var(--border-color);transition:all .2s ease}
+.tab:hover{background:var(--accent-color);color:#fff}
+.header-link{display:inline-block;padding:10px 24px;background:var(--accent-color);color:#fff;text-decoration:none;font-size:14px;font-weight:600;transition:all .3s ease}
+.header-link:hover{color:#fff;opacity:.85}
+.section{padding:15px;margin-bottom:20px;border:1px solid var(--border-color)}
+h2{font-size:18px;margin:0 0 15px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;position:relative;padding:6px 10px;background:var(--heading-bg);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)}
+h2::after{content:"";position:absolute;bottom:0;left:0;width:100%;height:1px;background:var(--accent-color)}
+h3{font-size:14px;margin:18px 0 10px;text-transform:uppercase;font-weight:700}
+.section>h3:first-of-type{margin-top:0}
+p{font-size:14px;margin:0 0 12px}
+.lead{font-weight:500}
+.screenshot{--c:10px;width:50%;margin:15px auto;overflow:hidden;border:1px solid var(--border-color)}
+.screenshot img{display:block;width:100%;height:auto}
+.sub-steps{list-style:none;padding-left:0;margin:0 0 12px}
+.sub-steps li{position:relative;padding-left:18px;margin-bottom:6px;font-size:14px}
+.sub-steps li::before{content:"→";position:absolute;left:0;font-size:12px}
+.steps{counter-reset:step -1}
+.step{position:relative;padding-left:36px;margin-bottom:12px;font-size:14px}
+.step::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:-1px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:13px;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);background:var(--accent-color)}
+.step .sub-steps{margin:8px 0 0}
+.issue{padding:10px 14px;margin:0 0 12px;background:var(--card-bg-color);border:1px solid var(--border-color);border-left:3px solid var(--accent-color)}
+.issue p{font-size:13px;margin:0 0 6px}
+.issue p:last-child{margin:0}
+.support-links{display:flex;justify-content:center;align-items:center;gap:40px;margin:15px 0 5px;padding-top:10px}
+.support-link{display:flex;align-items:center;text-decoration:none;color:var(--text-color);padding:5px 0}
+.icon-container{width:24px;height:24px;display:flex;align-items:center;justify-content:center;margin-right:6px;position:relative;flex-shrink:0}
+.icon-container::before{content:"";position:absolute;width:100%;height:100%;background:var(--card-bg-color);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.icon-container svg{width:70%;height:70%;color:var(--accent-color);position:relative;z-index:1}
+.support-link span{font-size:11px;text-transform:uppercase;font-weight:600}
+.center{text-align:center}
+footer{text-align:center;margin-top:20px;font-size:11px;padding-top:20px;font-weight:500;text-transform:uppercase;letter-spacing:1px;position:relative}
+footer::before{content:"";position:absolute;top:0;left:20%;right:20%;height:1px;background:var(--accent-color)}
+@media screen and (max-width:768px){.screenshot{width:100%}header h1{font-size:24px}.tabs{flex-direction:column}.tab{text-align:center}.support-links{flex-direction:column;align-items:flex-start;gap:10px}}
+@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:0}.container{padding:0}.tabs{display:none}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>DYNAMIC PHOTO CAMERA (MINI)</h1>
+<p>Документація для Unity-розробників. Розробник <a href="https://www.octantastudio.com">©Octanta Studio</a> 2024.</p>
+<nav class="tabs">
+<a class="tab" href="#overview">Огляд</a>
+<a class="tab" href="#setup">Встановлення</a>
+<a class="tab" href="#usage">Як працює</a>
+<a class="tab" href="#components">Компоненти</a>
+<a class="tab" href="#issues">Проблеми</a>
+<a class="tab" href="#contacts">Контакти</a>
+<a class="tab" href="#ideas">Ідеї</a>
+</nav>
+</header>
+
+<!-- OVERVIEW -->
+<div class="section" id="overview">
+<h2>Огляд</h2>
+<p class="lead"><strong>Dynamic Photo Camera Mini</strong> - це простий у використанні Unity-асет, створений для внутрішньоігрової фотографії. Підходить для інтерактивних детективних квестів та розслідувань. Демо сцена містить базову локацію, де можна робити фото у будь-якій точці екрана. З <a href="https://u3d.as/3qTN">розширеною системою інтерактивних фото на базі цього асета можна ознайомитись тут</a>.</p>
+
+<h3>Технічні деталі</h3>
+<ul class="sub-steps">
+<li>Розроблено на Unity 2022.3.20f1 (LTS).</li>
+<li>Протестовано на ПК з Windows 10. Мобільні телефони не підтримуються.</li>
+<li>Розмір фото: зазвичай 25-26 КБ на зображення. Зроблені фото зберігаються в <code>Application.persistentDataPath</code>.</li>
+<li>Асет налаштований для 3D. Тестовано і функціонує як в 3D, так і в 2D режимах.</li>
+<li>Асет використовує лише стандартні компоненти та класи Unity.</li>
+</ul>
+
+<p class="center" style="margin-top:18px"><a href="https://u3d.as/3qTN" target="_blank" class="header-link">ОТРИМАТИ ПОВНУ ВЕРСІЮ →</a></p>
+</div>
+
+<!-- SETUP -->
+<div class="section" id="setup">
+<h2>Встановлення</h2>
+<div class="steps">
+<div class="step"><a href="https://youtu.be/gktbVDKiDkA">YouTube туторіал</a>.</div>
+<div class="step">Імпортуйте асет у проєкт.</div>
+<div class="step">Додайте префаб <code>PhotoController</code> на сцену.</div>
+<div class="step"><b>Налаштуйте камеру (обов’язково):</b>
+<ul class="sub-steps">
+<li>Призначте вашу основну ігрову камеру в InputController в інспекторі та вимкніть камеру з префабу, АБО залиште камеру префабу та вимкніть вашу.</li>
+<li>Камеру необхідно призначити в поле Current Camera у InputController. Якщо камера не призначена, система автоматично використає Camera.main.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- USAGE -->
+<div class="section" id="usage">
+<h2>Як працює</h2>
+<ul class="sub-steps">
+<li><b>Фотографування:</b> Утримуйте клік/дотик протягом 1 секунди, поки не завершиться анімація квадрата.</li>
+<li>Фото з’явиться у колекції та буде збережене між сесіями.</li>
+<li><b>Видалення фото:</b> Використовуйте значок хрестика.</li>
+</ul>
+</div>
+
+<!-- COMPONENTS -->
+<div class="section" id="components">
+<h2>Основні компоненти</h2>
+<h3>PhotoController.cs</h3>
+<p>Головний контролер системи, що керує процесами фотографування, сортування, операціями з файлами.</p>
+<h3>PhotoUIManager.cs</h3>
+<p>Відповідає за інтерфейс, взаємодію з фото, відображення галереї, візуальний фідбек.</p>
+<h3>InputController.cs</h3>
+<p>Кросплатформенна система введення з автоматичною конфігурацією для 2D/3D на десктопах та мобільних пристроях.</p>
+<h3>PhotoPrefab.cs</h3>
+<p>Скрипт, що контролює поведінку кожної фотокартки.</p>
+<h3>PhotoInputBlocker.cs</h3>
+<p>Додайте цей компонент до будь-якої кнопки, щоб уникнути випадкового фотографування під час кліку. <b>У інспекторі необхідно вказати посилання на PhotoController.</b></p>
+</div>
+
+<!-- ISSUES -->
+<div class="section" id="issues">
+<h2>Поширені проблеми</h2>
+
+<h3>Елементи інтерфейсу (UI, Canvas)</h3>
+<div class="screenshot">
+<img src="https://octanta-studio.gitbook.io/dynamic-photo-camera-for-unity-in-game-photos/~gitbook/image?url=https%3A%2F%2Flh7-rt.googleusercontent.com%2Fdocsz%2FAD_4nXcYoAZZvMFSKwBUtcgNDFG-2bTFATHM4VZXfAt0NI4i0m8iOU2yaiM86rkI_2EJVzvclSfqjyLvIUDt7fJtIzLIpGlSsQfd-Eitn76qSXhshk0rRDTCr3-BBzwO_GZ4I1246XFD-Q%3Fkey%3Dz8IKZM9Z5B4qjdwJokf7bjl8&amp;width=400&amp;dpr=3&amp;quality=100&amp;sign=5cf8c13aca2d121bd50a65990daae8f5&amp;sv=3" alt="Unpack Prefab Completely та ієрархія PhotoController" loading="lazy">
+</div>
+<div class="issue">
+<p>⛔ <b>Проблема:</b> Фото не реагують на введення. Префаб PhotoController містить свій Canvas із UI-елементами, які можуть перекривати існуючі або навпаки.</p>
+<p>✅ <b>Рішення:</b> Розпакуйте префаб і перенесіть вміст UICanvas до існуючого Canvas або, навпаки, додайте існуючі елементи до Canvas префабу.</p>
+</div>
+
+<h3>Система введення (Input System)</h3>
+<div class="screenshot">
+<img src="https://octanta-studio.gitbook.io/dynamic-photo-camera-for-unity-in-game-photos/~gitbook/image?url=https%3A%2F%2F3734259406-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FWCupGi1gMGbHtWokmOaz%252Fuploads%252F5sEG6O9VeAEAWv4i5Xek%252Fimage_2025-02-16_17-05-12.png%3Falt%3Dmedia%26token%3D7b2ae20e-ea7a-459b-9aff-d7eebbad87ea&amp;width=400&amp;dpr=3&amp;quality=100&amp;sign=5f7c2ecf21c141ed9795ad5a69ce5a3c&amp;sv=3" alt="Active Input Handling зі значенням Both" loading="lazy">
+</div>
+<div class="issue">
+<p>⛔ <b>Проблема:</b> Якщо використовується нова система введення, може з’явитися помилка: “InvalidOperationException: You are trying to read Input using the UnityEngine…”.</p>
+<p>✅ <b>Рішення:</b> Відкрийте Edit → Project Settings → Player і встановіть Active Input Handling у значення "both".</p>
+</div>
+<div class="issue">
+<p>⛔ <b>Проблема:</b> Введення для фотографування може конфліктувати з існуючою логікою, наприклад, фотографування запускається при натисканні кнопки гравцем.</p>
+<p>✅ <b>Рішення:</b> Використовуйте компонент PhotoInputBlocker.cs (див. розділ <a href="#components">Компоненти</a>). Додайте його до існуючих кнопок і вкажіть посилання на PhotoController в інспекторі.</p>
+</div>
+
+<h3>Демо сцена</h3>
+<div class="issue">
+<p>⛔ <b>Проблема:</b> Матеріали у демо сцені не завантажуються належним чином.</p>
+<p>✅ <b>Рішення:</b> Усі матеріали та текстури для тестових об'єктів зберігаються у папці Materials. За замовчуванням матеріали використовують шейдер "Standard". Для проєктів URP змініть шейдер на "URP/Lit" або будь-який інший сумісний.</p>
+</div>
+</div>
+
+<!-- CONTACTS -->
+<div class="section" id="contacts">
+<h2>Контакти</h2>
+<p>Потрібна допомога? Зв'яжіться з нами:</p>
+<ul class="sub-steps">
+<li>Email: <a href="mailto:octantastudio@gmail.com">octantastudio@gmail.com</a></li>
+<li>Discord: Приєднуйтесь до каналу Octanta Studio <a href="https://discord.gg/6SPxKpFZFC">за посиланням</a> та використовуйте гілку ‘to-developers’. Ми відповімо на ваші запитання.</li>
+</ul>
+<div class="support-links">
+<a href="https://discord.gg/6SPxKpFZFC" class="support-link">
+<div class="icon-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25-1.845-.276-3.68-.276-5.487 0-.164-.393-.406-.874-.618-1.25a.077.077 0 0 0-.078-.037 19.736 19.736 0 0 0-4.885 1.515.07.07 0 0 0-.032.028C.533 9.046-.319 13.58.099 18.058a.082.082 0 0 0 .031.056c2.053 1.508 4.041 2.423 5.993 3.029a.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 12.21 12.21 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .079.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029c1.961-.607 3.95-1.522 6.002-3.03a.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.029" fill="currentColor"/></svg>
+</div>
+<span>DISCORD</span>
+</a>
+<a href="mailto:octantastudio@gmail.com" class="support-link">
+<div class="icon-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+</div>
+<span>EMAIL</span>
+</a>
+</div>
+</div>
+
+<!-- IDEAS -->
+<div class="section" id="ideas">
+<h2>Ідеї</h2>
+<ul class="sub-steps">
+<li>Use the camera to see what is hidden in the dark.</li>
+<li>By comparing photos from the crime scene and the changes in the state of the objects, you can determine the time of day when something happened here.</li>
+<li>If you photograph what you shouldn't, there is a risk of awakening an ancient force.</li>
+<li>Find and capture locations for the quests.</li>
+<li>Spy and obtain photo evidence.</li>
+</ul>
+</div>
+
+<nav class="tabs">
+<a class="tab" href="#overview">Огляд</a>
+<a class="tab" href="#setup">Встановлення</a>
+<a class="tab" href="#usage">Як працює</a>
+<a class="tab" href="#components">Компоненти</a>
+<a class="tab" href="#issues">Проблеми</a>
+<a class="tab" href="#contacts">Контакти</a>
+<a class="tab" href="#ideas">Ідеї</a>
+</nav>
+
+<footer>Розробник <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 2024. Dynamic Photo Camera (Mini)</footer>
+</div>
+</body>
+</html>
