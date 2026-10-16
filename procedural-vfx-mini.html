@@ -421,7 +421,7 @@
         <!-- Header: Procedural VFX Mini - Unity asset documentation, Octanta Studio -->
         <header>
             <h1>PROCEDURAL VFX MINI</h1>
-            <p>Documentation for Unity developers. Developed by <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 2024.</p>
+            <p>Documentation for Unity developers. Developed by <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 2026.</p>
             <!-- Navigation tabs: Overview, Setup, Customization, Components, Contacts -->
             <nav class="tabs">
                 <a class="tab" href="#overview">Overview</a>
@@ -433,13 +433,13 @@
         </header>
 
         <!--
-            Overview section
-            What Procedural VFX Mini is: free procedural shader-based VFX for Unity.
-            Compatible with URP (Universal Render Pipeline), HDRP (High Definition Render Pipeline), and Built-in.
-            Self-contained quad prefabs, UI Canvas and 2D/3D world space placement.
-            RenderTexture-based rendering, unique shape generated on every playback cycle.
-            Link to the full Procedural VFX Toolkit asset.
-        -->
+        Overview section
+        What Procedural VFX Mini is: free procedural shader-based VFX for Unity.
+        Compatible with URP (Universal Render Pipeline), HDRP (High Definition Render Pipeline), and Built-in.
+        Self-contained quad prefabs, UI Canvas and 2D/3D world space placement.
+        RenderTexture-based rendering, unique shape generated on every playback cycle.
+        Link to the full Procedural VFX Toolkit asset.
+    -->
         <div class="section" id="overview">
             <h2>Overview</h2>
 
@@ -465,11 +465,46 @@
         </div>
 
         <!--
-            Customization section
-            How to adjust shader parameters in the Inspector (colors, counts, speeds, sizes).
-            How to create a new prefab from a shader using the editor wizard (Create > Procedural VFX Mini > Effect Prefab).
-            How to use the included shaders as templates for building custom VFX.
-        -->
+        Usage section
+        How to set up Procedural VFX Mini and spawn effects in a Unity project.
+        Prefabs are templates - the developer spawns them at runtime via Instantiate()
+        or through VfxController.SpawnUniversalVfxEffect().
+        UI effects go under a Canvas, world effects anywhere in the scene.
+        Note about Loop and Destroy On End behavior.
+    -->
+        <div class="section" id="setup">
+            <h2>Usage</h2>
+            <p>The included prefabs are templates. Spawn them at the moment and in the context where you need them.</p>
+
+            <div class="steps">
+                <div class="step">Import the asset package into your Unity project.</div>
+                <div class="step">Open <code>Assets → OctantaStudio → ProceduralVFXMini → Scenes → DemoScene</code> and press Play to preview all effects in world space and on the UI.</div>
+                <div class="step">
+                    <b>Spawn effects from your own code.</b>
+                    <ul class="sub-steps">
+                        <li>For world space: call <code>Instantiate(effectPrefab, position, rotation)</code> wherever the effect should appear.</li>
+                        <li>For UI: instantiate the prefab as a child of your Canvas and set its anchored position.</li>
+                        <li>Pick prefabs from <code>Prefabs → Templates</code>. Use the <code>URP_</code> prefix in URP projects; non-prefixed in HDRP or Built-in.</li>
+                    </ul>
+                </div>
+                <div class="step">
+                    <b>Or use VfxController for managed spawning.</b>
+                    <ul class="sub-steps">
+                        <li>Add <code>VfxController</code> to your scene and call <code>SpawnUniversalVfxEffect(prefab, position)</code>.</li>
+                        <li>Auto-cleanup destroys one-shot effects after a single cycle. Looping effects are left alone.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="note">The effect plays on spawn and loops by default. To make it one-shot, uncheck <b>Loop</b> on the prefab - the <b>Destroy On End</b> option then becomes available and is enabled by default.</div>
+        </div>
+
+        <!--
+        Customization section
+        How to adjust shader parameters in the Inspector (colors, counts, speeds, sizes).
+        How to create a new prefab from a shader using the editor wizard (Create > Procedural VFX Mini > Effect Prefab).
+        How to use the included shaders as templates for building custom VFX.
+    -->
         <div class="section" id="customization">
             <h2>Customization</h2>
             <p>Every shader exposes its parameters as sliders, colors, and toggles in the Inspector. Select the material used by an effect and tune the look interactively - no code required.</p>
@@ -498,13 +533,13 @@
         </div>
 
         <!--
-            Core Components section
-            GlowMeshPlayer.cs - world space VFX player, RenderTexture blit, looping and one-shot playback.
-            ParticlePreviewPlayer.cs - UI VFX player through RawImage and per-instance material.
-            VfxController.cs - managed spawning with automatic cleanup of one-shot effects.
-            VfxEffectPrefabWizard.cs - editor wizard for creating prefabs from any shader.
-            Shaders - 12 procedural VFX shaders with unique per-cycle randomization.
-        -->
+        Core Components section
+        GlowMeshPlayer.cs - world space VFX player, RenderTexture blit, looping and one-shot playback.
+        ParticlePreviewPlayer.cs - UI VFX player through RawImage and per-instance material.
+        VfxController.cs - managed spawning with automatic cleanup of one-shot effects.
+        VfxEffectPrefabWizard.cs - editor wizard for creating prefabs from any shader.
+        Shaders - 12 procedural VFX shaders with unique per-cycle randomization.
+    -->
         <div class="section" id="components">
             <h2>Core Components</h2>
 
@@ -568,7 +603,7 @@
 
         <!-- Footer: Procedural VFX Mini by Octanta Studio -->
         <footer>
-            Developed by <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 2024. Procedural VFX Mini
+            Developed by <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 2026. Procedural VFX Mini
         </footer>
     </div>
 </body>
