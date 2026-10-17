@@ -12,7 +12,7 @@
         Effects work on UI Canvas and in 2D/3D world space.
         Compatible with Universal Render Pipeline (URP), High Definition Render Pipeline (HDRP), and Built-in pipeline.
         Every playback cycle generates a unique shape driven by a per-cycle random seed.
-        Core components: GlowMeshPlayer (world), ParticlePreviewPlayer (UI), VfxController, VfxEffectPrefabWizard.
+        Core components: GlowMeshPlayer (world), ParticlePreviewPlayer (UI).
         Developed by Octanta Studio.
     -->
     <style>
@@ -433,13 +433,13 @@
         </header>
 
         <!--
-        Overview section
-        What Procedural VFX Mini is: free procedural shader-based VFX for Unity.
-        Compatible with URP (Universal Render Pipeline), HDRP (High Definition Render Pipeline), and Built-in.
-        Self-contained quad prefabs, UI Canvas and 2D/3D world space placement.
-        RenderTexture-based rendering, unique shape generated on every playback cycle.
-        Link to the full Procedural VFX Toolkit asset.
-    -->
+            Overview section
+            What Procedural VFX Mini is: free procedural shader-based VFX for Unity.
+            Compatible with URP (Universal Render Pipeline), HDRP (High Definition Render Pipeline), and Built-in.
+            Self-contained quad prefabs, UI Canvas and 2D/3D world space placement.
+            RenderTexture-based rendering, unique shape generated on every playback cycle.
+            Link to the full Procedural VFX Toolkit asset.
+        -->
         <div class="section" id="overview">
             <h2>Overview</h2>
 
@@ -465,13 +465,12 @@
         </div>
 
         <!--
-        Usage section
-        How to set up Procedural VFX Mini and spawn effects in a Unity project.
-        Prefabs are templates - the developer spawns them at runtime via Instantiate()
-        or through VfxController.SpawnUniversalVfxEffect().
-        UI effects go under a Canvas, world effects anywhere in the scene.
-        Note about Loop and Destroy On End behavior.
-    -->
+            Usage section
+            How to set up Procedural VFX Mini and spawn effects in a Unity project.
+            Prefabs are templates - the developer spawns them at runtime via Instantiate().
+            UI effects go under a Canvas, world effects anywhere in the scene.
+            Note about Loop and Destroy On End behavior.
+        -->
         <div class="section" id="setup">
             <h2>Usage</h2>
             <p>The included prefabs are templates. Spawn them at the moment and in the context where you need them.</p>
@@ -487,24 +486,17 @@
                         <li>Pick prefabs from <code>Prefabs → Templates</code>. Use the <code>URP_</code> prefix in URP projects; non-prefixed in HDRP or Built-in.</li>
                     </ul>
                 </div>
-                <div class="step">
-                    <b>Or use VfxController for managed spawning.</b>
-                    <ul class="sub-steps">
-                        <li>Add <code>VfxController</code> to your scene and call <code>SpawnUniversalVfxEffect(prefab, position)</code>.</li>
-                        <li>Auto-cleanup destroys one-shot effects after a single cycle. Looping effects are left alone.</li>
-                    </ul>
-                </div>
             </div>
 
             <div class="note">The effect plays on spawn and loops by default. To make it one-shot, uncheck <b>Loop</b> on the prefab - the <b>Destroy On End</b> option then becomes available and is enabled by default.</div>
         </div>
 
         <!--
-        Customization section
-        How to adjust shader parameters in the Inspector (colors, counts, speeds, sizes).
-        How to create a new prefab from a shader using the editor wizard (Create > Procedural VFX Mini > Effect Prefab).
-        How to use the included shaders as templates for building custom VFX.
-    -->
+            Customization section
+            How to adjust shader parameters in the Inspector (colors, counts, speeds, sizes).
+            How to create a new prefab by duplicating a template and swapping its Glow Material.
+            How to use the included shaders as templates for building custom VFX.
+        -->
         <div class="section" id="customization">
             <h2>Customization</h2>
             <p>Every shader exposes its parameters as sliders, colors, and toggles in the Inspector. Select the material used by an effect and tune the look interactively - no code required.</p>
@@ -518,9 +510,9 @@
 
             <h3>Create your own effect</h3>
             <ul class="sub-steps">
-                <li>Right-click in the Project window and choose <code>Create → Procedural VFX Mini → Effect Prefab...</code>.</li>
-                <li>Pick Target: <b>World</b> or <b>UI</b>, then pick one of the 12 shaders from the dropdown.</li>
-                <li>Give the effect a name and click <b>Create Prefab</b> - the wizard creates the prefab and its material automatically.</li>
+                <li>Open any template from <code>Prefabs → Templates</code> and replace its Glow Material with a material created from one of the shaders in the Shaders folder.</li>
+                <li>Duplicate the tuned template in the Project window (<code>Ctrl+D</code> / <code>Cmd+D</code>) and rename it.</li>
+                <li>Move the new prefab into your own folder. It is ready to use right away.</li>
             </ul>
 
             <h3>Create your own shaders</h3>
@@ -533,13 +525,11 @@
         </div>
 
         <!--
-        Core Components section
-        GlowMeshPlayer.cs - world space VFX player, RenderTexture blit, looping and one-shot playback.
-        ParticlePreviewPlayer.cs - UI VFX player through RawImage and per-instance material.
-        VfxController.cs - managed spawning with automatic cleanup of one-shot effects.
-        VfxEffectPrefabWizard.cs - editor wizard for creating prefabs from any shader.
-        Shaders - 12 procedural VFX shaders with unique per-cycle randomization.
-    -->
+            Core Components section
+            GlowMeshPlayer.cs - world space VFX player, RenderTexture blit, looping and one-shot playback.
+            ParticlePreviewPlayer.cs - UI VFX player through RawImage and per-instance material.
+            Shaders - 12 procedural VFX shaders with unique per-cycle randomization.
+        -->
         <div class="section" id="components">
             <h2>Core Components</h2>
 
@@ -548,12 +538,6 @@
 
             <h3>ParticlePreviewPlayer.cs</h3>
             <p>UI counterpart of GlowMeshPlayer. Plays a shader effect on the UI layer through a RawImage and a per-instance Material - use it to overlay VFX on buttons, cards, or upgrades.</p>
-
-            <h3>VfxController.cs</h3>
-            <p>Optional manager for spawning world effects with automatic cleanup. Call <code>SpawnUniversalVfxEffect()</code> to instantiate an effect and have it destroyed after one cycle. Looping effects are ignored by auto-cleanup.</p>
-
-            <h3>VfxEffectPrefabWizard.cs</h3>
-            <p>Editor wizard for creating prefabs from any shader. Accessible via <code>Create → Procedural VFX Mini → Effect Prefab...</code>. Two targets: <b>UI</b> and <b>World</b>.</p>
 
             <h3>Shaders</h3>
             <ul class="sub-steps">
