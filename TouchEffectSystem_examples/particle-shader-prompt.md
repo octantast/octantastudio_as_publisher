@@ -36,10 +36,10 @@ The following shaders are reference samples only. They define the structural con
 
 ---
 
-## Sample 1 — `Fireflies.shader`
+## Sample 1 - `Fireflies.shader`
 
 ```hlsl
-Shader "UI/Fireflies"
+Shader "UniversalProceduralVfx/Fireflies"
 {
     Properties
     {
@@ -188,10 +188,10 @@ Shader "UI/Fireflies"
 
 ---
 
-## Sample 2 — `HealingAura.shader`
+## Sample 2 - `HealingAura.shader`
 
 ```hlsl
-Shader "UI/HealingAura"
+Shader "UniversalProceduralVfx/HealingAura"
 {
     Properties
     {
@@ -437,10 +437,10 @@ Shader "UI/HealingAura"
 
 ---
 
-## Sample 3 — `HealingPluses.shader`
+## Sample 3 - `HealingPluses.shader`
 
 ```hlsl
-Shader "UI/HealingPluses"
+Shader "UniversalProceduralVfx/HealingPluses"
 {
     Properties
     {
@@ -632,10 +632,10 @@ Shader "UI/HealingPluses"
 
 ---
 
-## Sample 4 — `RadialSparks.shader`
+## Sample 4 - `RadialSparks.shader`
 
 ```hlsl
-Shader "UI/RadialSparks"
+Shader "UniversalProceduralVfx/RadialSparks"
 {
     Properties
     {
@@ -822,10 +822,10 @@ Shader "UI/RadialSparks"
 
 ---
 
-## Sample 5 — `TouchPointForceFieldHex.shader`
+## Sample 5 - `TouchPointForceFieldHex.shader`
 
 ```hlsl
-Shader "UI/TouchPointForceFieldHex"
+Shader "UniversalProceduralVfx/TouchPointForceFieldHex"
 {
     Properties
     {
@@ -957,10 +957,10 @@ Shader "UI/TouchPointForceFieldHex"
 
 ---
 
-## Sample 6 — `VibroImpact.shader`
+## Sample 6 - `VibroImpact.shader`
 
 ```hlsl
-Shader "UI/VibroImpact"
+Shader "UniversalProceduralVfx/VibroImpact"
 {
     Properties
     {
@@ -1121,10 +1121,10 @@ Shader "UI/VibroImpact"
 
 ---
 
-## Sample 7 — `ComicImpactLayers.shader`
+## Sample 7 - `ComicImpactLayers.shader`
 
 ```hlsl
-Shader "UI/ComicImpactLayers"
+Shader "UniversalProceduralVfx/ComicImpactLayers"
 {
     Properties
     {
@@ -1416,10 +1416,10 @@ Shader "UI/ComicImpactLayers"
 
 ---
 
-## Sample 8 — `ComicPuff.shader`
+## Sample 8 - `ComicPuff.shader`
 
 ```hlsl
-Shader "UI/ComicPuff"
+Shader "UniversalProceduralVfx/ComicPuff"
 {
     Properties
     {
@@ -1602,10 +1602,10 @@ Shader "UI/ComicPuff"
 
 ---
 
-## Sample 9 — `Explosion.shader`
+## Sample 9 - `Explosion.shader`
 
 ```hlsl
-Shader "UI/Explosion"
+Shader "UniversalProceduralVfx/Explosion"
 {
     Properties
     {
