@@ -203,6 +203,56 @@
                 width: 100%;
                 height: auto;
             }
+        /* Free vs Full comparison table */
+        .table-wrap {
+            margin: 15px 0 5px;
+            border: 1px solid var(--border-color);
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--heading-bg);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td.c, th.c {
+            text-align: center;
+            width: 90px;
+        }
+
+        td.yes {
+            font-weight: 700;
+        }
+
+        td.no {
+            color: #999999;
+        }
+
+        @media screen and (max-width: 768px) {
+            td.c, th.c {
+                width: 60px;
+            }
+        }
+
         /* Overview two-column grid: shader customization screenshot on the left, intro text on the right */
         .overview-grid {
             display: flex;
@@ -451,15 +501,29 @@
                 </div>
                 <div class="overview-text">
                     <p class="lead">
-                        <strong>Procedural VFX Mini</strong> is a free set of procedurally generated VFX. Each effect is a self-contained quad that renders an animated shader. Instantiate it anywhere - on the UI Canvas, in 2D/3D world space - however you rotate it. It works with URP, HDRP, and Built-in pipelines. Effects are rendered through a RenderTexture, keeping them lightweight and pipeline-agnostic. Every playback cycle generates a unique shape: the same effect played twice never looks identical.
+                        <strong>Procedural VFX Mini</strong> is a free set of procedurally generated VFX. Each effect is a self-contained quad that renders an animated shader. Instantiate it anywhere - on the UI Canvas, in 2D/3D world space - however you rotate it. It works with URP, HDRP, and Built-in pipelines. Effects are rendered through a RenderTexture, keeping them lightweight and pipeline-agnostic. Every playback cycle generates a unique shape: the same effect played twice never looks identical. For a more feature-rich system, explore <a href="https://u3d.as/3C7x">this advanced asset</a>.
                     </p>
                 </div>
             </div>
 
-            <!-- Call to action: upgrade to the full Procedural VFX Toolkit -->
-            <p class="center" style="margin: 20px 0 12px;">For a more feature-rich system, explore <a href="https://u3d.as/3C7x">this advanced asset</a>.</p>
+            <!-- Free vs Full version comparison -->
+            <div class="table-wrap">
+                <table>
+                <tr><th>Feature</th><th class="c">Free Version</th><th class="c">Full Version</th></tr>
+                <tr><td>Randomized effect playback: a unique look on every cycle</td><td class="c yes">✓</td><td class="c yes">✓</td></tr>
+                <tr><td>Shader-based universal effects for UI and world space</td><td class="c yes">✓</td><td class="c yes">✓</td></tr>
+                <tr><td>Glitch-free rendering</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>50+ shader variants and ready-made prefabs</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>Editor wizard and VfxController</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>Effects that react to player input</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>Sprite-based effects (SparkleSpawner)</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>Text-based effects (TouchTextUI)</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>Technical support and custom effects</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                </table>
+            </div>
 
-            <p class="center" style="margin: 0;">
+            <!-- Call to action: upgrade to the full Procedural VFX Toolkit -->
+            <p class="center" style="margin: 20px 0 0;">
                 <a href="https://u3d.as/3C7x" target="_blank" class="header-link">GET FULL VERSION →</a>
             </p>
         </div>
