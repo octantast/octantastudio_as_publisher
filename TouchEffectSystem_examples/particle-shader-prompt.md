@@ -22,6 +22,7 @@ Whatever the visual is, preserve the structure of the samples. These requirement
 - Lifetime cycle
 - Transparent background
 - Effect stays inside the particle bounds
+- The appearance always begins from a state of complete transparency, and the end of the cycle also concludes with a completely transparent particle. This allows the effect to be played while blending harmoniously into its surroundings.
 
 ## Constraints
 
