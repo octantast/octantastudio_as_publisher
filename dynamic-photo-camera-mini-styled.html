@@ -18,8 +18,8 @@ header{text-align:center;padding-bottom:10px;margin-bottom:5px}
 header h1{font-size:32px;margin:5px 0;font-weight:900;letter-spacing:1px;text-transform:uppercase}
 header p{font-size:14px;margin:10px 0;font-weight:500;color:var(--secondary-color)}
 header p a{color:var(--secondary-color)}
-.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin:15px 0 10px}
-.tab{--c:6px;padding:10px 20px;background:var(--heading-bg);color:var(--text-color);font-weight:600;text-transform:uppercase;font-size:14px;text-decoration:none;border:1px solid var(--border-color);transition:all .2s ease}
+.tabs{display:flex;flex-wrap:nowrap;justify-content:center;gap:3px;margin:15px 0 10px}
+.tab{--c:6px;flex:1 1 auto;min-width:0;white-space:nowrap;text-align:center;padding:9px 6px;background:var(--heading-bg);color:var(--text-color);font-weight:600;text-transform:uppercase;font-size:13px;text-decoration:none;border:1px solid var(--border-color);transition:all .2s ease}
 .tab:hover{background:var(--accent-color);color:#fff}
 .header-link{display:inline-block;padding:10px 24px;background:var(--accent-color);color:#fff;text-decoration:none;font-size:14px;font-weight:600;transition:all .3s ease}
 .header-link:hover{color:#fff;opacity:.85}
@@ -59,7 +59,7 @@ td.no{color:#999}
 .center{text-align:center}
 footer{text-align:center;margin-top:20px;font-size:11px;padding-top:20px;font-weight:500;text-transform:uppercase;letter-spacing:1px;position:relative}
 footer::before{content:"";position:absolute;top:0;left:20%;right:20%;height:1px;background:var(--accent-color)}
-@media screen and (max-width:768px){.screenshot{width:100%}header h1{font-size:24px}.tabs{flex-direction:column}.tab{text-align:center}.support-links{flex-direction:column;align-items:flex-start;gap:10px}td.c,th.c{width:60px}}
+@media screen and (max-width:768px){.screenshot{width:100%}header h1{font-size:24px}.tabs{gap:2px}.tab{padding:8px 2px;font-size:min(13px,2.2vw)}.support-links{flex-direction:column;align-items:flex-start;gap:10px}td.c,th.c{width:60px}}
 @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:0}.container{padding:0}.tabs{display:none}}
 </style>
 </head>
