@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="程序化 VFX 迷你版 — 免費 Unity VFX 文件。用於 UI 畫布與 2D/3D 世界空間的程序化生成著色器特效。支援 URP、HDRP 與 Built-in 渲染管線。每次播放週期皆生成獨特形狀。">
+    <meta name="keywords" content="Unity, VFX, 程序化 VFX, 著色器特效, URP, HDRP, Built-in, UI 特效, 世界空間 VFX, 遊戲 VFX, Unity 資源, RenderTexture, 粒子特效">
+    <title>程序化 VFX 迷你版 文件</title>
+    <!--
+        程序化 VFX 迷你版 — Unity 資產文件
+        免費、程序化生成、基於著色器的 Unity 視覺特效（VFX）。
+        特效可作用於 UI 畫布與 2D/3D 世界空間。
+        相容於通用渲染管線（URP）、高畫質渲染管線（HDRP）與 Built-in 管線。
+        每個播放週期皆由每週期的隨機種子驅動，生成獨特的形狀。
+        核心元件：GlowMeshPlayer（世界）、ParticlePreviewPlayer（UI）。
+        由 Octanta Studio 開發。
+    -->
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+
+        :root {
+            --main-bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-color: #000000;
+            --card-bg-color: #f7f7f7;
+            --border-color: #cccccc;
+            --secondary-color: #555555;
+            --heading-bg: #f2f2f2;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', Arial, sans-serif;
+            background-color: var(--main-bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0 16px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 5mm 0;
+        }
+
+        a {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+            a:hover {
+                color: var(--secondary-color);
+            }
+
+        header {
+            text-align: center;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+        }
+
+            header h1 {
+                font-size: 32px;
+                margin: 5px 0;
+                color: var(--accent-color);
+                font-weight: 900;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+
+            header p {
+                font-size: 14px;
+                margin: 10px 0;
+                font-weight: 500;
+                color: var(--secondary-color);
+            }
+
+                header p a {
+                    color: var(--secondary-color);
+                }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            margin: 15px 0 10px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background-color: var(--heading-bg);
+            color: var(--text-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
+            transition: all 0.2s ease;
+        }
+
+            .tab:hover {
+                background-color: var(--accent-color);
+                color: #ffffff;
+            }
+
+        .header-link {
+            display: inline-block;
+            padding: 10px 24px;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+        }
+
+            .header-link:hover {
+                color: #ffffff;
+                opacity: 0.85;
+            }
+
+        .section {
+            background-color: var(--main-bg-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 0 0 15px;
+            color: var(--accent-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding: 6px 10px;
+            background-color: var(--heading-bg);
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+        }
+
+            h2::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: var(--accent-color);
+            }
+
+        h3 {
+            font-size: 14px;
+            margin: 18px 0 10px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .section > h3:first-of-type {
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 14px;
+            margin: 0 0 12px;
+        }
+
+        .lead {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .note {
+            margin: 12px 0;
+            padding: 10px 12px;
+            background-color: var(--card-bg-color);
+            border-left: 3px solid var(--accent-color);
+            font-size: 13px;
+        }
+
+        .screenshot {
+            margin: 0;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+        }
+
+            .screenshot img {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+        /* 免費版與完整版比較表 */
+        .table-wrap {
+            margin: 15px 0 5px;
+            border: 1px solid var(--border-color);
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--heading-bg);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td.c, th.c {
+            text-align: center;
+            width: 90px;
+        }
+
+        td.yes {
+            font-weight: 700;
+        }
+
+        td.no {
+            color: #999999;
+        }
+
+        @media screen and (max-width: 768px) {
+            td.c, th.c {
+                width: 60px;
+            }
+        }
+
+        /* 概覽雙欄格線：著色器自訂截圖於左側，介紹文字於右側 */
+        .overview-grid {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .overview-image {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .overview-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+            .overview-text p:last-child {
+                margin-bottom: 0;
+            }
+
+        .sub-steps {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0 0 12px;
+        }
+
+            .sub-steps li {
+                position: relative;
+                padding-left: 18px;
+                margin-bottom: 6px;
+                font-size: 14px;
+                display: block;
+            }
+
+                .sub-steps li::before {
+                    content: "→";
+                    position: absolute;
+                    left: 0;
+                    color: var(--accent-color);
+                    font-size: 12px;
+                }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 36px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+            .step::before {
+                counter-increment: step;
+                content: counter(step);
+                position: absolute;
+                left: 0;
+                top: -1px;
+                width: 26px;
+                height: 26px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: #ffffff;
+                font-size: 13px;
+                clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+                background: var(--accent-color);
+            }
+
+        .tag {
+            display: inline-block;
+            margin-right: 6px;
+            padding: 1px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-color: var(--heading-bg);
+            border: 1px solid var(--border-color);
+            clip-path: polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px);
+        }
+
+        .support-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 15px 0 5px;
+            padding-top: 10px;
+        }
+
+        .support-link {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 5px 0;
+        }
+
+        .icon-container {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 6px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+            .icon-container::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: var(--card-bg-color);
+                clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            }
+
+            .icon-container svg {
+                width: 70%;
+                height: 70%;
+                color: var(--accent-color);
+                position: relative;
+                z-index: 1;
+            }
+
+        .support-link span {
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: var(--accent-color);
+            padding-top: 20px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+            footer::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 20%;
+                right: 20%;
+                height: 1px;
+                background: var(--accent-color);
+            }
+
+            footer a {
+                color: var(--accent-color);
+            }
+
+        @media screen and (max-width: 768px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                text-align: center;
+            }
+
+            .support-links {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .overview-grid {
+                flex-direction: column;
+            }
+
+            .overview-image {
+                width: 100%;
+            }
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 0;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .tabs {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 標頭：程序化 VFX 迷你版 — Unity 資產文件，Octanta Studio -->
+        <header>
+            <h1>程序化 VFX 迷你版</h1>
+            <p>為 Unity 開發者提供的文件。由 <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 開發，2026 年。</p>
+            <!-- 導覽頁籤：概覽、設定、自訂、元件、聯絡方式 -->
+            <nav class="tabs">
+                <a class="tab" href="#overview">概覽</a>
+                <a class="tab" href="#setup">設定</a>
+                <a class="tab" href="#customization">自訂</a>
+                <a class="tab" href="#components">元件</a>
+                <a class="tab" href="#contacts">聯絡方式</a>
+            </nav>
+        </header>
+
+        <!--
+            概覽區段
+            程序化 VFX 迷你版是什麼：免費、基於程序化著色器的 Unity VFX。
+            相容於 URP（通用渲染管線）、HDRP（高畫質渲染管線）與 Built-in。
+            自成一體的 quad 預製體，可放置於 UI 畫布與 2D/3D 世界空間。
+            基於 RenderTexture 的渲染，每個播放週期皆生成獨特形狀。
+            連結至完整版 程序化 VFX 工具包 資產。
+        -->
+        <div class="section" id="overview">
+            <h2>概覽</h2>
+
+            <div class="overview-grid">
+                <div class="overview-image">
+                    <div class="screenshot">
+                        <img src="https://octanta-studio.gitbook.io/touch-effect-system-for-unity/~gitbook/image?url=https%3A%2F%2F1414976141-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FnBd5BNyGKTZYEzDTuKCp%252Fuploads%252Fvm21RJpnDxNwKITz3X9g%252FShaderPlayer.png%3Falt%3Dmedia%26token%3Df15d88b4-9095-4afb-8f90-98af456587fd&width=400&dpr=3&quality=100&sign=27a4dddbb140ab590ff390159d6671e4&sv=3" alt="檢視面板中的著色器自訂 — Unity VFX 參數" loading="lazy">
+                    </div>
+                </div>
+                <div class="overview-text">
+                    <p class="lead">
+                        <strong>程序化 VFX 迷你版</strong>是一組免費的程序化生成視覺特效。每個特效都是獨立的四邊形（quad），繪製一個動畫著色器。可在任何位置實例化它 — 於 UI 畫布、2D/3D 世界空間 — 無論您如何旋轉它。支援 URP、HDRP 與 Built-in 管線。特效透過 RenderTexture 渲染，保持輕量並與渲染管線無關。每個播放週期都會生成獨特的形狀：同一個特效播放兩次，看起來永遠不會完全一樣。如需功能更豐富的系統，請探索<a href="https://assetstore.u3d.cn/packages/slug/20004128">此進階版本</a>。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 免費版與完整版比較 -->
+            <div class="table-wrap">
+                <table>
+                <tr><th>功能</th><th class="c">免費版</th><th class="c">完整版</th></tr>
+                <tr><td>隨機化特效播放：每個週期皆呈現獨特外觀</td><td class="c yes">✓</td><td class="c yes">✓</td></tr>
+                <tr><td>用於 UI 與世界空間的基於著色器的通用特效</td><td class="c yes">✓</td><td class="c yes">✓</td></tr>
+                <tr><td>無瑕疵渲染</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>50+ 個著色器變體與現成預製體</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>編輯器精靈與 VfxController</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>可回應玩家輸入的特效</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>基於 Sprite 的特效（SparkleSpawner）</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>基於文字的特效（TouchTextUI）</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                <tr><td>技術支援與自訂特效</td><td class="c no">⨉</td><td class="c yes">✓</td></tr>
+                </table>
+            </div>
+
+            <!-- 行動呼籲：升級至完整版 程序化 VFX 工具包 -->
+            <p class="center" style="margin: 20px 0 0;">
+                <a href="https://assetstore.u3d.cn/packages/slug/20004128" target="_blank" class="header-link">取得完整版 →</a>
+            </p>
+        </div>
+
+        <!--
+            使用方式區段
+            如何在 Unity 專案中設定 程序化 VFX 迷你版 並生成特效。
+            預製體即為範本 — 開發者於執行階段透過 Instantiate() 生成它們。
+            UI 特效放在 Canvas 下，世界特效放在場景中的任何位置。
+            關於 Loop 與 Destroy On End 行為的注意事項。
+        -->
+        <div class="section" id="setup">
+            <h2>使用方式</h2>
+            <p>內附的預製體即為範本。在您需要它們的時刻與情境中生成它們。</p>
+
+            <div class="steps">
+                <div class="step">將資產套件匯入您的 Unity 專案。</div>
+                <div class="step">開啟 <code>Assets → OctantaStudio → ProceduralVFXMini → Scenes → DemoScene</code> 並按下 Play，以預覽世界空間與 UI 上的所有特效。</div>
+                <div class="step">
+                    <b>從您自己的程式碼生成特效。</b>
+                    <ul class="sub-steps">
+                        <li>世界空間：在特效應出現的位置呼叫 <code>Instantiate(effectPrefab, position, rotation)</code>。</li>
+                        <li>UI：將預製體實例化為 Canvas 的子物件，並設定其錨定位置。</li>
+                        <li>從 <code>Prefabs → Templates</code> 挑選預製體。URP 專案請使用 <code>URP_</code> 前綴；HDRP 或 Built-in 則使用不帶前綴的版本。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="note">特效於生成時播放並預設循環。若要改為一次性，請在預製體上取消勾選 <b>Loop</b> — 此時 <b>Destroy On End</b> 選項即會變為可用，且預設為啟用。</div>
+        </div>
+
+        <!--
+            自訂區段
+            如何在檢視面板中調整著色器參數（顏色、數量、速度、大小）。
+            如何透過複製範本並替換其 Glow Material 建立新的預製體。
+            如何使用內附的著色器作為範本以建構自訂 VFX。
+        -->
+        <div class="section" id="customization">
+            <h2>自訂</h2>
+            <p>每個著色器都會在檢視面板中將其參數公開為滑桿、顏色與切換開關。選取特效所使用的材質，以互動方式調整外觀 — 無需撰寫程式碼。</p>
+
+            <h3>調整特效</h3>
+            <ul class="sub-steps">
+                <li>在場景中選取該特效，並在檢視面板中開啟其 Glow Material。</li>
+                <li>調整顏色、數量、速度、大小與其他參數 — 場景執行期間變更會立即套用。</li>
+                <li>儲存到預製體的變更會在重新生成或重新啟動場景時生效。現有實例會保留先前的數值。</li>
+            </ul>
+
+            <h3>建立您自己的特效</h3>
+            <ul class="sub-steps">
+                <li>從 <code>Prefabs → Templates</code> 開啟任一範本，並將其 Glow Material 替換為使用 Shaders 資料夾中任一個著色器所建立的材質。</li>
+                <li>在 Project 視窗中複製調整好的範本（<code>Ctrl+D</code> / <code>Cmd+D</code>）並重新命名。</li>
+                <li>將新的預製體移至您自己的資料夾。它立即可用。</li>
+            </ul>
+
+            <h3>建立您自己的著色器</h3>
+            <p>將內附的著色器作為範本以建構您自己的，然後將其材質套用以實驗新的特效。下圖展示套用於平面網格的著色器材質。</p>
+
+            <!-- 截圖：套用於平面 2D/3D 網格的 VFX 著色器材質（非 UI） -->
+            <div class="screenshot">
+                <img src="https://octanta-studio.gitbook.io/touch-effect-system-for-unity/~gitbook/image?url=https%3A%2F%2F1414976141-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FnBd5BNyGKTZYEzDTuKCp%252Fuploads%252FqsD1C1aRH9ypmc4gGsNY%252FVFX%2520Toolkit.png%3Falt%3Dmedia%26token%3D0a750093-a869-49d8-ac7d-668538f9b6f1&width=400&dpr=3&quality=100&sign=9d560d8c5ec50a9d44f92e2efe269f27&sv=3" alt="套用於 Unity 中平面網格的程序化 VFX 著色器材質" loading="lazy">
+            </div>
+        </div>
+
+        <!--
+            核心元件區段
+            GlowMeshPlayer.cs — 世界空間 VFX 播放器，RenderTexture blit，循環與一次性播放。
+            ParticlePreviewPlayer.cs — 透過 RawImage 與每實例材質的 UI VFX 播放器。
+            Shaders — 12 個程序化 VFX 著色器，含每週期獨特的隨機化。
+        -->
+        <div class="section" id="components">
+            <h2>核心元件</h2>
+
+            <h3>GlowMeshPlayer.cs</h3>
+            <p>透過將幀 blit 至 RenderTexture 並將結果顯示於 MeshRenderer 上，驅動世界空間特效。處理循環、一次性播放、週期之間的暫停，以及播放速度。</p>
+
+            <h3>ParticlePreviewPlayer.cs</h3>
+            <p>GlowMeshPlayer 的 UI 對應元件。透過 RawImage 與每實例 Material 於 UI 層播放著色器特效 — 用於將 VFX 疊加於按鈕、卡牌或升級上。</p>
+
+            <h3>著色器</h3>
+            <ul class="sub-steps">
+                <li>全部 12 個著色器皆位於 <code>Assets → OctantaStudio → ProceduralVFXMini → Shaders</code>。</li>
+                <li>每個著色器都會在檢視面板中將其參數公開為滑桿、顏色與切換開關。</li>
+                <li>每個週期皆產生新的隨機種子，因此同一特效絕不會兩次看起來完全相同。</li>
+            </ul>
+        </div>
+
+        <!-- 聯絡方式區段：電子郵件、Discord 支援、WeChat、Octanta Studio 開發者頻道 -->
+        <div class="section" id="contacts">
+            <h2>聯絡方式</h2>
+            <p>需要協助？與我們聯絡：</p>
+            <ul class="sub-steps">
+                <li>電子郵件：<a href="mailto:octantastudio@gmail.com">octantastudio@gmail.com</a>。</li>
+                <li>Discord：加入 Octanta Studio 頻道 <a href="https://discord.gg/6SPxKpFZFC">https://discord.gg/6SPxKpFZFC</a> 並使用 'to-developers' 分支。我們將提供解答，或製作專門的 YouTube 教學。</li>
+                <li>WeChat：<a href="https://u.wechat.com/kHluJU-4AdnsB8WCkoDpTI4?s=2">@octanta_studio</a>。</li>
+            </ul>
+
+            <div class="support-links">
+                <a href="https://discord.gg/6SPxKpFZFC" class="support-link">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25-1.845-.276-3.68-.276-5.487 0-.164-.393-.406-.874-.618-1.25a.077.077 0 0 0-.078-.037 19.736 19.736 0 0 0-4.885 1.515.07.07 0 0 0-.032.028C.533 9.046-.319 13.58.099 18.058a.082.082 0 0 0 .031.056c2.053 1.508 4.041 2.423 5.993 3.029a.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 12.21 12.21 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .079.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029c1.961-.607 3.95-1.522 6.002-3.03a.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.029" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <span>DISCORD</span>
+                </a>
+                <a href="https://u.wechat.com/kHluJU-4AdnsB8WCkoDpTI4?s=2" class="support-link">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.407-.032zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/>
+                        </svg>
+                    </div>
+                    <span>WECHAT</span>
+                </a>
+                <a href="mailto:octantastudio@gmail.com" class="support-link">
+                    <div class="icon-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </div>
+                    <span>EMAIL</span>
+                </a>
+            </div>
+        </div>
+
+        <nav class="tabs">
+            <a class="tab" href="#overview">概覽</a>
+            <a class="tab" href="#setup">設定</a>
+            <a class="tab" href="#customization">自訂</a>
+            <a class="tab" href="#components">元件</a>
+            <a class="tab" href="#contacts">聯絡方式</a>
+        </nav>
+
+        <!-- 頁尾：程序化 VFX 迷你版 by Octanta Studio -->
+        <footer>
+            由 <a href="https://www.octantastudio.com/en/">©Octanta Studio</a> 開發，2026 年。程序化 VFX 迷你版
+        </footer>
+    </div>
+</body>
+</html>
